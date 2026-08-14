@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị — Bách Hóa Xanh</title>
+    <link rel="stylesheet" href="/static/admin/admin.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <h2>Admin</h2>
+                    <p>Bách Hóa Xanh</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="sidebar-link active" onclick="switchTab('tab-revenue', this)">
+                    <i class="fa-solid fa-chart-line"></i> Doanh Thu
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-products', this)">
+                    <i class="fa-solid fa-box"></i> Sản Phẩm
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-suppliers', this)">
+                    <i class="fa-solid fa-truck"></i> Nhà Cung Cấp
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-promos', this)">
+                    <i class="fa-solid fa-percent"></i> Khuyến Mãi SP
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-vouchers', this)">
+                    <i class="fa-solid fa-ticket"></i> Voucher
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-employees', this)">
+                    <i class="fa-solid fa-user-group"></i> Nhân Viên
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-customers', this)">
+                    <i class="fa-solid fa-users"></i> Khách Hàng
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-invoices', this)">
+                    <i class="fa-solid fa-receipt"></i> Hóa Đơn Bán
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-import-history', this)">
+                    <i class="fa-solid fa-truck-ramp-box"></i> Phiếu Nhập Kho
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-destroy-history', this)">
+                    <i class="fa-solid fa-fire"></i> Lịch Sử Hủy
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1 id="pageTitle"><i class="fa-solid fa-chart-line"></i> Thống Kê Doanh Thu</h1>
+                <div class="header-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Tìm kiếm..." oninput="handleSearch()">
+                </div>
+            </header>
+
+            <div class="main-body">
+
+                <!-- ========== SẢN PHẨM ========== -->
+                <div class="tab-pane" id="tab-products">
+                    <div class="toolbar">
+                        <h2>Danh Sách Sản Phẩm</h2>
+                        <button class="btn-primary" onclick="toggleProductForm()">
+                            <i class="fa-solid fa-plus"></i> Thêm Sản Phẩm
+                        </button>
+                    </div>
+
+                    <!-- Add/Edit Product Form -->
+                    <div class="form-card" id="productForm">
+                        <h3 id="productFormTitle"><i class="fa-solid fa-plus-circle"></i> Thêm Sản Phẩm Mới</h3>
+                        <form onsubmit="submitProduct(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Mã SP</label>
+                                    <input type="text" id="pf-masp" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên SP</label>
+                                    <input type="text" id="pf-tensp" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Danh Mục</label>
+                                    <select id="pf-danhmuc" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Đơn Vị Tính</label>
+                                    <input type="text" id="pf-dvt" placeholder="Chai, Gói, Kg...">
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá Bán (VNĐ)</label>
+                                    <input type="number" id="pf-gia" step="100" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Hàng tươi sống?</label>
+                                    <select id="pf-tuoisong">
+                                        <option value="0">Không</option>
+                                        <option value="1">Có</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> Lưu</button>
+                                <button type="button" class="btn-cancel" onclick="toggleProductForm()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ảnh</th>
+                                    <th>Mã SP</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Danh Mục</th>
+                                    <th>ĐVT</th>
+                                    <th>Giá Bán</th>
+                                    <th>Tồn Kho</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== NHÀ CUNG CẤP ========== -->
+                <div class="tab-pane" id="tab-suppliers">
+                    <div class="toolbar">
+                        <h2>Danh Sách Nhà Cung Cấp</h2>
+                        <button class="btn-primary" onclick="showSupplierForm()">
+                            <i class="fa-solid fa-plus"></i> Thêm Nhà Cung Cấp
+                        </button>
+                    </div>
+
+                    <!-- Add/Edit Supplier Form -->
+                    <div class="form-card" id="supplierForm" style="display: none;">
+                        <h3 id="supplierFormTitle"><i class="fa-solid fa-plus-circle"></i> Thêm Nhà Cung Cấp Mới</h3>
+                        <form onsubmit="submitSupplier(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Mã NCC</label>
+                                    <input type="text" id="sf-mancc" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên Nhà Cung Cấp</label>
+                                    <input type="text" id="sf-tenncc" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Số Điện Thoại</label>
+                                    <input type="text" id="sf-sdt">
+                                </div>
+                                <div class="form-group">
+                                    <label>Địa Chỉ</label>
+                                    <input type="text" id="sf-diachi">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> Lưu</button>
+                                <button type="button" class="btn-cancel" onclick="hideSupplierForm()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã NCC</th>
+                                    <th>Tên Nhà Cung Cấp</th>
+                                    <th>Số Điện Thoại</th>
+                                    <th>Địa Chỉ</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== KHUYẾN MÃI ========== -->
+                <div class="tab-pane" id="tab-promos">
+                    <div class="toolbar">
+                        <h2>Chương Trình Khuyến Mãi</h2>
+                        <button class="btn-primary" onclick="togglePromoForm()">
+                            <i class="fa-solid fa-plus"></i> Thêm KM
+                        </button>
+                    </div>
+
+                    <div class="form-card" id="promoForm">
+                        <h3><i class="fa-solid fa-tag"></i> Tạo Khuyến Mãi</h3>
+                        <form onsubmit="submitPromo(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Mã KM</label>
+                                    <input type="text" id="km-makm" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loại KM</label>
+                                    <select id="km-loaikm">
+                                        <option value="SanPham">Giảm giá Sản phẩm</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên KM</label>
+                                    <input type="text" id="km-tenkm" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>% Giảm</label>
+                                    <input type="number" id="km-phantram" min="1" max="100" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày bắt đầu</label>
+                                    <input type="date" id="km-start" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày kết thúc</label>
+                                    <input type="date" id="km-end" required>
+                                </div>
+                                <div class="form-group" id="km-products-group" style="grid-column: span 2;">
+                                    <label>Áp dụng cho Sản phẩm</label>
+                                    <div style="border: 1px solid var(--border-color); border-radius: 4px; padding: 10px;">
+                                        <input type="text" id="km-product-search" placeholder="Tìm tên hoặc danh mục..." oninput="filterPromoProducts()" style="width: 100%; margin-bottom: 10px; padding: 6px; border: 1px solid var(--border-color); border-radius: 4px;">
+                                        <div id="km-products-list" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+                                            <!-- Products will be loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> Tạo</button>
+                                <button type="button" class="btn-cancel" onclick="togglePromoForm()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã KM</th>
+                                    <th>Loại KM</th>
+                                    <th>Tên Chương Trình</th>
+                                    <th>% Giảm</th>
+                                    <th>Bắt Đầu</th>
+                                    <th>Kết Thúc</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="promosBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== VOUCHER ========== -->
+                <div class="tab-pane" id="tab-vouchers">
+                    <div class="toolbar">
+                        <h2>Quản Lý Voucher</h2>
+                        <button class="btn-primary" onclick="toggleVoucherForm()">
+                            <i class="fa-solid fa-plus"></i> Tạo Voucher
+                        </button>
+                    </div>
+
+                    <div class="form-card" id="voucherForm">
+                        <h3 id="voucherFormTitle"><i class="fa-solid fa-ticket"></i> Tạo Voucher Mới</h3>
+                        <form onsubmit="submitVoucher(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Mã Voucher</label>
+                                    <input type="text" id="v-mavoucher" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loại Voucher</label>
+                                    <select id="v-loaivoucher" onchange="handleVoucherTypeChange()">
+                                        <option value="GiamGia">Giảm giá Hóa đơn (%)</option>
+                                        <option value="TangSanPham">Tặng Sản phẩm</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên Voucher</label>
+                                    <input type="text" id="v-tenvoucher" required>
+                                </div>
+                                <div class="form-group" id="v-giatri-group">
+                                    <label>% Giảm / Giá Trị</label>
+                                    <input type="number" id="v-giatri" min="1" max="100">
+                                </div>
+                                <div class="form-group" id="v-masptang-group" style="display: none; grid-column: 1 / -1;">
+                                    <label>Sản Phẩm Tặng</label>
+                                    <select id="v-masptang">
+                                        <!-- Rendered by JS -->
+                                    </select>
+                                </div>
+                                <div class="form-group" id="v-soluongtang-group" style="display: none;">
+                                    <label>Số Lượng Tặng</label>
+                                    <input type="number" id="v-soluongtang" min="1" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày bắt đầu</label>
+                                    <input type="date" id="v-start" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày kết thúc</label>
+                                    <input type="date" id="v-end" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> Tạo</button>
+                                <button type="button" class="btn-cancel" onclick="toggleVoucherForm()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Voucher</th>
+                                    <th>Tên Voucher</th>
+                                    <th>Loại</th>
+                                    <th>Chi Tiết</th>
+                                    <th>Bắt Đầu</th>
+                                    <th>Kết Thúc</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vouchersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== NHÂN VIÊN ========== -->
+                <div class="tab-pane" id="tab-employees">
+                    <div class="toolbar">
+                        <h2>Quản Lý Nhân Viên</h2>
+                        <button class="btn-primary" onclick="toggleEmployeeForm()">
+                            <i class="fa-solid fa-plus"></i> Thêm NV
+                        </button>
+                    </div>
+
+                    <div class="form-card" id="employeeForm">
+                        <h3 id="employeeFormTitle"><i class="fa-solid fa-user-plus"></i> Thêm Nhân Viên</h3>
+                        <form onsubmit="submitEmployee(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Mã NV</label>
+                                    <input type="text" id="nv-manv" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên NV</label>
+                                    <input type="text" id="nv-tennv" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Chức Vụ</label>
+                                    <select id="nv-chucvu">
+                                        <option value="0">Admin / Quản lý</option>
+                                        <option value="1">Thu ngân</option>
+                                        <option value="2">Nhân viên kho</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>SĐT</label>
+                                    <input type="text" id="nv-sdt">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mật khẩu</label>
+                                    <input type="text" id="nv-matkhau" value="123456">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary" id="btnSubmitEmployee"><i class="fa-solid fa-save"></i> Thêm</button>
+                                <button type="button" class="btn-cancel" onclick="toggleEmployeeForm()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã NV</th>
+                                    <th>Tên Nhân Viên</th>
+                                    <th>Chức Vụ</th>
+                                    <th>SĐT</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== KHÁCH HÀNG ========== -->
+                <div class="tab-pane" id="tab-customers">
+                    <div class="toolbar">
+                        <h2>Quản Lý Khách Hàng</h2>
+                        <button class="btn-primary" onclick="toggleCustomerForm()">
+                            <i class="fa-solid fa-plus"></i> Thêm KH
+                        </button>
+                    </div>
+
+                    <div class="form-card" id="customerForm">
+                        <h3 id="customerFormTitle"><i class="fa-solid fa-user-plus"></i> Thêm Khách Hàng</h3>
+                        <form onsubmit="submitCustomer(event)">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    <input type="text" id="kh-sdt" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên Khách Hàng</label>
+                                    <input type="text" id="kh-tenkh" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Điểm Tích Lũy</label>
+                                    <input type="number" id="kh-diem" value="0" min="0">
+                                </div>
+                            </div>
+                            <input type="hidden" id="kh-makh">
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary" id="btnSubmitCustomer"><i class="fa-solid fa-save"></i> Lưu</button>
+                                <button type="button" class="btn-cancel" onclick="toggleCustomerForm()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã KH</th>
+                                    <th>Tên Khách Hàng</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Điểm</th>
+                                    <th>Ngày ĐK</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== HÓA ĐƠN ========== -->
+                <div class="tab-pane" id="tab-invoices">
+                    <div class="toolbar">
+                        <h2>Quản Lý Hóa Đơn Bán Hàng</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã HĐ</th>
+                                    <th>Ngày Lập</th>
+                                    <th>NV Lập</th>
+                                    <th>Khách Hàng</th>
+                                    <th>Thành Tiền</th>
+                                    <th>NV Sửa Cuối</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoicesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== PHIẾU NHẬP ========== -->
+                <div class="tab-pane" id="tab-import-history">
+                    <div class="toolbar">
+                        <h2>Quản Lý Phiếu Nhập Kho</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã PN</th>
+                                    <th>Ngày Nhập</th>
+                                    <th>NV Lập</th>
+                                    <th>Nhà Cung Cấp</th>
+                                    <th>Tổng Tiền</th>
+                                    <th>NV Sửa Cuối</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="importHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== THỐNG KÊ ========== -->
+                <div class="tab-pane active" id="tab-revenue">
+                    <div class="stats-row" id="revenueStats"></div>
+                    
+                    <div class="charts-row" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div class="chart-container" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                            <h3 style="margin-bottom:12px; font-size: 16px;">Doanh Thu Theo Ngày</h3>
+                            <canvas id="revenueByDayChart" style="max-height: 300px;"></canvas>
+                        </div>
+                        <div class="chart-container" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                            <h3 style="margin-bottom:12px; font-size: 16px;">Tỷ Trọng Theo Loại Sản Phẩm</h3>
+                            <canvas id="revenueByCategoryChart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-bottom:12px;">Bảng Chi Tiết Doanh Thu Theo Ngày</h3>
+                    <div class="table-container">
+                        <table class="data-table revenue-table">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Số Hóa Đơn</th>
+                                    <th>Tổng Tiền Hàng</th>
+                                    <th>Giảm Giá KM</th>
+                                    <th>Doanh Thu Thực</th>
+                                </tr>
+                            </thead>
+                            <tbody id="revenueBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: Lịch Sử Tiêu Hủy -->
+                <div class="tab-pane" id="tab-destroy-history">
+                    <div class="toolbar">
+                        <h2>Lịch Sử Hàng Tiêu Hủy</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Hủy</th>
+                                    <th>Sản Phẩm</th>
+                                    <th>Lô</th>
+                                    <th>Số Lượng</th>
+                                    <th>Người Hủy</th>
+                                    <th>Thời Gian</th>
+                                </tr>
+                            </thead>
+                            <tbody id="destroyHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi Tiết Hóa Đơn -->
+    <div class="modal-overlay" id="invoiceModalOverlay" onclick="closeInvoiceModal(event)">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 id="invoiceModalTitle">Chi Tiết Hóa Đơn</h3>
+                <span class="modal-close" onclick="closeInvoiceModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Ghi chú (sửa được)</label>
+                        <input type="text" id="hd-ghichu" placeholder="Lý do sửa, ghi chú khách hàng...">
+                    </div>
+                    <div class="form-group">
+                        <label>Phương thức thanh toán (sửa được)</label>
+                        <select id="hd-pttt">
+                            <option value="Tiền mặt">Tiền mặt</option>
+                            <option value="Chuyển khoản">Chuyển khoản</option>
+                            <option value="Momo/VNPay">Momo/VNPay</option>
+                        </select>
+                    </div>
+                </div>
+                <h4 style="margin-top: 15px; margin-bottom: 10px;">Danh sách hàng hóa đã bán</h4>
+                <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Mã Lô</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceDetailsBody"></tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="hd-mahd">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="saveInvoiceDetails()">Lưu Thay Đổi</button>
+                <button class="btn-cancel" onclick="closeInvoiceModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi Tiết Phiếu Nhập -->
+    <div class="modal-overlay" id="pnModalOverlay" onclick="closePnModal(event)">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 id="pnModalTitle">Chi Tiết Phiếu Nhập</h3>
+                <span class="modal-close" onclick="closePnModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Ghi chú (sửa được)</label>
+                        <input type="text" id="pn-ghichu" placeholder="Ghi chú về phiếu nhập...">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhà Cung Cấp (sửa được)</label>
+                        <select id="pn-ncc"></select>
+                    </div>
+                </div>
+                <h4 style="margin-top: 15px; margin-bottom: 10px;">Danh sách hàng hóa nhập</h4>
+                <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Giá nhập</th>
+                                <th>NSX</th>
+                                <th>HSD</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pnDetailsBody"></tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="pn-mapn">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="savePnDetails()">Lưu Thay Đổi</button>
+                <button class="btn-cancel" onclick="closePnModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Thành công!</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/admin/admin.js?v=3"></script>
+</body>
+</html>

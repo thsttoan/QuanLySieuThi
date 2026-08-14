@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLST - API Testing Docs</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .endpoint { border: 1px solid #e0e0e0; margin-bottom: 15px; border-radius: 5px; overflow: hidden; }
+        .endpoint-header { background: #f1f3f5; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; }
+        .method { font-weight: bold; padding: 4px 8px; border-radius: 4px; color: white; margin-right: 10px; }
+        .method.get { background-color: #28a745; }
+        .method.post { background-color: #ffc107; color: #000; }
+        .url { font-family: monospace; font-size: 16px; flex-grow: 1; }
+        .btn-test { background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .btn-test:hover { background: #0056b3; }
+        .response-box { padding: 15px; background: #272822; color: #f8f8f2; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; max-height: 400px; overflow-y: auto; display: none; margin: 0; }
+        .response-box.show { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>API Testing Playground</h1>
+    <p>Trang này giúp test nhanh các API GET của hệ thống mà không cần dùng Postman.</p>
+
+    <div style="background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <h3 style="margin-top: 0; color: #495057;">💡 Gợi ý Tính năng mở rộng cho Nhóm (Nhiệm vụ cho team)</h3>
+        <ul style="margin-bottom: 0; padding-left: 20px; line-height: 1.6;">
+            <li><strong>Chấm công tự động:</strong> Tự động ghi nhận giờ vào ca/ra ca dựa trên thời điểm nhân viên đăng nhập/đăng xuất hệ thống.</li>
+            <li><strong>Quản lý & Xếp ca làm việc:</strong> Tính năng phân ca cho nhân viên (Sáng/Chiều/Tối) để quản lý bàn giao doanh thu tiền mặt lúc đổi ca.</li>
+            <li><strong>Tính năng Trả Hàng (Refund):</strong> Xử lý khách đổi/trả hàng: tạo hóa đơn trả hàng và viết Procedure cộng tự động hoàn số lượng về tồn kho.</li>
+            <li><strong>In Hóa Đơn (Print Receipt):</strong> Thiết kế một popup template hóa đơn giấy nhiệt (80mm). Bấm nút in sẽ gọi lệnh <code>window.print()</code> của trình duyệt.</li>
+            <li><strong>Tích hợp Quét Mã Vạch:</strong> Bắt sự kiện bàn phím. Khi máy quét tít mã (tương đương gõ Text + Enter) thì tự động thêm 1 đơn vị sản phẩm đó vào giỏ hàng.</li>
+            <li><strong>Biểu đồ Doanh Thu:</strong> Tích hợp thư viện <strong>Chart.js</strong> vào trang Admin, gọi API <code>/api/revenue</code> để vẽ biểu đồ trực quan.</li>
+        </ul>
+    </div>
+
+    <!-- 1. API Products -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <div>
+                <span class="method get">GET</span>
+                <span class="url">/api/products</span>
+            </div>
+            <button class="btn-test" onclick="testApi('/api/products', 'res-products')">Test API</button>
+        </div>
+        <pre id="res-products" class="response-box"></pre>
+    </div>
+
+    <!-- 2. API Inventory -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <div>
+                <span class="method get">GET</span>
+                <span class="url">/api/inventory</span>
+            </div>
+            <button class="btn-test" onclick="testApi('/api/inventory', 'res-inventory')">Test API</button>
+        </div>
+        <pre id="res-inventory" class="response-box"></pre>
+    </div>
+
+    <!-- 3. API Revenue -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <div>
+                <span class="method get">GET</span>
+                <span class="url">/api/revenue</span>
+            </div>
+            <button class="btn-test" onclick="testApi('/api/revenue', 'res-revenue')">Test API</button>
+        </div>
+        <pre id="res-revenue" class="response-box"></pre>
+    </div>
+
+    <!-- 4. API Customers -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <div>
+                <span class="method get">GET</span>
+                <span class="url">/api/customers</span>
+            </div>
+            <button class="btn-test" onclick="testApi('/api/customers', 'res-customers')">Test API</button>
+        </div>
+        <pre id="res-customers" class="response-box"></pre>
+    </div>
+    
+    <!-- 5. API Invoices History -->
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <div>
+                <span class="method get">GET</span>
+                <span class="url">/api/invoices</span>
+            </div>
+            <button class="btn-test" onclick="testApi('/api/invoices', 'res-invoices')">Test API</button>
+        </div>
+        <pre id="res-invoices" class="response-box"></pre>
+    </div>
+</div>
+
+<script>
+    async function testApi(url, resId) {
+        const el = document.getElementById(resId);
+        el.classList.add('show');
+        el.innerText = "Đang tải dữ liệu...";
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            el.innerText = JSON.stringify(data, null, 4);
+        } catch (err) {
+            el.innerText = "Lỗi kết nối: " + err.message;
+        }
+    }
+</script>
+
+</body>
+</html>

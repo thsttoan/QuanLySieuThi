@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thu Ngân — Bách Hóa Xanh</title>
+    <link rel="stylesheet" href="/static/thungan/thungan.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="pos-layout">
+        <div class="pos-left">
+            <!-- HEADER -->
+            <header class="pos-header">
+            <div class="logo">
+                <i class="fa-solid fa-store"></i>
+                <span>Bách Hóa Xanh</span>
+            </div>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Tìm sản phẩm theo tên hoặc mã..." oninput="filterProducts()">
+            </div>
+            <div class="header-right">
+                <span class="user-info" id="userInfo">Thu ngân</span>
+                <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+            </div>
+        </header>
+
+        <!-- CATEGORY BAR -->
+        <nav class="category-bar" id="categoryBar">
+            <button class="cat-btn active" onclick="selectCategory('all', this)">
+                <i class="fa-solid fa-border-all"></i>
+                Tất cả
+            </button>
+            <!-- Categories rendered by JS -->
+        </nav>
+
+        <!-- MAIN: Products -->
+        <section class="products-area">
+            <div class="products-grid" id="productsGrid">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <aside class="cart-sidebar" id="cartSidebar">
+                <div class="cart-header" onclick="toggleCart()">
+                    <h3><i class="fa-solid fa-cart-shopping"></i> Giỏ Hàng <span class="cart-count" id="cartCount">0</span></h3>
+                </div>
+
+                <div class="cart-items" id="cartItems">
+                    <div class="cart-empty" id="cartEmpty">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <p>Chưa có sản phẩm</p>
+                    </div>
+                    <div id="cartList"></div>
+                </div>
+
+                <div class="cart-footer">
+                    <!-- Customer Lookup -->
+                    <div class="customer-section">
+                        <div class="input-row">
+                            <input type="text" id="customerPhone" placeholder="Nhập SĐT khách hàng...">
+                            <button class="btn-lookup" onclick="lookupCustomer()"><i class="fa-solid fa-search"></i> Tra cứu</button>
+                        </div>
+                        <div class="customer-info-display" id="customerInfo"></div>
+                        <div class="points-row" id="pointsRow" style="display:none;">
+                            <label>Dùng điểm:</label>
+                            <input type="number" id="pointsUse" value="0" min="0" oninput="calculateTotals()">
+                            <span id="pointsAvail" style="font-size:0.75rem; color:var(--text-muted)"></span>
+                        </div>
+                    </div>
+
+                    <!-- Voucher -->
+                    <div class="payment-section">
+                        <label>Mã Voucher:</label>
+                        <input type="text" id="voucherCode" placeholder="Nhập mã giảm giá" oninput="calculateTotals()" style="width:100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-top: 5px;">
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="payment-section">
+                        <label>Thanh toán:</label>
+                        <select id="paymentMethod">
+                            <option value="Tiền mặt">💵 Tiền mặt</option>
+                            <option value="Chuyển khoản">🏦 Chuyển khoản</option>
+                            <option value="Ví điện tử">📱 Ví điện tử (Momo/VNPay)</option>
+                        </select>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="totals">
+                        <div class="total-row">
+                            <span>Tạm tính:</span>
+                            <span id="subtotal">0đ</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Giảm giá KM:</span>
+                            <span id="discount" style="color:var(--green)">-0đ</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Giảm Voucher:</span>
+                            <span id="voucherDiscount" style="color:var(--orange)">-0đ</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Trừ điểm:</span>
+                            <span id="pointsDeduct">-0đ</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Thành tiền:</span>
+                            <span id="grandTotal">0đ</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-checkout" id="btnCheckout" onclick="processCheckout()" disabled>
+                        <i class="fa-solid fa-credit-card"></i>&nbsp; THANH TOÁN
+                    </button>
+                </div>
+            </aside>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Receipt Modal -->
+    <div class="modal-overlay" id="receiptModal">
+        <div class="modal-content">
+            <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+            <h2>Thanh Toán Thành Công!</h2>
+            <div class="receipt-info" id="receiptInfo"></div>
+            <button class="btn-close-modal" onclick="closeReceipt()">Đóng</button>
+        </div>
+    </div>
+
+    <script src="/static/thungan/thungan.js"></script>
+</body>
+</html>

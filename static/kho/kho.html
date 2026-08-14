@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Kho — Bách Hóa Xanh</title>
+    <link rel="stylesheet" href="/static/kho/kho.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon"><i class="fa-solid fa-warehouse"></i></div>
+                <div>
+                    <h2>Kho Hàng</h2>
+                    <p>Bách Hóa Xanh</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="sidebar-link active" onclick="switchTab('tab-inventory', this)">
+                    <i class="fa-solid fa-boxes-stacked"></i> Tồn Kho
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-import', this)">
+                    <i class="fa-solid fa-truck-ramp-box"></i> Nhập Kho
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-destroy-history', this)">
+                    <i class="fa-solid fa-fire"></i> Lịch Sử Hủy
+                </a>
+
+                <a class="sidebar-link" onclick="switchTab('tab-lowstock', this)">
+                    <i class="fa-solid fa-battery-quarter"></i> Cảnh Báo Tồn Kho
+                </a>
+                <a class="sidebar-link" onclick="switchTab('tab-alerts', this)">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Cảnh Báo HSD
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1 id="pageTitle"><i class="fa-solid fa-boxes-stacked"></i> Quản Lý Tồn Kho</h1>
+                <div class="header-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm..." oninput="handleSearch()">
+                </div>
+            </header>
+
+            <div class="main-body">
+
+                <!-- TAB: Tồn Kho -->
+                <div class="tab-pane active" id="tab-inventory">
+                    <div class="stats-row" id="statsRow"></div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ảnh</th>
+                                    <th>Mã Lô</th>
+                                    <th>Mã SP</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Ngày SX</th>
+                                    <th>Hạn SD</th>
+                                    <th>Số Lượng</th>
+                                    <th>Giá Nhập</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB LOW STOCK -->
+                <div id="tab-lowstock" class="tab-pane" style="display: none;">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Tổng Tồn Kho</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lowStockBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: Nhập Kho -->
+                <div class="tab-pane" id="tab-import">
+                    <div class="form-card">
+                        <h3><i class="fa-solid fa-truck-ramp-box"></i> Phiếu Nhập Kho Mới</h3>
+                        <form id="importForm" onsubmit="submitImport(event)">
+                            <div class="form-grid">
+                                <div class="form-group" style="grid-column: 1 / -1; margin-bottom: 5px;">
+                                    <label>Sản phẩm</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <input type="text" id="imp-search" placeholder="🔍 Nhập tên sản phẩm để tìm..." oninput="filterImportProducts()" style="flex: 1;">
+                                        <select id="imp-product" required style="flex: 2;"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nhà cung cấp</label>
+                                    <select id="imp-supplier" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Số lượng</label>
+                                    <input type="number" id="imp-qty" step="0.01" min="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá nhập (VNĐ)</label>
+                                    <input type="number" id="imp-price" step="100" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày sản xuất</label>
+                                    <input type="date" id="imp-mfg">
+                                </div>
+                                <div class="form-group">
+                                    <label>Hạn sử dụng</label>
+                                    <input type="date" id="imp-exp" required>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-plus"></i> Nhập Kho
+                            </button>
+                        </form>
+                    </div>
+
+                    <h3 style="margin-bottom:12px;">Lịch sử lô hàng gần đây</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Lô</th>
+                                    <th>Sản Phẩm</th>
+                                    <th>HSD</th>
+                                    <th>SL Nhập</th>
+                                    <th>Giá Nhập</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentImports"></tbody>
+                        </table>
+                    </div>
+                    <h3 style="margin-top:24px; margin-bottom:12px;"><i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Các Phiếu Nhập Kho</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã PN</th>
+                                    <th>Ngày Nhập</th>
+                                    <th>NV Lập</th>
+                                    <th>Nhà Cung Cấp</th>
+                                    <th>Tổng Tiền</th>
+                                    <th>NV Sửa Cuối</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="importHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: Cảnh Báo -->
+                <div class="tab-pane" id="tab-alerts">
+                    <div class="stats-row" id="alertStats"></div>
+                    <div class="alert-cards" id="alertCards"></div>
+                </div>
+
+                <!-- TAB: Lịch Sử Hủy -->
+                <div class="tab-pane" id="tab-destroy-history">
+                    <div class="toolbar">
+                        <h2>Lịch Sử Hàng Tiêu Hủy</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Hủy</th>
+                                    <th>Sản Phẩm</th>
+                                    <th>Lô</th>
+                                    <th>Số Lượng</th>
+                                    <th>Người Hủy</th>
+                                    <th>Thời Gian</th>
+                                </tr>
+                            </thead>
+                            <tbody id="destroyHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi Tiết Phiếu Nhập -->
+    <div class="modal-overlay" id="pnModalOverlay" onclick="closePnModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="pnModalTitle">Chi Tiết Phiếu Nhập</h3>
+                <span class="modal-close" onclick="closePnModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Ghi chú (sửa được)</label>
+                        <input type="text" id="pn-ghichu" placeholder="Ghi chú về phiếu nhập...">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhà Cung Cấp (sửa được)</label>
+                        <select id="pn-ncc"></select>
+                    </div>
+                </div>
+                <h4 style="margin-top: 15px; margin-bottom: 10px;">Danh sách hàng hóa nhập</h4>
+                <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Giá nhập</th>
+                                <th>NSX</th>
+                                <th>HSD</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pnDetailsBody"></tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="pn-mapn">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="savePnDetails()">Lưu Thay Đổi</button>
+                <button class="btn-cancel" onclick="closePnModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="/static/kho/kho.js?v=2"></script>
+</body>
+</html>
