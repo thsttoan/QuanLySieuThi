@@ -140,3 +140,31 @@ Bạn có thể tiến hành kiểm thử ngay trên giao diện Web POS tại �
    - Nhập Số điểm cần dùng: `50` điểm.
    - Nhấn **Xác nhận thanh toán**.
    - **Kết quả**: Trigger `trg_SauKhiLapHoaDon` phát hiện điểm bị âm, kích hoạt lỗi `RAISERROR` và thực hiện `ROLLBACK`. Kho hàng và điểm của khách hàng được giữ nguyên.
+
+---
+
+## 🐞 Demo Điều Khiển Tương Tranh (Concurrency Control)
+
+Dự án cung cấp một trang chuyên dụng để giả lập và kiểm thử các lỗi tương tranh phổ biến trong hệ thống đa người dùng, tại địa chỉ: `http://127.0.0.1:5000/demo`. Các lỗi được giả lập với dữ liệu thực tế (Lô 567, SP002) bao gồm:
+
+1. **Mất cập nhật (Lost Update):** Hai thu ngân cùng thanh toán lô hàng 567. Khắc phục bằng khóa `UPDLOCK, HOLDLOCK` (Khóa 2PL).
+2. **Đọc rác (Dirty Read):** Quản lý đọc tồn kho lô 567 khi thu ngân đang tạm hoãn thanh toán chưa chốt. Khắc phục bằng mức cô lập `READ COMMITTED`.
+3. **Không lặp lại (Non-repeatable Read):** Thu ngân đọc giá SP002 hai lần trong 1 giao dịch, quản lý chen ngang đổi giá. Khắc phục bằng mức cô lập `REPEATABLE READ`.
+4. **Bóng ma (Phantom Read):** Quản lý đếm tổng hóa đơn, thu ngân chen ngang chèn hóa đơn rác. Khắc phục bằng mức cô lập `SERIALIZABLE`.
+
+---
+
+## 📡 API Documentation (Demo Endpoints)
+
+Các API dưới đây được sử dụng riêng cho phần giả lập Tương tranh (`/api/demo/`):
+
+| Endpoint | Method | Mô tả |
+|----------|--------|-------|
+| `/api/demo/inventory/<malo>` | `GET` | Lấy số lượng tồn kho hiện tại của một Lô hàng cụ thể. |
+| `/api/demo/lost_update` | `POST` | Thực thi bán 1 sản phẩm của Lô 567. Hỗ trợ tham số `?mode=fixed` để bật cơ chế khóa chống Lost Update. |
+| `/api/demo/dirty_read/tx1` | `POST` | Bắt đầu giao dịch sửa tồn kho thành 9999, treo 5 giây rồi Rollback. |
+| `/api/demo/dirty_read/read` | `GET` | Đọc tồn kho Lô 567. Hỗ trợ tham số `?mode=fixed` (READ COMMITTED) hoặc `error` (READ UNCOMMITTED). |
+| `/api/demo/non_repeatable_read/read` | `GET` | Đọc giá SP002 hai lần cách nhau 5 giây. Hỗ trợ tham số `?mode=fixed` (REPEATABLE READ). |
+| `/api/demo/non_repeatable_read/update` | `POST` | Tăng giá SP002 thêm 1000 VNĐ. |
+| `/api/demo/phantom_read/count` | `GET` | Đếm tổng số hóa đơn 2 lần cách nhau 5 giây. Hỗ trợ tham số `?mode=fixed` (SERIALIZABLE). |
+| `/api/demo/phantom_read/insert` | `POST` | Chèn một hóa đơn rác với tổng tiền 50.000đ để giả lập Bóng ma. |

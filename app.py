@@ -998,5 +998,180 @@ def delete_supplier(mancc):
     except Exception as e:
         return jsonify({"status": "error", "error": str(e)}), 500
 
+# ==========================================
+# DEMO CONCURRENCY ISSUES
+# ==========================================
+@app.route('/demo')
+def demo_page():
+    return send_from_directory('static/demo', 'demo.html')
+
+@app.route('/api/demo/inventory/<malo>', methods=['GET'])
+def demo_get_inventory(malo):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = ?", (malo,))
+        row = cursor.fetchone()
+        conn.close()
+        return jsonify({"SoLuongTon": float(row[0]) if row else 0})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/lost_update', methods=['GET'])
+def demo_lost_update():
+    mode = request.args.get('mode', 'error')
+    tx = request.args.get('tx', '1')
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False 
+        cursor = conn.cursor()
+        
+        # 1. Đọc số lượng tồn
+        if mode == 'fixed':
+            cursor.execute("SELECT SoLuongTon FROM LO_HANG WITH (UPDLOCK, HOLDLOCK) WHERE MaLo = 567")
+        else:
+            cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = 567")
+            
+        row = cursor.fetchone()
+        if not row:
+            conn.rollback()
+            return jsonify({"error": "Không tìm thấy Lô 567 (SP002)"})
+            
+        qty = row[0]
+        
+        # Giả lập xử lý lâu (5 giây)
+        cursor.execute("WAITFOR DELAY '00:00:05'")
+        
+        # 2. Cập nhật số lượng
+        new_qty = float(qty) - 1
+        cursor.execute("UPDATE LO_HANG SET SoLuongTon = ? WHERE MaLo = 567", (new_qty,))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"message": f"Đã bán 1 SP. Tồn kho tính toán: {qty} -> {new_qty}"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/dirty_read/transaction', methods=['GET'])
+def demo_dirty_read_tx():
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False
+        cursor = conn.cursor()
+        
+        cursor.execute("UPDATE LO_HANG SET SoLuongTon = 9999 WHERE MaLo = 567")
+        cursor.execute("WAITFOR DELAY '00:00:05'")
+        
+        conn.rollback()
+        conn.close()
+        return jsonify({"message": "Giao dịch đã bị Hủy (Rollback). Tồn kho quay về ban đầu!"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/dirty_read/read', methods=['GET'])
+def demo_dirty_read_read():
+    mode = request.args.get('mode', 'error')
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False
+        cursor = conn.cursor()
+        
+        if mode == 'fixed':
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED")
+        else:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED")
+            
+        cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = 567")
+        row = cursor.fetchone()
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"SoLuongTon": float(row[0]) if row else 0})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/non_repeatable_read/read', methods=['GET'])
+def demo_non_repeatable_read():
+    mode = request.args.get('mode', 'error')
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False
+        cursor = conn.cursor()
+        
+        if mode == 'fixed':
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
+            
+        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = 'SP002'")
+        price1 = cursor.fetchone()[0]
+        
+        cursor.execute("WAITFOR DELAY '00:00:05'")
+        
+        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = 'SP002'")
+        price2 = cursor.fetchone()[0]
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"price1": float(price1), "price2": float(price2)})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/non_repeatable_read/update', methods=['POST'])
+def demo_non_repeatable_update():
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False
+        cursor = conn.cursor()
+        cursor.execute("UPDATE SAN_PHAM SET GiaBan = GiaBan + 1000 WHERE MaSP = 'SP002'")
+        conn.commit()
+        conn.close()
+        return jsonify({"message": "Đã tăng giá SP002 thêm 1000 VNĐ!"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/phantom_read/read', methods=['GET'])
+def demo_phantom_read():
+    mode = request.args.get('mode', 'error')
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False
+        cursor = conn.cursor()
+        
+        if mode == 'fixed':
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE")
+            
+        cursor.execute("SELECT COUNT(*) FROM HOA_DON")
+        count1 = cursor.fetchone()[0]
+        
+        cursor.execute("WAITFOR DELAY '00:00:05'")
+        
+        cursor.execute("SELECT COUNT(*) FROM HOA_DON")
+        count2 = cursor.fetchone()[0]
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"count1": count1, "count2": count2})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/phantom_read/insert', methods=['POST'])
+def demo_phantom_insert():
+    import time
+    try:
+        conn = get_db_connection()
+        conn.autocommit = False
+        cursor = conn.cursor()
+        
+        ma_hd = f"HD_DEMO_{int(time.time())}"
+        cursor.execute("""
+            INSERT INTO HOA_DON (MaHD, NgayLap, TongTienHang, ThanhTien, PhuongThucTT, MaNV)
+            VALUES (?, GETDATE(), 50000, 50000, 'Tiền mặt', 'thungan1')
+        """, (ma_hd,))
+        
+        conn.commit()
+        conn.close()
+        return jsonify({"message": "Đã chèn 1 hóa đơn rác (50,000 VNĐ)!"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, threaded=True)

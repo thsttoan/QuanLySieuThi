@@ -278,19 +278,50 @@ async function loadLowStock() {
         const res = await fetch('/api/inventory/low_stock');
         const data = await res.json();
         
-        const tbody = document.getElementById('lowStockBody');
-        tbody.innerHTML = data.map(r => {
-            let badgeClass = r.TrangThai === 'Hết hàng' ? 'badge-red' : 'badge-orange';
-            return `<tr>
-                <td><strong>${r.MaSP}</strong></td>
-                <td>${r.TenSP}</td>
-                <td style="color:red; font-weight:bold;">${r.TongTonKho}</td>
-                <td><span class="badge ${badgeClass}">${r.TrangThai}</span></td>
-            </tr>`;
+        const outOfStock = data.filter(r => parseFloat(r.TongTonKho) <= 0).length;
+        const lowStock = data.filter(r => parseFloat(r.TongTonKho) > 0 && parseFloat(r.TongTonKho) <= 10).length;
+
+        document.getElementById('lowStockStats').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fa-solid fa-battery-empty"></i></div>
+                <div class="stat-text"><h3>${outOfStock}</h3><p>Hết hàng (cần nhập ngay)</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-battery-quarter"></i></div>
+                <div class="stat-text"><h3>${lowStock}</h3><p>Sắp hết hàng (<= 10)</p></div>
+            </div>
+        `;
+
+        const container = document.getElementById('lowStockCards');
+        if (data.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-muted); padding:40px; text-align:center;"><i class="fa-solid fa-face-smile" style="font-size:2rem; display:block; margin-bottom:10px; opacity:0.4;"></i>Tuyệt vời! Không có sản phẩm nào sắp hết hàng!</p>';
+            return;
+        }
+
+        container.innerHTML = data.map(r => {
+            const tongTon = parseFloat(r.TongTonKho);
+            const isCritical = tongTon <= 0;
+            const actionBtn = `<button class="btn-primary" onclick="goToImportTab('${r.MaSP}')" style="padding:5px 10px; margin-top:8px; font-size:0.8rem; width:100%; border:none; border-radius:6px; cursor:pointer; color:white;"><i class="fa-solid fa-truck-ramp-box"></i> Nhập Hàng Ngay</button>`;
+            return `
+            <div class="alert-card ${isCritical ? 'critical' : ''}">
+                <div class="alert-icon">${isCritical ? '🚫' : '⚠️'}</div>
+                <div class="alert-body" style="flex:1;">
+                    <h4>${r.TenSP} (${r.MaSP})</h4>
+                    <p>Tổng Tồn Kho: <strong style="color: ${isCritical ? 'var(--red)' : 'var(--orange)'}">${r.TongTonKho}</strong> — Tình trạng: ${r.TrangThai}</p>
+                    ${actionBtn}
+                </div>
+            </div>`;
         }).join('');
     } catch (e) {
         console.error('Load low stock error:', e);
     }
+}
+
+function goToImportTab(maSP) {
+    // Switch to import tab
+    switchTab('tab-import', document.querySelectorAll('.sidebar-nav a')[1]);
+    // Select the product
+    document.getElementById('imp-product').value = maSP;
 }
 
 // ===== DESTROY INVENTORY =====

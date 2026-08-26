@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Lỗi Tương Tranh - Bách Hóa Xanh</title>
+    <link rel="stylesheet" href="/static/demo/demo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-shopping-basket"></i>
+            <h1>Hệ thống Quản lý Bách Hóa Xanh</h1>
+        </div>
+        <div class="header-title">
+            <h2>Kiểm thử Điều khiển Tương tranh (Concurrency Control)</h2>
+        </div>
+            <a href="/login"><i class="fas fa-home"></i> Trang chủ</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 1. Mất cập nhật (Lost Update) -->
+        <section class="card">
+            <div class="card-header">
+                <h3>1. Mất Cập Nhật (Lost Update)</h3>
+                <span class="badge tv3">Nhiệm vụ TV3</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Kịch bản:</strong> 2 thu ngân cùng bấm thanh toán Lô 567 (SP002 - Sườn non heo) cùng một thời điểm.</p>
+                <div class="actions">
+                    <button class="btn btn-error" onclick="runLostUpdate(false)">
+                        <i class="fas fa-bug"></i> Chạy (Gây Lỗi)
+                    </button>
+                    <button class="btn btn-success" onclick="runLostUpdate(true)">
+                        <i class="fas fa-shield-alt"></i> Chạy (Đã Fix - Khóa 2PL)
+                    </button>
+                </div>
+                <div class="console" id="log-lost-update">
+                    <div class="console-header">Console Log</div>
+                    <div class="console-body"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Đọc rác (Dirty Read) -->
+        <section class="card">
+            <div class="card-header">
+                <h3>2. Đọc Rác (Dirty Read)</h3>
+                <span class="badge tv2">Nhiệm vụ TV2</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Kịch bản:</strong> Thu ngân mở Bill nhưng chưa chốt (treo 5s rồi hủy). Trong lúc đó, Quản lý chạy báo cáo đọc tồn kho Lô 567.</p>
+                <div class="actions">
+                    <button class="btn btn-warning" onclick="startDirtyTransaction()">
+                        <i class="fas fa-play"></i> 1. Thu ngân: Chạy Giao dịch (Treo 5s rồi Hủy)
+                    </button>
+                    <button class="btn btn-error" onclick="runDirtyRead(false)">
+                        <i class="fas fa-bug"></i> 2. Quản lý: Đọc rác (READ UNCOMMITTED)
+                    </button>
+                    <button class="btn btn-success" onclick="runDirtyRead(true)">
+                        <i class="fas fa-shield-alt"></i> 2. Quản lý: Đọc chuẩn (READ COMMITTED)
+                    </button>
+                </div>
+                <div class="console" id="log-dirty-read">
+                    <div class="console-header">Console Log</div>
+                    <div class="console-body"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Không lặp lại (Non-repeatable Read) -->
+        <section class="card">
+            <div class="card-header">
+                <h3>3. Không Lặp Lại (Non-repeatable Read)</h3>
+                <span class="badge tv4">Nhiệm vụ TV4</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Kịch bản:</strong> Thu ngân đang mở Bill tính tiền (treo 5s). Quản lý trong kho đổi giá sản phẩm `SP002`.</p>
+                <div class="actions">
+                    <button class="btn btn-warning" onclick="startNonRepeatableTransaction(false)">
+                        <i class="fas fa-bug"></i> 1. Thu ngân: Đọc giá (Không Khóa)
+                    </button>
+                    <button class="btn btn-success" onclick="startNonRepeatableTransaction(true)">
+                        <i class="fas fa-shield-alt"></i> 1. Thu ngân: Đọc giá (REPEATABLE READ)
+                    </button>
+                    <button class="btn btn-danger" onclick="updatePrice()">
+                        <i class="fas fa-edit"></i> 2. Quản lý: Đổi giá SP01 ngay lập tức
+                    </button>
+                </div>
+                <div class="console" id="log-non-repeatable">
+                    <div class="console-header">Console Log</div>
+                    <div class="console-body"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Bóng ma (Phantom Read) -->
+        <section class="card">
+            <div class="card-header">
+                <h3>4. Bóng Ma (Phantom Read)</h3>
+                <span class="badge tv5">Nhiệm vụ TV5</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Kịch bản:</strong> Quản lý đang chạy hàm SUM đếm tổng số hóa đơn (mất 5s). Thu ngân chèn 1 hóa đơn mới vào.</p>
+                <div class="actions">
+                    <button class="btn btn-warning" onclick="startPhantomTransaction(false)">
+                        <i class="fas fa-bug"></i> 1. Quản lý: Đếm Hóa Đơn (Không Khóa Range)
+                    </button>
+                    <button class="btn btn-success" onclick="startPhantomTransaction(true)">
+                        <i class="fas fa-shield-alt"></i> 1. Quản lý: Đếm Hóa Đơn (SERIALIZABLE)
+                    </button>
+                    <button class="btn btn-danger" onclick="insertPhantomBill()">
+                        <i class="fas fa-plus"></i> 2. Thu ngân: Chèn Hóa Đơn mới
+                    </button>
+                </div>
+                <div class="console" id="log-phantom-read">
+                    <div class="console-header">Console Log</div>
+                    <div class="console-body"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/demo/demo.js"></script>
+</body>
+</html>
