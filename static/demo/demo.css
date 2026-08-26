@@ -194,3 +194,23 @@ header {
 .log-tx2 { color: #e06c75; }
 .log-success { color: #98c379; }
 .log-error { color: #e5c07b; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    .header-title {
+        text-align: center;
+    }
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px; /* To hơn để dễ bấm */
+    }
+}

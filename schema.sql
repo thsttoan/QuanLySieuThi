@@ -1,266 +1,232 @@
-USE [master]
-GO
-/****** Object:  Database [QL_BachHoaXanh]    Script Date: 8/13/2026 4:11:17 PM ******/
-CREATE DATABASE [QL_BachHoaXanh]
- CONTAINMENT = NONE
- ON  PRIMARY 
-( NAME = N'QL_BachHoaXanh', FILENAME = N'D:\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\QL_BachHoaXanh.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
- LOG ON 
-( NAME = N'QL_BachHoaXanh_log', FILENAME = N'D:\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\QL_BachHoaXanh_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
-GO
-IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
-begin
-EXEC [QL_BachHoaXanh].[dbo].[sp_fulltext_database] @action = 'enable'
-end
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET ANSI_NULL_DEFAULT OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET ANSI_NULLS OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET ANSI_PADDING OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET ANSI_WARNINGS OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET ARITHABORT OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET AUTO_CLOSE ON 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET AUTO_SHRINK OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET AUTO_UPDATE_STATISTICS ON 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET CURSOR_CLOSE_ON_COMMIT OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET CURSOR_DEFAULT  GLOBAL 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET CONCAT_NULL_YIELDS_NULL OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET NUMERIC_ROUNDABORT OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET QUOTED_IDENTIFIER OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET RECURSIVE_TRIGGERS OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET  ENABLE_BROKER 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET DATE_CORRELATION_OPTIMIZATION OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET TRUSTWORTHY OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET ALLOW_SNAPSHOT_ISOLATION OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET PARAMETERIZATION SIMPLE 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET READ_COMMITTED_SNAPSHOT OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET HONOR_BROKER_PRIORITY OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET RECOVERY SIMPLE 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET  MULTI_USER 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET PAGE_VERIFY CHECKSUM  
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET DB_CHAINING OFF 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET TARGET_RECOVERY_TIME = 60 SECONDS 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET DELAYED_DURABILITY = DISABLED 
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET QUERY_STORE = ON
-GO
-ALTER DATABASE [QL_BachHoaXanh] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO)
-GO
+-- =============================================
+-- Full Database Export: QL_BachHoaXanh
+-- Generated: 2026-08-26 20:01:45
+-- =============================================
 USE [QL_BachHoaXanh]
 GO
-ALTER DATABASE SCOPED CONFIGURATION SET ACCELERATED_PLAN_FORCING = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET ASYNC_STATS_UPDATE_WAIT_AT_LOW_PRIORITY = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET BATCH_MODE_ADAPTIVE_JOINS = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET BATCH_MODE_MEMORY_GRANT_FEEDBACK = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET BATCH_MODE_ON_ROWSTORE = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET CE_FEEDBACK = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET DEFERRED_COMPILATION_TV = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET DOP_FEEDBACK = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET DW_COMPATIBILITY_LEVEL = 0;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET ELEVATE_ONLINE = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET ELEVATE_RESUMABLE = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET EXEC_QUERY_STATS_FOR_SCALAR_FUNCTIONS = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET FORCE_SHOWPLAN_RUNTIME_PARAMETER_COLLECTION = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET GLOBAL_TEMPORARY_TABLE_AUTO_DROP = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET IDENTITY_CACHE = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET INTERLEAVED_EXECUTION_TVF = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET ISOLATE_SECURITY_POLICY_CARDINALITY = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET LAST_QUERY_PLAN_STATS = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET LEDGER_DIGEST_STORAGE_ENDPOINT = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET LEGACY_CARDINALITY_ESTIMATION = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET LEGACY_CARDINALITY_ESTIMATION = PRIMARY;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET LIGHTWEIGHT_QUERY_PROFILING = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET MAXDOP = 0;
-GO
-ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET MAXDOP = PRIMARY;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET MEMORY_GRANT_FEEDBACK_PERCENTILE_GRANT = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET MEMORY_GRANT_FEEDBACK_PERSISTENCE = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET OPTIMIZED_PLAN_FORCING = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET OPTIMIZE_FOR_AD_HOC_WORKLOADS = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET PARAMETER_SENSITIVE_PLAN_OPTIMIZATION = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET PARAMETER_SNIFFING = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET PARAMETER_SNIFFING = PRIMARY;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET PAUSED_RESUMABLE_INDEX_ABORT_DURATION_MINUTES = 1440;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET QUERY_OPTIMIZER_HOTFIXES = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET QUERY_OPTIMIZER_HOTFIXES = PRIMARY;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET ROW_MODE_MEMORY_GRANT_FEEDBACK = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET TSQL_SCALAR_UDF_INLINING = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET VERBOSE_TRUNCATION_WARNINGS = ON;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET XTP_PROCEDURE_EXECUTION_STATISTICS = OFF;
-GO
-ALTER DATABASE SCOPED CONFIGURATION SET XTP_QUERY_EXECUTION_STATISTICS = OFF;
-GO
-USE [QL_BachHoaXanh]
-GO
-/****** Object:  UserDefinedFunction [dbo].[fn_TinhDiemTichLuy]    Script Date: 8/13/2026 4:11:18 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
-GO
 
--- 2. Cáº­p nháº­t hÃ m tÃ­nh Ä‘iá»ƒm tÃ­ch lÅ©y (1000Ä‘ = 1 Ä‘iá»ƒm)
-CREATE FUNCTION [dbo].[fn_TinhDiemTichLuy] (
-    @ThanhTien DECIMAL(18,2)
+-- =============================================
+-- PART 1: TABLE STRUCTURE
+-- =============================================
+
+-- Table: [CHI_TIET_HOA_DON]
+CREATE TABLE [CHI_TIET_HOA_DON] (
+    [MaHD] VARCHAR(20) NOT NULL,
+    [MaSP] VARCHAR(15) NOT NULL,
+    [MaLo] INT NOT NULL,
+    [SoLuong] DECIMAL(10,2) NOT NULL,
+    [DonGia] DECIMAL(18,2) NOT NULL,
+    [ThanhTien] DECIMAL(18,2) NOT NULL,
+    [SoTienGiam] DECIMAL(18,2) NOT NULL DEFAULT ((0)),
+    PRIMARY KEY ([MaHD], [MaSP], [MaLo])
 )
-RETURNS INT
-AS
-BEGIN
-    RETURN FLOOR(@ThanhTien / 1000.0);
-END;
-
-GO
-/****** Object:  UserDefinedFunction [dbo].[fn_TinhTienSauKhuyenMai]    Script Date: 8/13/2026 4:11:18 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
 GO
 
-
---------------------------------------------------------------------------------
--- ĐỐI TƯỢNG 1: FUNCTIONS (HÀM)
---------------------------------------------------------------------------------
-
--- Hàm 1: Tính giá trị sản phẩm sau khuyến mãi
-CREATE FUNCTION [dbo].[fn_TinhTienSauKhuyenMai] (
-    @MaSP VARCHAR(15),
-    @DonGia DECIMAL(18,2)
+-- Table: [CHI_TIET_PHIEU_NHAP]
+CREATE TABLE [CHI_TIET_PHIEU_NHAP] (
+    [MaPN] VARCHAR(20) NOT NULL,
+    [MaSP] VARCHAR(15) NOT NULL,
+    [SoLuong] DECIMAL(10,2) NOT NULL,
+    [GiaNhap] DECIMAL(18,2) NOT NULL,
+    [NgaySanXuat] DATE NULL,
+    [HanSuDung] DATE NOT NULL,
+    PRIMARY KEY ([MaPN], [MaSP])
 )
-RETURNS DECIMAL(18,2)
-AS
-BEGIN
-    DECLARE @PhanTramGiam INT = 0;
-    
-    -- Lấy % giảm giá lớn nhất của sản phẩm đang còn hiệu lực
-    SELECT TOP 1 @PhanTramGiam = km.PhanTramGiam
-    FROM KHUYEN_MAI km
-    INNER JOIN KM_SAN_PHAM ksp ON km.MaKM = ksp.MaKM
-    WHERE ksp.MaSP = @MaSP 
-      AND GETDATE() BETWEEN km.NgayBatDau AND km.NgayKetThuc
-    ORDER BY km.PhanTramGiam DESC;
-    
-    RETURN @DonGia * (1 - ISNULL(@PhanTramGiam, 0) / 100.0);
-END;
+GO
 
+-- Table: [DANH_MUC]
+CREATE TABLE [DANH_MUC] (
+    [MaDanhMuc] VARCHAR(10) NOT NULL,
+    [TenDanhMuc] NVARCHAR(100) NOT NULL,
+    PRIMARY KEY ([MaDanhMuc])
+)
 GO
-/****** Object:  Table [dbo].[DANH_MUC]    Script Date: 8/13/2026 4:11:18 PM ******/
-SET ANSI_NULLS ON
+
+-- Table: [HANG_TIEU_HUY]
+CREATE TABLE [HANG_TIEU_HUY] (
+    [MaTieuHuy] INT IDENTITY(1,1) NOT NULL,
+    [MaSP] VARCHAR(15) NOT NULL,
+    [MaLo] INT NOT NULL,
+    [SoLuongHuy] DECIMAL(10,2) NOT NULL,
+    [NgayTieuHuy] DATETIME NULL DEFAULT (getdate()),
+    [MaNV] VARCHAR(10) NOT NULL,
+    PRIMARY KEY ([MaTieuHuy])
+)
 GO
-SET QUOTED_IDENTIFIER ON
+
+-- Table: [HOA_DON]
+CREATE TABLE [HOA_DON] (
+    [MaHD] VARCHAR(20) NOT NULL,
+    [NgayLap] DATETIME NULL DEFAULT (getdate()),
+    [MaNV] VARCHAR(10) NULL,
+    [MaKH] INT NULL,
+    [TongTienHang] DECIMAL(18,2) NOT NULL,
+    [GiamGiaKM] DECIMAL(18,2) NULL DEFAULT ((0)),
+    [DiemSuDung] INT NULL DEFAULT ((0)),
+    [ThanhTien] DECIMAL(18,2) NOT NULL,
+    [PhuongThucTT] NVARCHAR(30) NOT NULL,
+    [MaNVSuaCuoi] VARCHAR(10) NULL,
+    [NgaySuaCuoi] DATETIME NULL,
+    [GhiChu] NVARCHAR(500) NULL,
+    [MaVoucher] VARCHAR(20) NULL,
+    [GiamGiaVoucher] DECIMAL(18,2) NULL,
+    PRIMARY KEY ([MaHD])
+)
 GO
-CREATE TABLE [dbo].[DANH_MUC](
-	[MaDanhMuc] [varchar](10) NOT NULL,
-	[TenDanhMuc] [nvarchar](100) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaDanhMuc] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+
+-- Table: [KHACH_HANG]
+CREATE TABLE [KHACH_HANG] (
+    [MaKH] INT IDENTITY(1,1) NOT NULL,
+    [SoDienThoai] VARCHAR(15) NOT NULL,
+    [TenKH] NVARCHAR(100) NOT NULL,
+    [DiemTichLuy] INT NULL DEFAULT ((0)),
+    [NgayDangKy] DATETIME NULL DEFAULT (getdate()),
+    PRIMARY KEY ([MaKH])
+)
 GO
-/****** Object:  Table [dbo].[SAN_PHAM]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
+
+-- Table: [KHUYEN_MAI]
+CREATE TABLE [KHUYEN_MAI] (
+    [MaKM] VARCHAR(10) NOT NULL,
+    [TenKM] NVARCHAR(100) NOT NULL,
+    [PhanTramGiam] INT NOT NULL,
+    [NgayBatDau] DATETIME NOT NULL,
+    [NgayKetThuc] DATETIME NOT NULL,
+    [LoaiKM] VARCHAR(20) NULL DEFAULT ('SanPham'),
+    PRIMARY KEY ([MaKM])
+)
 GO
-SET QUOTED_IDENTIFIER ON
+
+-- Table: [KM_SAN_PHAM]
+CREATE TABLE [KM_SAN_PHAM] (
+    [MaKM] VARCHAR(10) NOT NULL,
+    [MaSP] VARCHAR(15) NOT NULL,
+    PRIMARY KEY ([MaKM], [MaSP])
+)
 GO
-CREATE TABLE [dbo].[SAN_PHAM](
-	[MaSP] [varchar](15) NOT NULL,
-	[TenSP] [nvarchar](150) NOT NULL,
-	[MaDanhMuc] [varchar](10) NULL,
-	[DonViTinh] [nvarchar](20) NOT NULL,
-	[GiaBan] [decimal](18, 2) NOT NULL,
-	[LaHangTuoiSong] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaSP] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+
+-- Table: [LO_HANG]
+CREATE TABLE [LO_HANG] (
+    [MaLo] INT IDENTITY(1,1) NOT NULL,
+    [MaSP] VARCHAR(15) NULL,
+    [NgaySanXuat] DATE NULL,
+    [HanSuDung] DATE NOT NULL,
+    [SoLuongTon] DECIMAL(10,2) NOT NULL,
+    [GiaNhap] DECIMAL(18,2) NOT NULL,
+    PRIMARY KEY ([MaLo])
+)
 GO
-/****** Object:  Table [dbo].[LO_HANG]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
+
+-- Table: [NHA_CUNG_CAP]
+CREATE TABLE [NHA_CUNG_CAP] (
+    [MaNCC] VARCHAR(10) NOT NULL,
+    [TenNCC] NVARCHAR(150) NOT NULL,
+    [SoDienThoai] VARCHAR(15) NULL,
+    [DiaChi] NVARCHAR(200) NULL,
+    PRIMARY KEY ([MaNCC])
+)
 GO
-SET QUOTED_IDENTIFIER ON
+
+-- Table: [NHAN_VIEN]
+CREATE TABLE [NHAN_VIEN] (
+    [MaNV] VARCHAR(10) NOT NULL,
+    [TenNV] NVARCHAR(100) NOT NULL,
+    [ChucVu] NVARCHAR(50) NOT NULL,
+    [SoDienThoai] VARCHAR(15) NULL,
+    [MatKhau] VARCHAR(255) NOT NULL,
+    [Role] INT NULL DEFAULT ((1)),
+    PRIMARY KEY ([MaNV])
+)
 GO
-CREATE TABLE [dbo].[LO_HANG](
-	[MaLo] [int] IDENTITY(1,1) NOT NULL,
-	[MaSP] [varchar](15) NULL,
-	[NgaySanXuat] [date] NULL,
-	[HanSuDung] [date] NOT NULL,
-	[SoLuongTon] [decimal](10, 2) NOT NULL,
-	[GiaNhap] [decimal](18, 2) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaLo] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+
+-- Table: [PHIEU_NHAP]
+CREATE TABLE [PHIEU_NHAP] (
+    [MaPN] VARCHAR(20) NOT NULL,
+    [NgayNhap] DATETIME NULL DEFAULT (getdate()),
+    [MaNV] VARCHAR(10) NULL,
+    [MaNCC] VARCHAR(10) NULL,
+    [TongTien] DECIMAL(18,2) NOT NULL,
+    [MaNVSuaCuoi] VARCHAR(10) NULL,
+    [NgaySuaCuoi] DATETIME NULL,
+    [GhiChu] NVARCHAR(500) NULL,
+    PRIMARY KEY ([MaPN])
+)
 GO
-/****** Object:  View [dbo].[v_SanPhamSieuThi]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
+
+-- Table: [SAN_PHAM]
+CREATE TABLE [SAN_PHAM] (
+    [MaSP] VARCHAR(15) NOT NULL,
+    [TenSP] NVARCHAR(150) NOT NULL,
+    [MaDanhMuc] VARCHAR(10) NULL,
+    [DonViTinh] NVARCHAR(20) NOT NULL,
+    [GiaBan] DECIMAL(18,2) NOT NULL,
+    [LaHangTuoiSong] BIT NULL DEFAULT ((0)),
+    PRIMARY KEY ([MaSP])
+)
 GO
-SET QUOTED_IDENTIFIER OFF
+
+-- Table: [VOUCHER]
+CREATE TABLE [VOUCHER] (
+    [MaVoucher] VARCHAR(20) NOT NULL,
+    [TenVoucher] NVARCHAR(100) NOT NULL,
+    [LoaiVoucher] VARCHAR(20) NOT NULL,
+    [GiaTri] DECIMAL(18,2) NULL,
+    [MaSPTang] VARCHAR(15) NULL,
+    [SoLuongTang] INT NULL,
+    [NgayBatDau] DATE NOT NULL,
+    [NgayKetThuc] DATE NOT NULL,
+    PRIMARY KEY ([MaVoucher])
+)
+GO
+
+-- =============================================
+-- PART 2: FOREIGN KEYS
+-- =============================================
+
+ALTER TABLE [CHI_TIET_HOA_DON] ADD CONSTRAINT [FK__CHI_TIET_H__MaHD__5DCAEF64] FOREIGN KEY ([MaHD]) REFERENCES [HOA_DON] ([MaHD])
+ALTER TABLE [CHI_TIET_HOA_DON] ADD CONSTRAINT [FK__CHI_TIET_H__MaLo__5FB337D6] FOREIGN KEY ([MaLo]) REFERENCES [LO_HANG] ([MaLo])
+ALTER TABLE [CHI_TIET_HOA_DON] ADD CONSTRAINT [FK__CHI_TIET_H__MaSP__5EBF139D] FOREIGN KEY ([MaSP]) REFERENCES [SAN_PHAM] ([MaSP])
+ALTER TABLE [CHI_TIET_PHIEU_NHAP] ADD CONSTRAINT [FK__CHI_TIET_P__MaPN__6A30C649] FOREIGN KEY ([MaPN]) REFERENCES [PHIEU_NHAP] ([MaPN])
+ALTER TABLE [CHI_TIET_PHIEU_NHAP] ADD CONSTRAINT [FK__CHI_TIET_P__MaSP__6B24EA82] FOREIGN KEY ([MaSP]) REFERENCES [SAN_PHAM] ([MaSP])
+ALTER TABLE [HANG_TIEU_HUY] ADD CONSTRAINT [FK__HANG_TIEU___MaLo__1DB06A4F] FOREIGN KEY ([MaLo]) REFERENCES [LO_HANG] ([MaLo])
+ALTER TABLE [HANG_TIEU_HUY] ADD CONSTRAINT [FK__HANG_TIEU___MaNV__1EA48E88] FOREIGN KEY ([MaNV]) REFERENCES [NHAN_VIEN] ([MaNV])
+ALTER TABLE [HANG_TIEU_HUY] ADD CONSTRAINT [FK__HANG_TIEU___MaSP__1CBC4616] FOREIGN KEY ([MaSP]) REFERENCES [SAN_PHAM] ([MaSP])
+ALTER TABLE [HOA_DON] ADD CONSTRAINT [FK__HOA_DON__MaKH__5535A963] FOREIGN KEY ([MaKH]) REFERENCES [KHACH_HANG] ([MaKH])
+ALTER TABLE [HOA_DON] ADD CONSTRAINT [FK__HOA_DON__MaNV__5441852A] FOREIGN KEY ([MaNV]) REFERENCES [NHAN_VIEN] ([MaNV])
+ALTER TABLE [HOA_DON] ADD CONSTRAINT [FK__HOA_DON__MaNVSua__02084FDA] FOREIGN KEY ([MaNVSuaCuoi]) REFERENCES [NHAN_VIEN] ([MaNV])
+ALTER TABLE [KM_SAN_PHAM] ADD CONSTRAINT [FK__KM_SAN_PHA__MaKM__4F7CD00D] FOREIGN KEY ([MaKM]) REFERENCES [KHUYEN_MAI] ([MaKM])
+ALTER TABLE [KM_SAN_PHAM] ADD CONSTRAINT [FK__KM_SAN_PHA__MaSP__5070F446] FOREIGN KEY ([MaSP]) REFERENCES [SAN_PHAM] ([MaSP])
+ALTER TABLE [LO_HANG] ADD CONSTRAINT [FK__LO_HANG__MaSP__403A8C7D] FOREIGN KEY ([MaSP]) REFERENCES [SAN_PHAM] ([MaSP])
+ALTER TABLE [PHIEU_NHAP] ADD CONSTRAINT [FK__PHIEU_NHA__MaNCC__66603565] FOREIGN KEY ([MaNCC]) REFERENCES [NHA_CUNG_CAP] ([MaNCC])
+ALTER TABLE [PHIEU_NHAP] ADD CONSTRAINT [FK__PHIEU_NHA__MaNVS__02FC7413] FOREIGN KEY ([MaNVSuaCuoi]) REFERENCES [NHAN_VIEN] ([MaNV])
+ALTER TABLE [PHIEU_NHAP] ADD CONSTRAINT [FK__PHIEU_NHAP__MaNV__656C112C] FOREIGN KEY ([MaNV]) REFERENCES [NHAN_VIEN] ([MaNV])
+ALTER TABLE [SAN_PHAM] ADD CONSTRAINT [FK__SAN_PHAM__MaDanh__398D8EEE] FOREIGN KEY ([MaDanhMuc]) REFERENCES [DANH_MUC] ([MaDanhMuc])
+GO
+
+-- =============================================
+-- PART 3: VIEWS, PROCEDURES, TRIGGERS, FUNCTIONS
+-- =============================================
+
+-- VIEW: v_CanhBaoTonKho
+GO
+
+        CREATE VIEW [dbo].[v_CanhBaoTonKho] AS
+        SELECT 
+            sp.MaSP,
+            sp.TenSP,
+            ISNULL(SUM(lh.SoLuongTon), 0) AS TongTonKho,
+            CASE 
+                WHEN ISNULL(SUM(lh.SoLuongTon), 0) = 0 THEN N'Hết hàng'
+                ELSE N'Sắp hết (<= 10)'
+            END AS TrangThai
+        FROM SAN_PHAM sp
+        LEFT JOIN LO_HANG lh ON sp.MaSP = lh.MaSP
+        GROUP BY sp.MaSP, sp.TenSP
+        HAVING ISNULL(SUM(lh.SoLuongTon), 0) <= 10;
+ 
+GO
+
+-- VIEW: v_SanPhamSieuThi
 GO
 
 
@@ -269,7 +235,7 @@ GO
 --------------------------------------------------------------------------------
 
 -- View 1: Danh sách sản phẩm siêu thị và tổng tồn kho của các lô hàng còn hạn sử dụng
-CREATE VIEW [dbo].[v_SanPhamSieuThi] AS
+CREATE VIEW v_SanPhamSieuThi AS
 SELECT 
     sp.MaSP,
     sp.TenSP,
@@ -287,14 +253,12 @@ FROM SAN_PHAM sp
 INNER JOIN DANH_MUC dm ON sp.MaDanhMuc = dm.MaDanhMuc;
 
 GO
-/****** Object:  View [dbo].[v_CanhBaoHanSD]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
+
+-- VIEW: v_CanhBaoHanSD
 GO
 
 -- View 2: Cảnh báo hạn sử dụng lô hàng
-CREATE VIEW [dbo].[v_CanhBaoHanSD] AS
+CREATE VIEW v_CanhBaoHanSD AS
 SELECT 
     lh.MaLo,
     sp.MaSP,
@@ -314,62 +278,12 @@ INNER JOIN SAN_PHAM sp ON lh.MaSP = sp.MaSP
 WHERE lh.SoLuongTon > 0;
 
 GO
-/****** Object:  View [dbo].[v_CanhBaoTonKho]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
-GO
 
--- View 4: Cảnh báo tồn kho thấp (dưới 10)
-CREATE VIEW [dbo].[v_CanhBaoTonKho] AS
-SELECT 
-    sp.MaSP,
-    sp.TenSP,
-    ISNULL(SUM(lh.SoLuongTon), 0) AS TongTonKho,
-    CASE 
-        WHEN ISNULL(SUM(lh.SoLuongTon), 0) = 0 THEN N'Hết hàng'
-        ELSE N'Sắp hết (<= 10)'
-    END AS TrangThai
-FROM SAN_PHAM sp
-LEFT JOIN LO_HANG lh ON sp.MaSP = lh.MaSP
-GROUP BY sp.MaSP, sp.TenSP
-HAVING ISNULL(SUM(lh.SoLuongTon), 0) <= 10;
-
-GO
-/****** Object:  Table [dbo].[HOA_DON]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[HOA_DON](
-	[MaHD] [varchar](20) NOT NULL,
-	[NgayLap] [datetime] NULL,
-	[MaNV] [varchar](10) NULL,
-	[MaKH] [int] NULL,
-	[TongTienHang] [decimal](18, 2) NOT NULL,
-	[GiamGiaKM] [decimal](18, 2) NULL,
-	[DiemSuDung] [int] NULL,
-	[ThanhTien] [decimal](18, 2) NOT NULL,
-	[PhuongThucTT] [nvarchar](30) NOT NULL,
-	[MaNVSuaCuoi] [varchar](10) NULL,
-	[NgaySuaCuoi] [datetime] NULL,
-	[GhiChu] [nvarchar](500) NULL,
-	[MaVoucher] [varchar](20) NULL,
-	[GiamGiaVoucher] [decimal](18, 2) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaHD] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  View [dbo].[v_DoanhThuTheoNgay]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
+-- VIEW: v_DoanhThuTheoNgay
 GO
 
 -- View 3: Báo cáo doanh thu theo ngày
-CREATE VIEW [dbo].[v_DoanhThuTheoNgay] AS
+CREATE VIEW v_DoanhThuTheoNgay AS
 SELECT 
     CAST(NgayLap AS DATE) AS Ngay,
     COUNT(MaHD) AS SoHoaDon,
@@ -381,420 +295,63 @@ FROM HOA_DON
 GROUP BY CAST(NgayLap AS DATE);
 
 GO
-/****** Object:  Table [dbo].[CHI_TIET_HOA_DON]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[CHI_TIET_HOA_DON](
-	[MaHD] [varchar](20) NOT NULL,
-	[MaSP] [varchar](15) NOT NULL,
-	[MaLo] [int] NOT NULL,
-	[SoLuong] [decimal](10, 2) NOT NULL,
-	[DonGia] [decimal](18, 2) NOT NULL,
-	[ThanhTien] [decimal](18, 2) NOT NULL,
-	[SoTienGiam] [decimal](18, 2) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaHD] ASC,
-	[MaSP] ASC,
-	[MaLo] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[CHI_TIET_PHIEU_NHAP]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[CHI_TIET_PHIEU_NHAP](
-	[MaPN] [varchar](20) NOT NULL,
-	[MaSP] [varchar](15) NOT NULL,
-	[SoLuong] [decimal](10, 2) NOT NULL,
-	[GiaNhap] [decimal](18, 2) NOT NULL,
-	[NgaySanXuat] [date] NULL,
-	[HanSuDung] [date] NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaPN] ASC,
-	[MaSP] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[KHACH_HANG]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[KHACH_HANG](
-	[MaKH] [int] IDENTITY(1,1) NOT NULL,
-	[SoDienThoai] [varchar](15) NOT NULL,
-	[TenKH] [nvarchar](100) NOT NULL,
-	[DiemTichLuy] [int] NULL,
-	[NgayDangKy] [datetime] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaKH] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-UNIQUE NONCLUSTERED 
-(
-	[SoDienThoai] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[KHUYEN_MAI]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[KHUYEN_MAI](
-	[MaKM] [varchar](10) NOT NULL,
-	[TenKM] [nvarchar](100) NOT NULL,
-	[PhanTramGiam] [int] NOT NULL,
-	[NgayBatDau] [datetime] NOT NULL,
-	[NgayKetThuc] [datetime] NOT NULL,
-	[LoaiKM] [varchar](20) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaKM] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[KM_SAN_PHAM]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[KM_SAN_PHAM](
-	[MaKM] [varchar](10) NOT NULL,
-	[MaSP] [varchar](15) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaKM] ASC,
-	[MaSP] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[NHA_CUNG_CAP]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[NHA_CUNG_CAP](
-	[MaNCC] [varchar](10) NOT NULL,
-	[TenNCC] [nvarchar](150) NOT NULL,
-	[SoDienThoai] [varchar](15) NULL,
-	[DiaChi] [nvarchar](200) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaNCC] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[NHAN_VIEN]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[NHAN_VIEN](
-	[MaNV] [varchar](10) NOT NULL,
-	[TenNV] [nvarchar](100) NOT NULL,
-	[ChucVu] [nvarchar](50) NOT NULL,
-	[SoDienThoai] [varchar](15) NULL,
-	[MatKhau] [varchar](255) NOT NULL,
-	[Role] [int] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaNV] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[PHIEU_NHAP]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[PHIEU_NHAP](
-	[MaPN] [varchar](20) NOT NULL,
-	[NgayNhap] [datetime] NULL,
-	[MaNV] [varchar](10) NULL,
-	[MaNCC] [varchar](10) NULL,
-	[TongTien] [decimal](18, 2) NOT NULL,
-	[MaNVSuaCuoi] [varchar](10) NULL,
-	[NgaySuaCuoi] [datetime] NULL,
-	[GhiChu] [nvarchar](500) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaPN] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[VOUCHER]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[VOUCHER](
-	[MaVoucher] [varchar](20) NOT NULL,
-	[TenVoucher] [nvarchar](100) NOT NULL,
-	[LoaiVoucher] [varchar](20) NOT NULL,
-	[GiaTri] [decimal](18, 2) NULL,
-	[MaSPTang] [varchar](15) NULL,
-	[SoLuongTang] [int] NULL,
-	[NgayBatDau] [date] NOT NULL,
-	[NgayKetThuc] [date] NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MaVoucher] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON] ADD  DEFAULT ((0)) FOR [SoTienGiam]
-GO
-ALTER TABLE [dbo].[HOA_DON] ADD  DEFAULT (getdate()) FOR [NgayLap]
-GO
-ALTER TABLE [dbo].[HOA_DON] ADD  DEFAULT ((0)) FOR [GiamGiaKM]
-GO
-ALTER TABLE [dbo].[HOA_DON] ADD  DEFAULT ((0)) FOR [DiemSuDung]
-GO
-ALTER TABLE [dbo].[KHACH_HANG] ADD  DEFAULT ((0)) FOR [DiemTichLuy]
-GO
-ALTER TABLE [dbo].[KHACH_HANG] ADD  DEFAULT (getdate()) FOR [NgayDangKy]
-GO
-ALTER TABLE [dbo].[KHUYEN_MAI] ADD  DEFAULT ('SanPham') FOR [LoaiKM]
-GO
-ALTER TABLE [dbo].[NHAN_VIEN] ADD  DEFAULT ((1)) FOR [Role]
-GO
-ALTER TABLE [dbo].[PHIEU_NHAP] ADD  DEFAULT (getdate()) FOR [NgayNhap]
-GO
-ALTER TABLE [dbo].[SAN_PHAM] ADD  DEFAULT ((0)) FOR [LaHangTuoiSong]
-GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON]  WITH CHECK ADD FOREIGN KEY([MaHD])
-REFERENCES [dbo].[HOA_DON] ([MaHD])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON]  WITH CHECK ADD FOREIGN KEY([MaLo])
-REFERENCES [dbo].[LO_HANG] ([MaLo])
-GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON]  WITH CHECK ADD FOREIGN KEY([MaSP])
-REFERENCES [dbo].[SAN_PHAM] ([MaSP])
-GO
-ALTER TABLE [dbo].[CHI_TIET_PHIEU_NHAP]  WITH CHECK ADD FOREIGN KEY([MaPN])
-REFERENCES [dbo].[PHIEU_NHAP] ([MaPN])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[CHI_TIET_PHIEU_NHAP]  WITH CHECK ADD FOREIGN KEY([MaSP])
-REFERENCES [dbo].[SAN_PHAM] ([MaSP])
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD FOREIGN KEY([MaKH])
-REFERENCES [dbo].[KHACH_HANG] ([MaKH])
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD FOREIGN KEY([MaNV])
-REFERENCES [dbo].[NHAN_VIEN] ([MaNV])
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD FOREIGN KEY([MaNVSuaCuoi])
-REFERENCES [dbo].[NHAN_VIEN] ([MaNV])
-GO
-ALTER TABLE [dbo].[KM_SAN_PHAM]  WITH CHECK ADD FOREIGN KEY([MaKM])
-REFERENCES [dbo].[KHUYEN_MAI] ([MaKM])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[KM_SAN_PHAM]  WITH CHECK ADD FOREIGN KEY([MaSP])
-REFERENCES [dbo].[SAN_PHAM] ([MaSP])
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[LO_HANG]  WITH CHECK ADD FOREIGN KEY([MaSP])
-REFERENCES [dbo].[SAN_PHAM] ([MaSP])
-GO
-ALTER TABLE [dbo].[PHIEU_NHAP]  WITH CHECK ADD FOREIGN KEY([MaNCC])
-REFERENCES [dbo].[NHA_CUNG_CAP] ([MaNCC])
-GO
-ALTER TABLE [dbo].[PHIEU_NHAP]  WITH CHECK ADD FOREIGN KEY([MaNVSuaCuoi])
-REFERENCES [dbo].[NHAN_VIEN] ([MaNV])
-GO
-ALTER TABLE [dbo].[PHIEU_NHAP]  WITH CHECK ADD FOREIGN KEY([MaNV])
-REFERENCES [dbo].[NHAN_VIEN] ([MaNV])
-GO
-ALTER TABLE [dbo].[SAN_PHAM]  WITH CHECK ADD FOREIGN KEY([MaDanhMuc])
-REFERENCES [dbo].[DANH_MUC] ([MaDanhMuc])
-GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON]  WITH CHECK ADD CHECK  (([DonGia]>=(0)))
-GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON]  WITH CHECK ADD CHECK  (([SoLuong]>(0)))
-GO
-ALTER TABLE [dbo].[CHI_TIET_PHIEU_NHAP]  WITH CHECK ADD CHECK  (([GiaNhap]>(0)))
-GO
-ALTER TABLE [dbo].[CHI_TIET_PHIEU_NHAP]  WITH CHECK ADD CHECK  (([SoLuong]>(0)))
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD CHECK  (([DiemSuDung]>=(0)))
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD CHECK  (([GiamGiaKM]>=(0)))
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD CHECK  (([ThanhTien]>=(0)))
-GO
-ALTER TABLE [dbo].[HOA_DON]  WITH CHECK ADD CHECK  (([TongTienHang]>=(0)))
-GO
-ALTER TABLE [dbo].[KHACH_HANG]  WITH CHECK ADD CHECK  (([DiemTichLuy]>=(0)))
-GO
-ALTER TABLE [dbo].[KHUYEN_MAI]  WITH CHECK ADD CHECK  (([PhanTramGiam]>=(0) AND [PhanTramGiam]<=(100)))
-GO
-ALTER TABLE [dbo].[LO_HANG]  WITH CHECK ADD CHECK  (([GiaNhap]>(0)))
-GO
-ALTER TABLE [dbo].[LO_HANG]  WITH CHECK ADD CHECK  (([SoLuongTon]>=(0)))
-GO
-ALTER TABLE [dbo].[PHIEU_NHAP]  WITH CHECK ADD CHECK  (([TongTien]>=(0)))
-GO
-ALTER TABLE [dbo].[SAN_PHAM]  WITH CHECK ADD CHECK  (([GiaBan]>(0)))
-GO
-/****** Object:  StoredProcedure [dbo].[sp_BanHangFIFO]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+
+-- PROCEDURE: sp_SuaChiTietPhieuNhap
 GO
 
-CREATE   PROCEDURE [dbo].[sp_BanHangFIFO]
-    @MaHD VARCHAR(20),
-    @MaSP VARCHAR(15),
-    @SoLuongYeuCau DECIMAL(10,2),
-    @DonGiaGoc DECIMAL(18,2),
-    @SoTienGiam DECIMAL(18,2),
-    @ThanhTien DECIMAL(18,2)
-AS
-BEGIN
-    SET NOCOUNT ON;
-    
-    DECLARE @SoLuongConLai DECIMAL(10,2) = @SoLuongYeuCau;
-    DECLARE @MaLo INT, @SoLuongTonLo DECIMAL(10,2);
-    
-    DECLARE @ConLaiTienGiam DECIMAL(18,2) = @SoTienGiam;
-    DECLARE @ConLaiThanhTien DECIMAL(18,2) = @ThanhTien;
-    
-    DECLARE BatchCursor CURSOR LOCAL FAST_FORWARD FOR
-    SELECT MaLo, SoLuongTon
-    FROM LO_HANG
-    WHERE MaSP = @MaSP AND HanSuDung > GETDATE() AND SoLuongTon > 0
-    ORDER BY HanSuDung ASC;
-    
-    OPEN BatchCursor;
-    FETCH NEXT FROM BatchCursor INTO @MaLo, @SoLuongTonLo;
-    
-    WHILE @@FETCH_STATUS = 0 AND @SoLuongConLai > 0
-    BEGIN
-        IF @SoLuongTonLo >= @SoLuongConLai
-        BEGIN
-            UPDATE LO_HANG SET SoLuongTon = SoLuongTon - @SoLuongConLai WHERE MaLo = @MaLo;
-            
-            INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, SoTienGiam, ThanhTien)
-            VALUES (@MaHD, @MaSP, @MaLo, @SoLuongConLai, @DonGiaGoc, 
-                    @ConLaiTienGiam, @ConLaiThanhTien);
-            
-            SET @SoLuongConLai = 0;
-        END
-        ELSE
-        BEGIN
-            UPDATE LO_HANG SET SoLuongTon = 0 WHERE MaLo = @MaLo;
-            
-            DECLARE @TienGiamLo DECIMAL(18,2) = (@SoTienGiam / @SoLuongYeuCau) * @SoLuongTonLo;
-            DECLARE @ThanhTienLo DECIMAL(18,2) = (@ThanhTien / @SoLuongYeuCau) * @SoLuongTonLo;
-            
-            INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, SoTienGiam, ThanhTien)
-            VALUES (@MaHD, @MaSP, @MaLo, @SoLuongTonLo, @DonGiaGoc, 
-                    @TienGiamLo, @ThanhTienLo);
-            
-            SET @ConLaiTienGiam = @ConLaiTienGiam - @TienGiamLo;
-            SET @ConLaiThanhTien = @ConLaiThanhTien - @ThanhTienLo;
-            SET @SoLuongConLai = @SoLuongConLai - @SoLuongTonLo;
-        END
-        
-        FETCH NEXT FROM BatchCursor INTO @MaLo, @SoLuongTonLo;
-    END
-    
-    CLOSE BatchCursor;
-    DEALLOCATE BatchCursor;
-    
-    IF @SoLuongConLai > 0
-    BEGIN
-        DECLARE @TenSP NVARCHAR(150);
-        SELECT @TenSP = TenSP FROM SAN_PHAM WHERE MaSP = @MaSP;
-        DECLARE @ErrMsg NVARCHAR(255) = N'Lỗi: Sản phẩm "' + ISNULL(@TenSP, @MaSP) + N'" không đủ hàng tồn kho!';
-        RAISERROR (@ErrMsg, 16, 1);
-    END
-END;
-
-GO
-/****** Object:  StoredProcedure [dbo].[sp_NhapKho]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[sp_NhapKho]
+-- PROCEDURE Sá»¬A CHI TIáº¾T PHIáº¾U NHáº¬P
+CREATE PROCEDURE sp_SuaChiTietPhieuNhap
     @MaPN VARCHAR(20),
-    @MaNV VARCHAR(10),
-    @MaNCC VARCHAR(10),
     @MaSP VARCHAR(15),
-    @SoLuong DECIMAL(10,2),
-    @GiaNhap DECIMAL(18,2),
-    @NgaySanXuat DATE,
-    @HanSuDung DATE
+    @SoLuongMoi DECIMAL(10,2),
+    @MaNV VARCHAR(10)
 AS
 BEGIN
     SET NOCOUNT ON;
-    
     BEGIN TRY
         BEGIN TRANSACTION;
         
-        DECLARE @TongTien DECIMAL(18,2) = @SoLuong * @GiaNhap;
+        DECLARE @SoLuongCu DECIMAL(10,2), @GiaNhap DECIMAL(18,2), @NgaySX DATE, @HanSD DATE;
+        SELECT @SoLuongCu = SoLuong, @GiaNhap = GiaNhap, @NgaySX = NgaySanXuat, @HanSD = HanSuDung
+        FROM CHI_TIET_PHIEU_NHAP 
+        WHERE MaPN = @MaPN AND MaSP = @MaSP;
         
-        -- 1. Tạo phiếu nhập nếu chưa tồn tại
-        IF NOT EXISTS (SELECT 1 FROM PHIEU_NHAP WHERE MaPN = @MaPN)
+        IF @SoLuongCu IS NULL
         BEGIN
-            INSERT INTO PHIEU_NHAP (MaPN, NgayNhap, MaNV, MaNCC, TongTien)
-            VALUES (@MaPN, GETDATE(), @MaNV, @MaNCC, @TongTien);
-        END
-        ELSE
-        BEGIN
-            UPDATE PHIEU_NHAP
-            SET TongTien = TongTien + @TongTien
-            WHERE MaPN = @MaPN;
+            RAISERROR(N'KhÃ´ng tÃ¬m tháº¥y chi tiáº¿t phiáº¿u nháº­p!', 16, 1);
         END
         
-        -- 2. Thêm vào chi tiết phiếu nhập
-        INSERT INTO CHI_TIET_PHIEU_NHAP (MaPN, MaSP, SoLuong, GiaNhap, NgaySanXuat, HanSuDung)
-        VALUES (@MaPN, @MaSP, @SoLuong, @GiaNhap, @NgaySanXuat, @HanSuDung);
+        DECLARE @ChenhLech DECIMAL(10,2) = @SoLuongMoi - @SoLuongCu;
         
-        -- 3. Cập nhật lô hàng hoặc tạo lô mới
-        IF EXISTS (SELECT 1 FROM LO_HANG WHERE MaSP = @MaSP AND NgaySanXuat = @NgaySanXuat AND HanSuDung = @HanSuDung)
-        BEGIN
-            UPDATE LO_HANG 
-            SET SoLuongTon = SoLuongTon + @SoLuong,
-                GiaNhap = @GiaNhap -- Cập nhật giá nhập mới nhất
-            WHERE MaSP = @MaSP AND NgaySanXuat = @NgaySanXuat AND HanSuDung = @HanSuDung;
-        END
-        ELSE
-        BEGIN
-            INSERT INTO LO_HANG (MaSP, NgaySanXuat, HanSuDung, SoLuongTon, GiaNhap)
-            VALUES (@MaSP, @NgaySanXuat, @HanSuDung, @SoLuong, @GiaNhap);
-        END
+        -- Cáº­p nháº­t chi tiáº¿t phiáº¿u nháº­p
+        UPDATE CHI_TIET_PHIEU_NHAP SET SoLuong = @SoLuongMoi WHERE MaPN = @MaPN AND MaSP = @MaSP;
+        
+        -- Cáº­p nháº­t lÃ´ hÃ ng
+        UPDATE LO_HANG SET SoLuongTon = SoLuongTon + @ChenhLech 
+        WHERE MaSP = @MaSP AND NgaySanXuat = @NgaySX AND HanSuDung = @HanSD;
+        
+        -- Cáº­p nháº­t tá»•ng tiá»n phiáº¿u nháº­p
+        UPDATE PHIEU_NHAP 
+        SET TongTien = TongTien + (@ChenhLech * @GiaNhap),
+            MaNVSuaCuoi = @MaNV,
+            NgaySuaCuoi = GETDATE()
+        WHERE MaPN = @MaPN;
         
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-        
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        RAISERROR(@ErrorMessage, 16, 1);
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrMsg, 16, 1);
     END CATCH
 END;
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_SuaChiTietHoaDon]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+
+-- PROCEDURE: sp_SuaChiTietHoaDon
 GO
 
-CREATE   PROCEDURE [dbo].[sp_SuaChiTietHoaDon]
+CREATE   PROCEDURE sp_SuaChiTietHoaDon
     @MaHD VARCHAR(20),
     @MaSP VARCHAR(15),
     @MaLo INT,
@@ -867,94 +424,146 @@ BEGIN
 END;
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_SuaChiTietPhieuNhap]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
+
+-- PROCEDURE: sp_BanHangFIFO
 GO
 
--- PROCEDURE Sá»¬A CHI TIáº¾T PHIáº¾U NHáº¬P
-CREATE PROCEDURE [dbo].[sp_SuaChiTietPhieuNhap]
-    @MaPN VARCHAR(20),
-    @MaSP VARCHAR(15),
-    @SoLuongMoi DECIMAL(10,2),
-    @MaNV VARCHAR(10)
-AS
-BEGIN
-    SET NOCOUNT ON;
-    BEGIN TRY
-        BEGIN TRANSACTION;
-        
-        DECLARE @SoLuongCu DECIMAL(10,2), @GiaNhap DECIMAL(18,2), @NgaySX DATE, @HanSD DATE;
-        SELECT @SoLuongCu = SoLuong, @GiaNhap = GiaNhap, @NgaySX = NgaySanXuat, @HanSD = HanSuDung
-        FROM CHI_TIET_PHIEU_NHAP 
-        WHERE MaPN = @MaPN AND MaSP = @MaSP;
-        
-        IF @SoLuongCu IS NULL
+        CREATE PROCEDURE [dbo].[sp_BanHangFIFO]
+            @MaHD VARCHAR(20),
+            @MaSP VARCHAR(15),
+            @SoLuongYeuCau DECIMAL(10,2),
+            @DonGiaGoc DECIMAL(18,2),
+            @SoTienGiam DECIMAL(18,2),
+            @ThanhTien DECIMAL(18,2)
+        AS
         BEGIN
-            RAISERROR(N'KhÃ´ng tÃ¬m tháº¥y chi tiáº¿t phiáº¿u nháº­p!', 16, 1);
-        END
-        
-        DECLARE @ChenhLech DECIMAL(10,2) = @SoLuongMoi - @SoLuongCu;
-        
-        -- Cáº­p nháº­t chi tiáº¿t phiáº¿u nháº­p
-        UPDATE CHI_TIET_PHIEU_NHAP SET SoLuong = @SoLuongMoi WHERE MaPN = @MaPN AND MaSP = @MaSP;
-        
-        -- Cáº­p nháº­t lÃ´ hÃ ng
-        UPDATE LO_HANG SET SoLuongTon = SoLuongTon + @ChenhLech 
-        WHERE MaSP = @MaSP AND NgaySanXuat = @NgaySX AND HanSuDung = @HanSD;
-        
-        -- Cáº­p nháº­t tá»•ng tiá»n phiáº¿u nháº­p
-        UPDATE PHIEU_NHAP 
-        SET TongTien = TongTien + (@ChenhLech * @GiaNhap),
-            MaNVSuaCuoi = @MaNV,
-            NgaySuaCuoi = GETDATE()
-        WHERE MaPN = @MaPN;
-        
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
-        DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
-        RAISERROR(@ErrMsg, 16, 1);
-    END CATCH
-END;
+            SET NOCOUNT ON;
+            
+            DECLARE @SoLuongConLai DECIMAL(10,2) = @SoLuongYeuCau;
+            DECLARE @MaLo INT, @SoLuongTonLo DECIMAL(10,2);
+            
+            DECLARE @ConLaiTienGiam DECIMAL(18,2) = @SoTienGiam;
+            DECLARE @ConLaiThanhTien DECIMAL(18,2) = @ThanhTien;
+            
+            DECLARE BatchCursor CURSOR LOCAL FAST_FORWARD FOR
+            SELECT MaLo, SoLuongTon
+            FROM LO_HANG
+            WHERE MaSP = @MaSP AND HanSuDung > GETDATE() AND SoLuongTon > 0
+            ORDER BY HanSuDung ASC;
+            
+            OPEN BatchCursor;
+            FETCH NEXT FROM BatchCursor INTO @MaLo, @SoLuongTonLo;
+            
+            WHILE @@FETCH_STATUS = 0 AND @SoLuongConLai > 0
+            BEGIN
+                IF @SoLuongTonLo >= @SoLuongConLai
+                BEGIN
+                    UPDATE LO_HANG SET SoLuongTon = SoLuongTon - @SoLuongConLai WHERE MaLo = @MaLo;
+                    
+                    INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, SoTienGiam, ThanhTien)
+                    VALUES (@MaHD, @MaSP, @MaLo, @SoLuongConLai, @DonGiaGoc, 
+                            @ConLaiTienGiam, @ConLaiThanhTien);
+                    
+                    SET @SoLuongConLai = 0;
+                END
+                ELSE
+                BEGIN
+                    UPDATE LO_HANG SET SoLuongTon = 0 WHERE MaLo = @MaLo;
+                    
+                    DECLARE @TienGiamLo DECIMAL(18,2) = (@SoTienGiam / @SoLuongYeuCau) * @SoLuongTonLo;
+                    DECLARE @ThanhTienLo DECIMAL(18,2) = (@ThanhTien / @SoLuongYeuCau) * @SoLuongTonLo;
+                    
+                    INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, SoTienGiam, ThanhTien)
+                    VALUES (@MaHD, @MaSP, @MaLo, @SoLuongTonLo, @DonGiaGoc, 
+                            @TienGiamLo, @ThanhTienLo);
+                    
+                    SET @ConLaiTienGiam = @ConLaiTienGiam - @TienGiamLo;
+                    SET @ConLaiThanhTien = @ConLaiThanhTien - @ThanhTienLo;
+                    SET @SoLuongConLai = @SoLuongConLai - @SoLuongTonLo;
+                END
+                
+                FETCH NEXT FROM BatchCursor INTO @MaLo, @SoLuongTonLo;
+            END
+            
+            CLOSE BatchCursor;
+            DEALLOCATE BatchCursor;
+            
+            IF @SoLuongConLai > 0
+            BEGIN
+                DECLARE @TenSP NVARCHAR(150);
+                SELECT @TenSP = TenSP FROM SAN_PHAM WHERE MaSP = @MaSP;
+                DECLARE @ErrMsg NVARCHAR(255) = N'Lỗi: Sản phẩm "' + ISNULL(@TenSP, @MaSP) + N'" không đủ hàng tồn kho!';
+                RAISERROR (@ErrMsg, 16, 1);
+            END
+        END;
+ 
+GO
 
+-- PROCEDURE: sp_NhapKho
 GO
-/****** Object:  Trigger [dbo].[trg_KiemTraHSDKhiBan]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
-GO
-
--- Trigger 2: Kiểm tra hạn sử dụng của lô hàng khi lưu chi tiết hóa đơn
-CREATE TRIGGER [dbo].[trg_KiemTraHSDKhiBan]
-ON [dbo].[CHI_TIET_HOA_DON]
-AFTER INSERT, UPDATE
+CREATE PROCEDURE sp_NhapKho
+    @MaPN VARCHAR(20),
+    @MaNV VARCHAR(10),
+    @MaNCC VARCHAR(10),
+    @MaSP VARCHAR(15),
+    @SoLuong DECIMAL(10,2),
+    @GiaNhap DECIMAL(18,2),
+    @NgaySanXuat DATE,
+    @HanSuDung DATE
 AS
 BEGIN
     SET NOCOUNT ON;
     
-    IF EXISTS (
-        SELECT 1
-        FROM inserted i
-        INNER JOIN LO_HANG lh ON i.MaLo = lh.MaLo
-        WHERE lh.HanSuDung < GETDATE()
-    )
-    BEGIN
-        RAISERROR (N'Lỗi: Không thể bán sản phẩm thuộc lô hàng đã hết hạn sử dụng!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        
+        DECLARE @TongTien DECIMAL(18,2) = @SoLuong * @GiaNhap;
+        
+        -- 1. Tạo phiếu nhập nếu chưa tồn tại
+        IF NOT EXISTS (SELECT 1 FROM PHIEU_NHAP WHERE MaPN = @MaPN)
+        BEGIN
+            INSERT INTO PHIEU_NHAP (MaPN, NgayNhap, MaNV, MaNCC, TongTien)
+            VALUES (@MaPN, GETDATE(), @MaNV, @MaNCC, @TongTien);
+        END
+        ELSE
+        BEGIN
+            UPDATE PHIEU_NHAP
+            SET TongTien = TongTien + @TongTien
+            WHERE MaPN = @MaPN;
+        END
+        
+        -- 2. Thêm vào chi tiết phiếu nhập
+        INSERT INTO CHI_TIET_PHIEU_NHAP (MaPN, MaSP, SoLuong, GiaNhap, NgaySanXuat, HanSuDung)
+        VALUES (@MaPN, @MaSP, @SoLuong, @GiaNhap, @NgaySanXuat, @HanSuDung);
+        
+        -- 3. Cập nhật lô hàng hoặc tạo lô mới
+        IF EXISTS (SELECT 1 FROM LO_HANG WHERE MaSP = @MaSP AND NgaySanXuat = @NgaySanXuat AND HanSuDung = @HanSuDung)
+        BEGIN
+            UPDATE LO_HANG 
+            SET SoLuongTon = SoLuongTon + @SoLuong,
+                GiaNhap = @GiaNhap -- Cập nhật giá nhập mới nhất
+            WHERE MaSP = @MaSP AND NgaySanXuat = @NgaySanXuat AND HanSuDung = @HanSuDung;
+        END
+        ELSE
+        BEGIN
+            INSERT INTO LO_HANG (MaSP, NgaySanXuat, HanSuDung, SoLuongTon, GiaNhap)
+            VALUES (@MaSP, @NgaySanXuat, @HanSuDung, @SoLuong, @GiaNhap);
+        END
+        
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMessage, 16, 1);
+    END CATCH
 END;
 
 GO
-ALTER TABLE [dbo].[CHI_TIET_HOA_DON] ENABLE TRIGGER [trg_KiemTraHSDKhiBan]
-GO
-/****** Object:  Trigger [dbo].[trg_SauKhiLapHoaDon]    Script Date: 8/13/2026 4:11:19 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER OFF
+
+-- TRIGGER: trg_SauKhiLapHoaDon
 GO
 
 
@@ -963,8 +572,8 @@ GO
 --------------------------------------------------------------------------------
 
 -- Trigger 1: Tự động cập nhật điểm tích lũy của khách hàng sau khi lập hóa đơn
-CREATE TRIGGER [dbo].[trg_SauKhiLapHoaDon]
-ON [dbo].[HOA_DON]
+CREATE TRIGGER trg_SauKhiLapHoaDon
+ON HOA_DON
 AFTER INSERT
 AS
 BEGIN
@@ -995,23 +604,1244 @@ BEGIN
 END;
 
 GO
-ALTER TABLE [dbo].[HOA_DON] ENABLE TRIGGER [trg_SauKhiLapHoaDon]
+
+-- TRIGGER: trg_KiemTraHSDKhiBan
 GO
-USE [master]
+
+-- Trigger 2: Kiểm tra hạn sử dụng của lô hàng khi lưu chi tiết hóa đơn
+CREATE TRIGGER trg_KiemTraHSDKhiBan
+ON CHI_TIET_HOA_DON
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        INNER JOIN LO_HANG lh ON i.MaLo = lh.MaLo
+        WHERE lh.HanSuDung < GETDATE()
+    )
+    BEGIN
+        RAISERROR (N'Lỗi: Không thể bán sản phẩm thuộc lô hàng đã hết hạn sử dụng!', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+END;
+
 GO
-ALTER DATABASE [QL_BachHoaXanh] SET  READ_WRITE 
+
+-- FUNCTION: fn_TinhTienSauKhuyenMai
 GO
-USE [QL_BachHoaXanh]
+
+
+--------------------------------------------------------------------------------
+-- ĐỐI TƯỢNG 1: FUNCTIONS (HÀM)
+--------------------------------------------------------------------------------
+
+-- Hàm 1: Tính giá trị sản phẩm sau khuyến mãi
+CREATE FUNCTION fn_TinhTienSauKhuyenMai (
+    @MaSP VARCHAR(15),
+    @DonGia DECIMAL(18,2)
+)
+RETURNS DECIMAL(18,2)
+AS
+BEGIN
+    DECLARE @PhanTramGiam INT = 0;
+    
+    -- Lấy % giảm giá lớn nhất của sản phẩm đang còn hiệu lực
+    SELECT TOP 1 @PhanTramGiam = km.PhanTramGiam
+    FROM KHUYEN_MAI km
+    INNER JOIN KM_SAN_PHAM ksp ON km.MaKM = ksp.MaKM
+    WHERE ksp.MaSP = @MaSP 
+      AND GETDATE() BETWEEN km.NgayBatDau AND km.NgayKetThuc
+    ORDER BY km.PhanTramGiam DESC;
+    
+    RETURN @DonGia * (1 - ISNULL(@PhanTramGiam, 0) / 100.0);
+END;
+
 GO
-CREATE TABLE [dbo].[HANG_TIEU_HUY] (
-    [MaTieuHuy] INT IDENTITY(1,1) PRIMARY KEY,
-    [MaSP] VARCHAR(15) NOT NULL,
-    [MaLo] INT NOT NULL,
-    [SoLuongHuy] DECIMAL(10,2) NOT NULL,
-    [NgayTieuHuy] DATETIME DEFAULT GETDATE(),
-    [MaNV] VARCHAR(10) NOT NULL,
-    FOREIGN KEY ([MaSP]) REFERENCES [dbo].[SAN_PHAM]([MaSP]),
-    FOREIGN KEY ([MaLo]) REFERENCES [dbo].[LO_HANG]([MaLo]),
-    FOREIGN KEY ([MaNV]) REFERENCES [dbo].[NHAN_VIEN]([MaNV])
-);
+
+-- FUNCTION: fn_TinhDiemTichLuy
+GO
+
+-- 2. Cáº­p nháº­t hÃ m tÃ­nh Ä‘iá»ƒm tÃ­ch lÅ©y (1000Ä‘ = 1 Ä‘iá»ƒm)
+CREATE FUNCTION fn_TinhDiemTichLuy (
+    @ThanhTien DECIMAL(18,2)
+)
+RETURNS INT
+AS
+BEGIN
+    RETURN FLOOR(@ThanhTien / 1000.0);
+END;
+
+GO
+
+-- =============================================
+-- PART 4: SEED DATA
+-- =============================================
+
+-- Data: DANH_MUC (15 rows)
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM01', N'Thịt, cá, trứng, hải sản')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM02', N'Rau, củ, nấm, trái cây')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM03', N'Dầu ăn, nước chấm, gia vị')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM04', N'Gạo, bột, đồ khô')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM05', N'Mì, miến, cháo, phở')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM06', N'Sữa các loại')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM07', N'Kem, sữa chua')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM08', N'Thực phẩm đông mát')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM09', N'Bia, nước giải khát')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM10', N'Cà phê, Trà, Ngũ Cốc')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM11', N'Bánh kẹo các loại')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM12', N'Chăm sóc cá nhân')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM13', N'Vệ sinh nhà cửa')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM14', N'Sản phẩm mẹ và bé')
+INSERT INTO [DANH_MUC] ([MaDanhMuc], [TenDanhMuc]) VALUES (N'DM15', N'Đồ dùng gia đình')
+GO
+
+-- Data: KHACH_HANG (1 rows)
+SET IDENTITY_INSERT [KHACH_HANG] ON
+GO
+INSERT INTO [KHACH_HANG] ([MaKH], [SoDienThoai], [TenKH], [DiemTichLuy], [NgayDangKy]) VALUES (1, N'0123456789', N'Toàn', 1271, '2026-08-13 14:00:53.127000')
+SET IDENTITY_INSERT [KHACH_HANG] OFF
+GO
+
+-- Data: KHUYEN_MAI (2 rows)
+INSERT INTO [KHUYEN_MAI] ([MaKM], [TenKM], [PhanTramGiam], [NgayBatDau], [NgayKetThuc], [LoaiKM]) VALUES (N'KM01', N'Giảm giá Thịt, cá, trứng, hải sả', 10, '2026-08-13 00:00:00', '2026-08-20 00:00:00', N'SanPham')
+INSERT INTO [KHUYEN_MAI] ([MaKM], [TenKM], [PhanTramGiam], [NgayBatDau], [NgayKetThuc], [LoaiKM]) VALUES (N'KM02', N'Giảm giá Kem, sữa chua', 30, '2026-08-13 00:00:00', '2026-08-20 00:00:00', N'SanPham')
+GO
+
+-- Data: NHA_CUNG_CAP (5 rows)
+INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (N'NCC01', N'Hợp tác xã Rau sạch Đà Lạt', N'02633888999', N'Lâm Đồng, Đà Lạt')
+INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (N'NCC02', N'Công ty Cổ phần Chăn nuôi C.P. Việt Nam', N'02839991111', N'KCN Biên Hòa 2, Đồng Nai')
+INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (N'NCC03', N'Công ty Cổ phần Chuỗi Thực phẩm TH', N'02431234567', N'Nghĩa Đàn, Nghệ An')
+INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (N'NCC04', N'Công ty Cổ phần Acecook Việt Nam', N'02838154000', N'KCN Tân Bình, TP. Hồ Chí Minh')
+INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (N'NCC05', N'Công ty TNHH Unilever Việt Nam', N'02838236666', N'Quận 7, TP. Hồ Chí Minh')
+GO
+
+-- Data: NHAN_VIEN (4 rows)
+INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'admin', N'Quản trị viên', N'Admin / Quản lý', N'0999999999', N'scrypt:32768:8:1$aHcqfArPgDOIbSTx$71d68d9dd348b424e4b6d53cbe56c7a352ed2de8d6cc8100b7328c3145c052729e6185b80f0bb14b217d631abe089873eae536746d0e4683715c3f0c7f4f8d58', 0)
+INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'kho1', N'Thủ Kho 1', N'Nhân viên kho', N'0922233344', N'scrypt:32768:8:1$lqOBkIzs93IqsFZS$6a17c0425297e5c7e4999afd64595e124884f0adb633ece7039039f696d4004872f1c8e49496010445efc8c96ced86869b47536639b9d35ba8ce57e544e113ff', 2)
+INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'thungan1', N'Thu Ngân 1', N'Thu ngân', N'0911122233', N'scrypt:32768:8:1$RWfKHag9deB8wj3P$a500cf18e49f52d7b3a74240f78eb3ccc489ec9f3f17e2de20784e9ca37149b307b858a64502dc3a948f7af1e8bc19cdd8fa3b94ff83d21679b8e04bc8433e05', 1)
+INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'thungan2', N'Thu Ngân 2', N'Thu ngân', N'0911122234', N'scrypt:32768:8:1$B6y0fSflKSBk1WAs$79cce84d1a3a7262520b506af828da303dddcdf4bcb9853810e771fe4e3bcc4f444f33928bc61665665d1cbcc78f2c6606ef80f6b012b68edf22fb3e8095ada0', 1)
+GO
+
+-- Data: VOUCHER (1 rows)
+INSERT INTO [VOUCHER] ([MaVoucher], [TenVoucher], [LoaiVoucher], [GiaTri], [MaSPTang], [SoLuongTang], [NgayBatDau], [NgayKetThuc]) VALUES (N'VC01', N'Giảm 5%', N'GiamGia', N'5.00', NULL, NULL, '2026-08-13', '2026-08-20')
+GO
+
+-- Data: CHI_TIET_HOA_DON (20 rows)
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP002', 14, N'1.00', N'115000.00', N'97557.77', N'17442.23')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP026', 3, N'1.00', N'13000.00', N'12253.63', N'746.37')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP051', 79, N'1.00', N'42000.00', N'39588.66', N'2411.34')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP076', 114, N'1.00', N'135000.00', N'127249.26', N'7750.74')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP101', 12, N'6.00', N'4500.00', N'25449.85', N'1550.15')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP126', 188, N'1.00', N'30500.00', N'28748.91', N'1751.09')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP151', 222, N'1.00', N'26000.00', N'24507.26', N'1492.74')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP176', 262, N'1.00', N'68000.00', N'64095.92', N'3904.08')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP207', 307, N'1.00', N'325000.00', N'306340.81', N'18659.19')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP208', 309, N'8.00', N'10000.00', N'75406.97', N'4593.03')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP232', 340, N'1.00', N'10000.00', N'9425.87', N'574.13')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP252', 373, N'1.00', N'38000.00', N'35818.31', N'2181.69')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP253', 375, N'1.00', N'10000.00', N'9425.87', N'574.13')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP279', 414, N'1.00', N'155000.00', N'146101.00', N'8899.00')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP284', 422, N'1.00', N'38000.00', N'35818.31', N'2181.69')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP311', 465, N'1.00', N'78000.00', N'73521.79', N'4478.21')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP341', 509, N'1.00', N'85000.00', N'80119.90', N'4880.10')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260813144525001', N'SP375', 562, N'1.00', N'85000.00', N'80119.90', N'4880.10')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260814082554001', N'SP207', 307, N'1.00', N'325000.00', N'325000.00', N'0.00')
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260814100935001', N'SP003', 15, N'1.00', N'75000.00', N'67500.00', N'7500.00')
+GO
+
+-- Data: CHI_TIET_PHIEU_NHAP (6 rows)
+INSERT INTO [CHI_TIET_PHIEU_NHAP] ([MaPN], [MaSP], [SoLuong], [GiaNhap], [NgaySanXuat], [HanSuDung]) VALUES (N'PN20260814083849', N'SP026', N'10.00', N'7000.00', '2026-08-14', '2026-08-16')
+INSERT INTO [CHI_TIET_PHIEU_NHAP] ([MaPN], [MaSP], [SoLuong], [GiaNhap], [NgaySanXuat], [HanSuDung]) VALUES (N'PN20260826170620', N'SP001', N'10.00', N'25000.00', '2026-08-26', '2026-09-02')
+INSERT INTO [CHI_TIET_PHIEU_NHAP] ([MaPN], [MaSP], [SoLuong], [GiaNhap], [NgaySanXuat], [HanSuDung]) VALUES (N'PN20260826173050', N'SP002', N'1.00', N'100000.00', '2026-08-26', '2026-09-02')
+INSERT INTO [CHI_TIET_PHIEU_NHAP] ([MaPN], [MaSP], [SoLuong], [GiaNhap], [NgaySanXuat], [HanSuDung]) VALUES (N'PN20260826175220', N'SP002', N'1.00', N'100000.00', '2026-08-26', '2026-09-02')
+INSERT INTO [CHI_TIET_PHIEU_NHAP] ([MaPN], [MaSP], [SoLuong], [GiaNhap], [NgaySanXuat], [HanSuDung]) VALUES (N'PN20260826193126', N'SP002', N'1.00', N'100000.00', '2026-08-26', '2026-08-27')
+INSERT INTO [CHI_TIET_PHIEU_NHAP] ([MaPN], [MaSP], [SoLuong], [GiaNhap], [NgaySanXuat], [HanSuDung]) VALUES (N'PN20260826193703', N'SP003', N'1.00', N'60000.00', '2026-08-26', '2026-09-02')
+GO
+
+-- Data: HANG_TIEU_HUY (56 rows)
+SET IDENTITY_INSERT [HANG_TIEU_HUY] ON
+GO
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (1, N'SP026', 1, N'5.00', '2026-08-14 09:04:54.443000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (2, N'SP026', 2, N'15.00', '2026-08-14 09:05:02.907000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (3, N'SP001', 8, N'10.00', '2026-08-14 09:05:05.203000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (4, N'SP027', 4, N'30.00', '2026-08-14 09:05:07.010000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (5, N'SP003', 15, N'23.00', '2026-08-26 17:01:12.767000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (6, N'SP005', 17, N'35.00', '2026-08-26 17:01:14.857000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (7, N'SP012', 27, N'37.00', '2026-08-26 17:01:17.953000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (8, N'SP013', 28, N'31.00', '2026-08-26 17:01:19.677000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (9, N'SP015', 32, N'16.00', '2026-08-26 17:01:21.463000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (10, N'SP022', 43, N'33.00', '2026-08-26 17:01:23.530000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (11, N'SP024', 46, N'15.00', '2026-08-26 17:01:25.927000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (12, N'SP016', 34, N'39.00', '2026-08-26 17:01:39.640000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (13, N'SP028', 6, N'12.00', '2026-08-26 17:01:41.027000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (14, N'SP040', 62, N'34.00', '2026-08-26 17:01:43.043000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (15, N'SP048', 73, N'27.00', '2026-08-26 17:01:45.010000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (16, N'SP050', 77, N'26.00', '2026-08-26 17:01:47.007000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (17, N'SP038', 60, N'16.00', '2026-08-26 17:01:48.703000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (18, N'SP031', 52, N'17.00', '2026-08-26 17:01:53.667000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (19, N'SP044', 68, N'27.00', '2026-08-26 17:01:54.980000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (20, N'SP043', 66, N'19.00', '2026-08-26 17:01:56.563000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (21, N'SP029', 48, N'21.00', '2026-08-26 17:01:58.030000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (22, N'SP027', 5, N'40.00', '2026-08-26 17:02:00.680000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (23, N'SP004', 16, N'28.00', '2026-08-26 17:02:03.883000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (24, N'SP009', 22, N'14.00', '2026-08-26 17:02:06.670000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (25, N'SP007', 19, N'35.00', '2026-08-26 17:02:22.010000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (26, N'SP019', 38, N'26.00', '2026-08-26 17:02:23.423000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (27, N'SP002', 14, N'26.00', '2026-08-26 17:02:31.640000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (28, N'SP026', 3, N'24.00', '2026-08-26 17:02:32.910000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (29, N'SP026', 565, N'10.00', '2026-08-26 17:02:34.760000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (30, N'SP010', 23, N'19.00', '2026-08-26 17:02:37.673000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (31, N'SP017', 35, N'42.00', '2026-08-26 17:02:39.610000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (32, N'SP023', 44, N'37.00', '2026-08-26 17:02:40.923000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (33, N'SP025', 47, N'26.00', '2026-08-26 17:02:42.533000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (34, N'SP030', 50, N'31.00', '2026-08-26 17:02:45.043000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (35, N'SP033', 54, N'12.00', '2026-08-26 17:02:46.417000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (36, N'SP039', 61, N'28.00', '2026-08-26 17:14:26.813000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (37, N'SP041', 63, N'39.00', '2026-08-26 17:14:33.833000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (38, N'SP028', 7, N'30.00', '2026-08-26 17:14:35.197000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (39, N'SP006', 18, N'19.00', '2026-08-26 17:14:37.160000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (40, N'SP011', 25, N'43.00', '2026-08-26 17:14:38.680000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (41, N'SP018', 37, N'12.00', '2026-08-26 17:14:40.263000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (42, N'SP014', 30, N'45.00', '2026-08-26 17:14:46.897000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (43, N'SP008', 21, N'22.00', '2026-08-26 17:14:48.160000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (44, N'SP021', 42, N'17.00', '2026-08-26 17:14:49.623000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (45, N'SP036', 57, N'35.00', '2026-08-26 17:17:38.663000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (46, N'SP042', 64, N'10.00', '2026-08-26 17:17:39.960000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (47, N'SP047', 71, N'42.00', '2026-08-26 17:17:41.367000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (48, N'SP049', 75, N'32.00', '2026-08-26 17:17:43.117000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (49, N'SP045', 69, N'44.00', '2026-08-26 17:17:44.913000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (50, N'SP046', 70, N'13.00', '2026-08-26 17:17:46.817000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (51, N'SP037', 59, N'18.00', '2026-08-26 17:17:48.643000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (52, N'SP032', 53, N'27.00', '2026-08-26 17:17:50.163000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (53, N'SP034', 55, N'22.00', '2026-08-26 17:17:52.133000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (54, N'SP035', 56, N'26.00', '2026-08-26 17:17:54.463000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (55, N'SP020', 40, N'37.00', '2026-08-26 17:17:56.233000', N'kho1')
+INSERT INTO [HANG_TIEU_HUY] ([MaTieuHuy], [MaSP], [MaLo], [SoLuongHuy], [NgayTieuHuy], [MaNV]) VALUES (56, N'SP001', 9, N'50.00', '2026-08-26 17:17:57.703000', N'kho1')
+SET IDENTITY_INSERT [HANG_TIEU_HUY] OFF
+GO
+
+-- Data: HOA_DON (4 rows)
+INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD_DEMO_1787741682', '2026-08-26 17:54:42.433000', N'thungan1', NULL, N'50000.00', N'0.00', 0, N'50000.00', N'Ti?n m?t', NULL, NULL, NULL, NULL, NULL)
+INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260813144525001', '2026-08-13 14:45:25.333000', N'thungan1', 1, N'1360500.00', N'11500.00', 100, N'1271550.00', N'Tiền mặt', NULL, NULL, NULL, N'VC01', N'67450.00')
+INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260814082554001', '2026-08-14 08:25:55.050000', N'thungan1', NULL, N'325000.00', N'0.00', 0, N'325000.00', N'Tiền mặt', NULL, NULL, NULL, NULL, N'0.00')
+INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260814100935001', '2026-08-14 10:09:35.700000', N'thungan1', NULL, N'75000.00', N'7500.00', 0, N'67500.00', N'Ví điện tử', NULL, NULL, NULL, NULL, N'0.00')
+GO
+
+-- Data: KM_SAN_PHAM (50 rows)
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP001')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP002')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP003')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP004')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP005')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP006')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP007')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP008')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP009')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP010')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP011')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP012')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP013')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP014')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP015')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP016')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP017')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP018')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP019')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP020')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP021')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP022')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP023')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP024')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM01', N'SP025')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP151')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP152')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP153')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP154')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP155')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP156')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP157')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP158')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP159')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP160')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP161')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP162')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP163')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP164')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP165')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP166')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP167')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP168')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP169')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP170')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP171')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP172')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP173')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP174')
+INSERT INTO [KM_SAN_PHAM] ([MaKM], [MaSP]) VALUES (N'KM02', N'SP175')
+GO
+
+-- Data: LO_HANG (569 rows)
+SET IDENTITY_INSERT [LO_HANG] ON
+GO
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (1, N'SP026', '2026-08-07', '2026-08-10', N'0.00', N'6000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (2, N'SP026', '2026-08-10', '2026-08-13', N'0.00', N'6200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (3, N'SP026', '2026-08-11', '2026-08-16', N'0.00', N'6500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (4, N'SP027', '2026-08-08', '2026-08-14', N'0.00', N'8000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (5, N'SP027', '2026-08-11', '2026-08-17', N'0.00', N'8200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (6, N'SP028', '2026-08-09', '2026-08-15', N'0.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (7, N'SP028', '2026-08-11', '2026-08-19', N'0.00', N'9200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (8, N'SP001', '2026-07-30', '2026-08-14', N'0.00', N'58000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (9, N'SP001', '2026-08-09', '2026-08-24', N'0.00', N'60000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (10, N'SP127', '2026-03-04', '2026-08-31', N'40.00', N'23000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (11, N'SP127', '2026-07-12', '2027-01-08', N'120.00', N'24000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (12, N'SP101', '2026-06-12', '2027-02-07', N'594.00', N'3100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (13, N'SP276', '2026-02-12', '2029-01-27', N'40.00', N'105000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (14, N'SP002', '2026-08-08', '2026-08-16', N'0.00', N'86500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (15, N'SP003', '2026-07-27', '2026-08-15', N'0.00', N'51000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (16, N'SP004', '2026-08-04', '2026-08-17', N'0.00', N'53800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (17, N'SP005', '2026-08-03', '2026-08-15', N'0.00', N'36000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (18, N'SP006', '2026-08-10', '2026-08-19', N'0.00', N'46500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (19, N'SP007', '2026-07-29', '2026-08-21', N'0.00', N'70600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (20, N'SP007', '2026-07-13', '2026-09-24', N'35.00', N'70600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (21, N'SP008', '2026-08-01', '2026-08-20', N'0.00', N'53300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (22, N'SP009', '2026-08-04', '2026-08-17', N'0.00', N'100200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (23, N'SP010', '2026-08-01', '2026-08-17', N'0.00', N'70600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (24, N'SP010', '2026-07-27', '2026-09-13', N'19.00', N'70600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (25, N'SP011', '2026-07-25', '2026-08-19', N'0.00', N'50600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (26, N'SP011', '2026-07-26', '2026-09-09', N'43.00', N'50600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (27, N'SP012', '2026-08-04', '2026-08-15', N'0.00', N'79300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (28, N'SP013', '2026-08-06', '2026-08-15', N'0.00', N'39000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (29, N'SP013', '2026-08-04', '2026-09-29', N'31.00', N'39000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (30, N'SP014', '2026-08-09', '2026-08-20', N'0.00', N'36200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (31, N'SP014', '2026-08-02', '2026-09-05', N'45.00', N'36200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (32, N'SP015', '2026-07-24', '2026-08-15', N'0.00', N'26400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (33, N'SP015', '2026-07-23', '2026-09-14', N'16.00', N'26400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (34, N'SP016', '2026-08-08', '2026-08-15', N'0.00', N'23900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (35, N'SP017', '2026-08-05', '2026-08-17', N'0.00', N'19600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (36, N'SP017', '2026-07-14', '2026-09-22', N'42.00', N'19600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (37, N'SP018', '2026-07-29', '2026-08-19', N'0.00', N'86900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (38, N'SP019', '2026-08-09', '2026-08-21', N'0.00', N'49300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (39, N'SP019', '2026-07-31', '2026-09-12', N'26.00', N'49300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (40, N'SP020', '2026-08-03', '2026-08-21', N'0.00', N'36400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (41, N'SP020', '2026-07-27', '2026-09-27', N'37.00', N'36400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (42, N'SP021', '2026-07-27', '2026-08-20', N'0.00', N'57900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (43, N'SP022', '2026-08-10', '2026-08-15', N'0.00', N'86100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (44, N'SP023', '2026-08-06', '2026-08-18', N'0.00', N'81400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (45, N'SP023', '2026-07-24', '2026-09-25', N'37.00', N'81400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (46, N'SP024', '2026-08-08', '2026-08-15', N'0.00', N'23300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (47, N'SP025', '2026-07-22', '2026-08-18', N'0.00', N'35000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (48, N'SP029', '2026-08-06', '2026-08-17', N'0.00', N'21200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (49, N'SP029', '2026-08-02', '2026-09-04', N'21.00', N'21200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (50, N'SP030', '2026-07-31', '2026-08-18', N'0.00', N'10700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (51, N'SP030', '2026-07-23', '2026-09-07', N'31.00', N'10700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (52, N'SP031', '2026-07-24', '2026-08-16', N'0.00', N'9500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (53, N'SP032', '2026-08-04', '2026-08-21', N'0.00', N'15200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (54, N'SP033', '2026-08-07', '2026-08-18', N'0.00', N'8400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (55, N'SP034', '2026-07-24', '2026-08-21', N'0.00', N'18200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (56, N'SP035', '2026-07-27', '2026-08-21', N'0.00', N'6600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (57, N'SP036', '2026-08-03', '2026-08-20', N'0.00', N'13400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (58, N'SP036', '2026-07-26', '2026-09-06', N'35.00', N'13400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (59, N'SP037', '2026-07-23', '2026-08-21', N'0.00', N'11000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (60, N'SP038', '2026-08-01', '2026-08-16', N'0.00', N'18400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (61, N'SP039', '2026-07-31', '2026-08-18', N'0.00', N'11300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (62, N'SP040', '2026-07-22', '2026-08-15', N'0.00', N'15800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (63, N'SP041', '2026-08-01', '2026-08-19', N'0.00', N'5900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (64, N'SP042', '2026-08-02', '2026-08-20', N'0.00', N'13100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (65, N'SP042', '2026-07-15', '2026-10-04', N'10.00', N'13100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (66, N'SP043', '2026-07-24', '2026-08-17', N'0.00', N'31600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (67, N'SP043', '2026-07-22', '2026-09-14', N'19.00', N'31600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (68, N'SP044', '2026-07-26', '2026-08-16', N'0.00', N'22000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (69, N'SP045', '2026-07-29', '2026-08-21', N'0.00', N'47700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (70, N'SP046', '2026-08-03', '2026-08-21', N'0.00', N'63200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (71, N'SP047', '2026-08-08', '2026-08-20', N'0.00', N'40300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (72, N'SP047', '2026-07-15', '2026-09-28', N'42.00', N'40300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (73, N'SP048', '2026-07-28', '2026-08-15', N'0.00', N'19200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (74, N'SP048', '2026-08-02', '2026-09-24', N'27.00', N'19200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (75, N'SP049', '2026-07-23', '2026-08-20', N'0.00', N'16300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (76, N'SP049', '2026-07-29', '2026-09-23', N'32.00', N'16300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (77, N'SP050', '2026-07-27', '2026-08-15', N'0.00', N'26400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (78, N'SP050', '2026-07-16', '2026-09-29', N'26.00', N'26400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (79, N'SP051', '2026-08-10', '2027-03-01', N'188.00', N'31700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (80, N'SP052', '2026-07-24', '2027-04-07', N'96.00', N'32600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (81, N'SP053', '2026-08-07', '2027-06-17', N'156.00', N'32500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (82, N'SP053', '2026-07-23', '2027-07-24', N'156.00', N'32500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (83, N'SP054', '2026-08-09', '2027-07-22', N'390.00', N'26300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (84, N'SP054', '2026-07-28', '2027-08-12', N'390.00', N'26300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (85, N'SP055', '2026-07-25', '2027-04-26', N'391.00', N'17900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (86, N'SP055', '2026-07-23', '2027-05-21', N'391.00', N'17900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (87, N'SP056', '2026-08-06', '2027-05-10', N'234.00', N'18300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (88, N'SP056', '2026-07-19', '2027-06-15', N'234.00', N'18300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (89, N'SP057', '2026-08-02', '2027-06-22', N'389.00', N'28300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (90, N'SP057', '2026-08-06', '2027-07-29', N'389.00', N'28300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (91, N'SP058', '2026-07-27', '2027-05-18', N'243.00', N'39100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (92, N'SP059', '2026-07-24', '2027-03-04', N'153.00', N'14400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (93, N'SP060', '2026-07-24', '2027-05-01', N'395.00', N'14900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (94, N'SP061', '2026-07-31', '2027-04-29', N'90.00', N'13400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (95, N'SP061', '2026-07-12', '2027-05-30', N'90.00', N'13400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (96, N'SP062', '2026-07-29', '2027-04-17', N'219.00', N'27300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (97, N'SP063', '2026-07-31', '2027-07-07', N'267.00', N'17400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (98, N'SP064', '2026-08-03', '2027-04-24', N'244.00', N'24000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (99, N'SP064', '2026-07-27', '2027-06-06', N'244.00', N'24000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (100, N'SP065', '2026-07-24', '2027-02-22', N'190.00', N'4600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (101, N'SP065', '2026-07-12', '2027-04-03', N'190.00', N'4600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (102, N'SP066', '2026-08-01', '2027-03-13', N'319.00', N'11100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (103, N'SP066', '2026-07-31', '2027-03-28', N'319.00', N'11100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (104, N'SP067', '2026-08-04', '2027-07-14', N'201.00', N'10400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (105, N'SP068', '2026-08-03', '2027-03-20', N'199.00', N'17700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (106, N'SP069', '2026-08-10', '2027-08-05', N'178.00', N'27600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (107, N'SP070', '2026-07-27', '2027-08-05', N'173.00', N'15300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (108, N'SP071', '2026-08-09', '2027-02-26', N'298.00', N'4200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (109, N'SP072', '2026-07-23', '2027-07-13', N'89.00', N'54600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (110, N'SP073', '2026-07-29', '2027-05-13', N'113.00', N'12800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (111, N'SP074', '2026-07-28', '2027-04-29', N'358.00', N'8800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (112, N'SP074', '2026-07-15', '2027-05-16', N'358.00', N'8800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (113, N'SP075', '2026-08-10', '2027-04-02', N'357.00', N'30900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (114, N'SP076', '2026-07-28', '2027-02-04', N'169.00', N'95900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (115, N'SP076', '2026-07-31', '2027-03-19', N'170.00', N'95900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (116, N'SP077', '2026-07-28', '2027-02-13', N'186.00', N'123300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (117, N'SP077', '2026-07-18', '2027-03-16', N'186.00', N'123300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (118, N'SP078', '2026-08-02', '2027-07-17', N'107.00', N'84900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (119, N'SP078', '2026-07-13', '2027-08-31', N'107.00', N'84900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (120, N'SP079', '2026-08-04', '2027-02-23', N'238.00', N'31000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (121, N'SP079', '2026-07-28', '2027-03-15', N'238.00', N'31000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (122, N'SP080', '2026-07-23', '2027-02-12', N'294.00', N'46800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (123, N'SP080', '2026-07-24', '2027-02-28', N'294.00', N'46800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (124, N'SP081', '2026-08-05', '2027-05-05', N'210.00', N'15400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (125, N'SP082', '2026-07-22', '2027-04-20', N'153.00', N'8900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (126, N'SP083', '2026-08-05', '2027-07-25', N'364.00', N'10600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (127, N'SP084', '2026-07-24', '2027-05-13', N'210.00', N'12800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (128, N'SP085', '2026-07-25', '2027-07-22', N'125.00', N'11400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (129, N'SP085', '2026-08-04', '2027-08-23', N'125.00', N'11400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (130, N'SP086', '2026-08-06', '2027-02-17', N'235.00', N'18600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (131, N'SP087', '2026-07-28', '2027-02-05', N'258.00', N'14000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (132, N'SP087', '2026-07-14', '2027-03-12', N'258.00', N'14000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (133, N'SP088', '2026-08-09', '2027-07-18', N'309.00', N'44400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (134, N'SP088', '2026-07-22', '2027-08-06', N'309.00', N'44400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (135, N'SP089', '2026-08-04', '2027-01-16', N'398.00', N'10200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (136, N'SP089', '2026-08-02', '2027-02-05', N'398.00', N'10200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (137, N'SP090', '2026-07-30', '2027-01-26', N'199.00', N'18600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (138, N'SP091', '2026-07-29', '2027-03-29', N'367.00', N'31600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (139, N'SP092', '2026-08-03', '2027-07-01', N'108.00', N'60300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (140, N'SP093', '2026-08-05', '2027-01-08', N'196.00', N'59900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (141, N'SP094', '2026-08-08', '2027-06-04', N'121.00', N'48800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (142, N'SP095', '2026-08-06', '2027-06-30', N'323.00', N'56500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (143, N'SP095', '2026-07-31', '2027-08-10', N'323.00', N'56500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (144, N'SP096', '2026-08-09', '2027-03-09', N'101.00', N'36700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (145, N'SP097', '2026-07-22', '2027-05-24', N'344.00', N'20100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (146, N'SP097', '2026-07-13', '2027-06-17', N'344.00', N'20100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (147, N'SP098', '2026-07-28', '2027-05-30', N'284.00', N'18400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (148, N'SP099', '2026-07-24', '2027-06-06', N'191.00', N'23800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (149, N'SP100', '2026-07-23', '2027-04-12', N'369.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (150, N'SP100', '2026-07-13', '2027-04-28', N'369.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (151, N'SP102', '2026-08-07', '2027-04-19', N'383.00', N'88600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (152, N'SP103', '2026-07-23', '2027-04-01', N'295.00', N'2600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (153, N'SP103', '2026-07-16', '2027-05-13', N'295.00', N'2600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (154, N'SP104', '2026-07-23', '2027-06-09', N'158.00', N'4900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (155, N'SP104', '2026-08-05', '2027-07-12', N'158.00', N'4900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (156, N'SP105', '2026-08-06', '2027-04-07', N'153.00', N'4800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (157, N'SP106', '2026-07-29', '2027-01-11', N'309.00', N'2800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (158, N'SP106', '2026-07-24', '2027-02-20', N'309.00', N'2800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (159, N'SP107', '2026-08-05', '2027-05-27', N'297.00', N'4100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (160, N'SP107', '2026-07-22', '2027-06-25', N'297.00', N'4100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (161, N'SP108', '2026-07-30', '2027-02-09', N'311.00', N'4300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (162, N'SP108', '2026-07-25', '2027-03-21', N'311.00', N'4300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (163, N'SP109', '2026-08-09', '2027-04-15', N'135.00', N'11800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (164, N'SP109', '2026-08-05', '2027-05-04', N'135.00', N'11800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (165, N'SP110', '2026-08-08', '2027-05-07', N'366.00', N'4200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (166, N'SP111', '2026-08-05', '2027-04-21', N'274.00', N'4700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (167, N'SP112', '2026-08-10', '2027-07-25', N'370.00', N'4200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (168, N'SP112', '2026-07-25', '2027-08-19', N'370.00', N'4200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (169, N'SP113', '2026-07-31', '2027-04-29', N'199.00', N'3600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (170, N'SP114', '2026-07-23', '2027-05-15', N'308.00', N'3700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (171, N'SP114', '2026-07-22', '2027-06-06', N'308.00', N'3700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (172, N'SP115', '2026-07-30', '2027-06-22', N'305.00', N'3800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (173, N'SP116', '2026-07-30', '2027-01-11', N'260.00', N'4100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (174, N'SP116', '2026-08-02', '2027-02-02', N'260.00', N'4100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (175, N'SP117', '2026-07-29', '2027-01-21', N'231.00', N'10100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (176, N'SP118', '2026-08-03', '2027-03-04', N'92.00', N'5400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (177, N'SP119', '2026-07-27', '2027-02-07', N'374.00', N'2200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (178, N'SP120', '2026-07-23', '2027-04-13', N'361.00', N'74900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (179, N'SP121', '2026-07-22', '2027-05-17', N'141.00', N'158500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (180, N'SP121', '2026-07-23', '2027-06-24', N'141.00', N'158500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (181, N'SP122', '2026-07-24', '2027-02-26', N'133.00', N'4100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (182, N'SP122', '2026-08-06', '2027-04-02', N'133.00', N'4100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (183, N'SP123', '2026-07-25', '2027-04-08', N'97.00', N'1900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (184, N'SP124', '2026-07-30', '2027-04-04', N'168.00', N'4800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (185, N'SP124', '2026-07-22', '2027-05-04', N'168.00', N'4800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (186, N'SP125', '2026-07-31', '2027-01-18', N'381.00', N'5900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (187, N'SP125', '2026-08-03', '2027-02-11', N'381.00', N'5900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (188, N'SP126', '2026-07-23', '2026-10-14', N'69.00', N'21700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (189, N'SP126', '2026-07-13', '2026-11-06', N'70.00', N'21700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (190, N'SP128', '2026-08-07', '2026-09-06', N'85.00', N'23100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (191, N'SP128', '2026-07-18', '2026-09-24', N'85.00', N'23100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (192, N'SP129', '2026-07-28', '2026-09-02', N'71.00', N'21600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (193, N'SP129', '2026-07-16', '2026-09-27', N'71.00', N'21600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (194, N'SP130', '2026-08-03', '2026-11-07', N'84.00', N'20900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (195, N'SP130', '2026-08-04', '2026-12-09', N'84.00', N'20900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (196, N'SP131', '2026-08-06', '2026-10-08', N'58.00', N'20500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (197, N'SP131', '2026-07-13', '2026-10-29', N'58.00', N'20500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (198, N'SP132', '2026-07-29', '2026-09-17', N'114.00', N'5300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (199, N'SP132', '2026-07-26', '2026-10-13', N'114.00', N'5300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (200, N'SP133', '2026-08-07', '2026-10-27', N'47.00', N'19700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (201, N'SP134', '2026-07-26', '2026-10-25', N'40.00', N'7500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (202, N'SP135', '2026-07-31', '2026-09-28', N'41.00', N'16600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (203, N'SP135', '2026-07-24', '2026-10-25', N'41.00', N'16600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (204, N'SP136', '2026-07-28', '2026-09-25', N'76.00', N'15900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (205, N'SP136', '2026-07-16', '2026-11-05', N'76.00', N'15900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (206, N'SP137', '2026-08-10', '2026-10-20', N'83.00', N'30100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (207, N'SP138', '2026-07-24', '2026-11-01', N'99.00', N'285800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (208, N'SP139', '2026-08-06', '2026-09-10', N'45.00', N'249000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (209, N'SP140', '2026-08-02', '2026-10-06', N'106.00', N'435700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (210, N'SP141', '2026-08-05', '2026-10-14', N'55.00', N'212000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (211, N'SP142', '2026-07-26', '2026-08-31', N'93.00', N'311300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (212, N'SP143', '2026-08-10', '2026-10-17', N'82.00', N'19700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (213, N'SP144', '2026-07-29', '2026-10-14', N'81.00', N'19200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (214, N'SP145', '2026-08-10', '2026-09-03', N'113.00', N'20800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (215, N'SP146', '2026-08-08', '2026-11-02', N'58.00', N'19400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (216, N'SP147', '2026-07-28', '2026-09-09', N'96.00', N'20400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (217, N'SP147', '2026-07-20', '2026-10-13', N'96.00', N'20400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (218, N'SP148', '2026-08-10', '2026-09-27', N'107.00', N'15400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (219, N'SP148', '2026-07-16', '2026-10-28', N'107.00', N'15400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (220, N'SP149', '2026-08-05', '2026-09-05', N'96.00', N'22500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (221, N'SP150', '2026-07-26', '2026-08-31', N'96.00', N'16600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (222, N'SP151', '2026-08-06', '2026-09-04', N'48.00', N'19600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (223, N'SP151', '2026-07-19', '2026-10-03', N'49.00', N'19600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (224, N'SP152', '2026-07-31', '2026-10-18', N'48.00', N'20200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (225, N'SP152', '2026-07-20', '2026-11-20', N'48.00', N'20200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (226, N'SP153', '2026-07-27', '2026-11-05', N'87.00', N'19400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (227, N'SP154', '2026-08-05', '2026-09-14', N'64.00', N'20200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (228, N'SP154', '2026-07-29', '2026-10-05', N'64.00', N'20200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (229, N'SP155', '2026-07-27', '2026-09-06', N'111.00', N'23500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (230, N'SP156', '2026-07-27', '2026-10-19', N'119.00', N'22700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (231, N'SP157', '2026-08-06', '2026-09-23', N'116.00', N'20900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (232, N'SP157', '2026-07-13', '2026-10-14', N'116.00', N'20900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (233, N'SP158', '2026-07-25', '2026-09-27', N'93.00', N'46100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (234, N'SP158', '2026-07-24', '2026-10-27', N'93.00', N'46100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (235, N'SP159', '2026-07-28', '2026-10-28', N'108.00', N'8700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (236, N'SP160', '2026-07-23', '2026-09-18', N'64.00', N'7200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (237, N'SP160', '2026-07-18', '2026-10-27', N'64.00', N'7200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (238, N'SP161', '2026-08-09', '2026-09-03', N'90.00', N'7200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (239, N'SP161', '2026-07-31', '2026-09-26', N'90.00', N'7200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (240, N'SP162', '2026-08-09', '2026-11-01', N'102.00', N'46700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (241, N'SP163', '2026-08-04', '2026-09-30', N'105.00', N'11500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (242, N'SP163', '2026-07-25', '2026-10-20', N'105.00', N'11500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (243, N'SP164', '2026-08-08', '2026-09-17', N'83.00', N'83800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (244, N'SP164', '2026-07-27', '2026-11-01', N'83.00', N'83800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (245, N'SP165', '2026-08-04', '2026-09-03', N'97.00', N'6000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (246, N'SP165', '2026-07-23', '2026-09-24', N'97.00', N'6000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (247, N'SP166', '2026-07-26', '2026-09-08', N'97.00', N'4300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (248, N'SP166', '2026-07-16', '2026-10-04', N'97.00', N'4300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (249, N'SP167', '2026-07-22', '2026-09-28', N'66.00', N'22800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (250, N'SP167', '2026-08-04', '2026-11-02', N'66.00', N'22800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (251, N'SP168', '2026-08-04', '2026-10-27', N'96.00', N'6700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (252, N'SP169', '2026-07-25', '2026-10-18', N'116.00', N'5700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (253, N'SP169', '2026-07-25', '2026-11-06', N'116.00', N'5700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (254, N'SP170', '2026-08-07', '2026-10-11', N'97.00', N'17300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (255, N'SP171', '2026-07-31', '2026-09-21', N'49.00', N'40500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (256, N'SP171', '2026-07-13', '2026-10-16', N'49.00', N'40500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (257, N'SP172', '2026-07-24', '2026-10-13', N'97.00', N'22400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (258, N'SP173', '2026-08-01', '2026-10-24', N'59.00', N'3700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (259, N'SP173', '2026-07-16', '2026-11-21', N'59.00', N'3700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (260, N'SP174', '2026-08-04', '2026-10-25', N'103.00', N'5500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (261, N'SP175', '2026-07-22', '2026-09-03', N'88.00', N'34700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (262, N'SP176', '2026-07-29', '2026-09-27', N'109.00', N'49800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (263, N'SP177', '2026-08-04', '2026-11-05', N'111.00', N'51500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (264, N'SP178', '2026-07-29', '2026-10-24', N'107.00', N'62100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (265, N'SP178', '2026-07-14', '2026-11-25', N'107.00', N'62100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (266, N'SP179', '2026-07-30', '2026-11-08', N'54.00', N'20600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (267, N'SP180', '2026-08-10', '2026-10-31', N'69.00', N'31400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (268, N'SP180', '2026-07-17', '2026-11-25', N'69.00', N'31400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (269, N'SP181', '2026-08-04', '2026-09-24', N'61.00', N'45100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (270, N'SP181', '2026-07-21', '2026-10-23', N'61.00', N'45100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (271, N'SP182', '2026-08-07', '2026-09-23', N'81.00', N'51700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (272, N'SP182', '2026-08-01', '2026-10-09', N'81.00', N'51700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (273, N'SP183', '2026-07-28', '2026-09-19', N'70.00', N'5800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (274, N'SP184', '2026-08-05', '2026-10-07', N'88.00', N'37900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (275, N'SP184', '2026-07-17', '2026-10-28', N'88.00', N'37900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (276, N'SP185', '2026-07-23', '2026-09-09', N'75.00', N'27100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (277, N'SP186', '2026-08-01', '2026-08-31', N'113.00', N'52100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (278, N'SP187', '2026-08-09', '2026-10-13', N'50.00', N'29700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (279, N'SP187', '2026-07-18', '2026-11-08', N'50.00', N'29700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (280, N'SP188', '2026-08-06', '2026-10-09', N'93.00', N'26200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (281, N'SP189', '2026-07-23', '2026-10-30', N'96.00', N'41200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (282, N'SP190', '2026-07-22', '2026-11-05', N'96.00', N'16400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (283, N'SP190', '2026-08-04', '2026-11-22', N'96.00', N'16400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (284, N'SP191', '2026-08-07', '2026-10-04', N'58.00', N'45100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (285, N'SP192', '2026-08-10', '2026-09-26', N'90.00', N'28600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (286, N'SP192', '2026-07-12', '2026-11-04', N'90.00', N'28600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (287, N'SP193', '2026-08-09', '2026-09-15', N'99.00', N'26700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (288, N'SP194', '2026-07-24', '2026-10-03', N'79.00', N'26300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (289, N'SP195', '2026-07-23', '2026-09-29', N'76.00', N'12300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (290, N'SP195', '2026-07-30', '2026-10-16', N'76.00', N'12300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (291, N'SP196', '2026-07-22', '2026-09-12', N'49.00', N'21000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (292, N'SP197', '2026-07-28', '2026-10-28', N'43.00', N'40400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (293, N'SP198', '2026-08-09', '2026-09-26', N'77.00', N'35800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (294, N'SP198', '2026-07-25', '2026-10-29', N'77.00', N'35800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (295, N'SP199', '2026-08-08', '2026-10-13', N'101.00', N'15600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (296, N'SP199', '2026-07-26', '2026-11-27', N'101.00', N'15600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (297, N'SP200', '2026-07-27', '2026-10-26', N'93.00', N'36800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (298, N'SP201', '2026-07-22', '2027-04-03', N'296.00', N'12200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (299, N'SP201', '2026-07-14', '2027-05-07', N'296.00', N'12200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (300, N'SP202', '2026-07-31', '2027-08-01', N'316.00', N'10200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (301, N'SP203', '2026-07-23', '2027-02-19', N'380.00', N'7100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (302, N'SP203', '2026-07-15', '2027-03-12', N'380.00', N'7100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (303, N'SP204', '2026-07-23', '2027-06-03', N'251.00', N'9200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (304, N'SP205', '2026-08-07', '2027-06-19', N'100.00', N'7200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (305, N'SP206', '2026-08-06', '2027-03-20', N'374.00', N'68800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (306, N'SP206', '2026-07-20', '2027-04-26', N'374.00', N'68800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (307, N'SP207', '2026-07-24', '2027-07-31', N'139.00', N'242400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (308, N'SP207', '2026-07-27', '2027-08-31', N'143.00', N'242400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (309, N'SP208', '2026-07-24', '2027-05-02', N'318.00', N'7200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (310, N'SP209', '2026-07-23', '2027-04-24', N'225.00', N'40500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (311, N'SP209', '2026-07-18', '2027-05-11', N'225.00', N'40500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (312, N'SP210', '2026-08-02', '2027-06-19', N'247.00', N'14700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (313, N'SP211', '2026-07-22', '2027-05-15', N'197.00', N'7100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (314, N'SP212', '2026-08-09', '2027-04-28', N'399.00', N'6700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (315, N'SP213', '2026-07-27', '2027-07-08', N'220.00', N'7100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (316, N'SP214', '2026-08-04', '2027-04-13', N'389.00', N'6800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (317, N'SP215', '2026-07-28', '2027-07-11', N'268.00', N'8100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (318, N'SP215', '2026-07-15', '2027-08-14', N'268.00', N'8100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (319, N'SP216', '2026-08-06', '2027-03-09', N'85.00', N'5100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (320, N'SP216', '2026-07-30', '2027-04-08', N'85.00', N'5100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (321, N'SP217', '2026-07-22', '2027-06-29', N'333.00', N'5900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (322, N'SP218', '2026-07-25', '2027-05-16', N'177.00', N'5600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (323, N'SP219', '2026-08-02', '2027-06-06', N'130.00', N'4400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (324, N'SP220', '2026-08-08', '2027-03-12', N'381.00', N'4600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (325, N'SP221', '2026-08-07', '2027-07-01', N'295.00', N'4900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (326, N'SP222', '2026-08-08', '2027-07-19', N'220.00', N'6000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (327, N'SP223', '2026-07-27', '2027-02-27', N'221.00', N'40900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (328, N'SP223', '2026-08-06', '2027-03-21', N'221.00', N'40900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (329, N'SP224', '2026-08-03', '2027-03-10', N'105.00', N'9700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (330, N'SP225', '2026-08-05', '2027-06-22', N'283.00', N'25300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (331, N'SP225', '2026-07-14', '2027-07-31', N'283.00', N'25300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (332, N'SP226', '2026-07-23', '2027-02-10', N'271.00', N'37500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (333, N'SP227', '2026-07-23', '2027-04-03', N'213.00', N'46600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (334, N'SP228', '2026-08-04', '2027-06-11', N'317.00', N'31100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (335, N'SP228', '2026-07-22', '2027-07-03', N'317.00', N'31100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (336, N'SP229', '2026-08-06', '2027-03-03', N'368.00', N'46900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (337, N'SP229', '2026-07-26', '2027-03-26', N'368.00', N'46900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (338, N'SP230', '2026-07-22', '2027-01-31', N'393.00', N'58900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (339, N'SP231', '2026-07-24', '2027-05-28', N'216.00', N'27600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (340, N'SP232', '2026-08-01', '2027-01-08', N'318.00', N'6800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (341, N'SP232', '2026-07-24', '2027-02-17', N'319.00', N'6800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (342, N'SP233', '2026-08-01', '2027-05-30', N'305.00', N'20200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (343, N'SP233', '2026-07-29', '2027-07-01', N'305.00', N'20200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (344, N'SP234', '2026-08-03', '2027-04-01', N'109.00', N'28800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (345, N'SP235', '2026-08-08', '2027-07-06', N'312.00', N'32900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (346, N'SP235', '2026-08-05', '2027-08-20', N'312.00', N'32900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (347, N'SP236', '2026-08-04', '2027-05-12', N'94.00', N'38800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (348, N'SP237', '2026-08-08', '2027-04-01', N'120.00', N'24200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (349, N'SP237', '2026-07-25', '2027-04-30', N'120.00', N'24200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (350, N'SP238', '2026-07-26', '2027-01-21', N'336.00', N'27600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (351, N'SP238', '2026-08-02', '2027-02-19', N'336.00', N'27600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (352, N'SP239', '2026-08-03', '2027-02-15', N'124.00', N'37500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (353, N'SP240', '2026-08-09', '2027-05-04', N'301.00', N'33100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (354, N'SP240', '2026-07-25', '2027-06-17', N'301.00', N'33100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (355, N'SP241', '2026-07-23', '2027-04-21', N'122.00', N'49000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (356, N'SP241', '2026-07-29', '2027-05-24', N'122.00', N'49000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (357, N'SP242', '2026-07-27', '2027-03-20', N'361.00', N'33100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (358, N'SP242', '2026-08-06', '2027-04-08', N'361.00', N'33100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (359, N'SP243', '2026-07-23', '2027-03-14', N'277.00', N'36400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (360, N'SP244', '2026-08-01', '2027-06-21', N'261.00', N'11300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (361, N'SP244', '2026-08-03', '2027-07-26', N'261.00', N'11300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (362, N'SP245', '2026-08-04', '2027-04-04', N'128.00', N'35300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (363, N'SP245', '2026-07-31', '2027-05-12', N'128.00', N'35300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (364, N'SP246', '2026-07-23', '2027-01-16', N'303.00', N'23100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (365, N'SP246', '2026-07-30', '2027-02-08', N'303.00', N'23100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (366, N'SP247', '2026-08-10', '2027-01-09', N'362.00', N'41500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (367, N'SP248', '2026-07-23', '2027-04-26', N'321.00', N'17600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (368, N'SP248', '2026-07-16', '2027-06-02', N'321.00', N'17600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (369, N'SP249', '2026-08-02', '2027-04-10', N'309.00', N'28400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (370, N'SP249', '2026-08-05', '2027-04-28', N'309.00', N'28400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (371, N'SP250', '2026-07-26', '2027-06-18', N'214.00', N'24700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (372, N'SP251', '2026-08-10', '2027-08-04', N'341.00', N'16100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (373, N'SP252', '2026-07-25', '2027-04-27', N'148.00', N'28600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (374, N'SP252', '2026-08-03', '2027-06-06', N'149.00', N'28600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (375, N'SP253', '2026-08-06', '2027-04-05', N'166.00', N'6900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (376, N'SP253', '2026-07-26', '2027-05-18', N'167.00', N'6900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (377, N'SP254', '2026-07-31', '2027-03-26', N'351.00', N'95700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (378, N'SP255', '2026-07-30', '2027-04-03', N'369.00', N'38700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (379, N'SP255', '2026-07-25', '2027-05-03', N'369.00', N'38700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (380, N'SP256', '2026-08-06', '2027-02-07', N'209.00', N'8700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (381, N'SP257', '2026-07-23', '2027-03-31', N'278.00', N'13300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (382, N'SP257', '2026-08-06', '2027-04-28', N'278.00', N'13300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (383, N'SP258', '2026-07-30', '2027-05-19', N'365.00', N'15000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (384, N'SP259', '2026-08-01', '2027-05-05', N'369.00', N'20300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (385, N'SP259', '2026-07-31', '2027-05-25', N'369.00', N'20300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (386, N'SP260', '2026-08-09', '2027-03-23', N'104.00', N'31400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (387, N'SP260', '2026-07-15', '2027-04-12', N'104.00', N'31400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (388, N'SP261', '2026-07-25', '2027-02-23', N'399.00', N'15900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (389, N'SP262', '2026-07-25', '2027-05-18', N'310.00', N'12600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (390, N'SP262', '2026-07-23', '2027-06-05', N'310.00', N'12600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (391, N'SP263', '2026-08-05', '2027-07-13', N'214.00', N'12600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (392, N'SP264', '2026-08-07', '2027-07-12', N'118.00', N'3700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (393, N'SP265', '2026-07-25', '2027-04-29', N'392.00', N'7100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (394, N'SP266', '2026-07-30', '2027-04-20', N'92.00', N'20100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (395, N'SP267', '2026-08-06', '2027-05-09', N'243.00', N'4000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (396, N'SP267', '2026-08-05', '2027-06-16', N'243.00', N'4000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (397, N'SP268', '2026-07-30', '2027-05-26', N'358.00', N'34400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (398, N'SP268', '2026-07-22', '2027-06-26', N'358.00', N'34400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (399, N'SP269', '2026-08-09', '2027-07-18', N'254.00', N'5600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (400, N'SP269', '2026-07-22', '2027-08-18', N'254.00', N'5600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (401, N'SP270', '2026-08-09', '2027-03-21', N'229.00', N'15400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (402, N'SP270', '2026-07-18', '2027-04-29', N'229.00', N'15400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (403, N'SP271', '2026-08-02', '2027-05-24', N'348.00', N'24100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (404, N'SP271', '2026-07-20', '2027-06-15', N'348.00', N'24100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (405, N'SP272', '2026-07-26', '2027-05-17', N'235.00', N'8700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (406, N'SP273', '2026-07-23', '2027-02-22', N'217.00', N'20700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (407, N'SP274', '2026-07-26', '2027-07-22', N'193.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (408, N'SP274', '2026-07-18', '2027-08-23', N'193.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (409, N'SP275', '2026-07-26', '2027-07-02', N'285.00', N'31300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (410, N'SP277', '2026-08-07', '2028-12-19', N'34.00', N'104300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (411, N'SP277', '2026-07-24', '2029-01-04', N'34.00', N'104300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (412, N'SP278', '2026-08-07', '2028-12-21', N'80.00', N'92500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (413, N'SP278', '2026-07-26', '2029-01-15', N'80.00', N'92500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (414, N'SP279', '2026-07-30', '2028-02-03', N'25.00', N'105700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (415, N'SP279', '2026-08-05', '2028-03-08', N'26.00', N'105700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (416, N'SP280', '2026-08-01', '2028-04-26', N'22.00', N'100500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (417, N'SP280', '2026-07-24', '2028-05-27', N'22.00', N'100500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (418, N'SP281', '2026-07-24', '2028-06-01', N'39.00', N'111900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (419, N'SP282', '2026-07-28', '2028-09-23', N'56.00', N'119500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (420, N'SP283', '2026-07-22', '2027-09-08', N'67.00', N'63700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (421, N'SP283', '2026-07-17', '2027-10-04', N'67.00', N'63700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (422, N'SP284', '2026-07-23', '2028-05-14', N'66.00', N'27600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (423, N'SP284', '2026-07-25', '2028-06-14', N'67.00', N'27600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (424, N'SP285', '2026-07-30', '2028-03-12', N'80.00', N'25200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (425, N'SP285', '2026-07-14', '2028-03-29', N'80.00', N'25200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (426, N'SP286', '2026-08-08', '2028-07-04', N'31.00', N'31100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (427, N'SP287', '2026-08-02', '2027-08-26', N'66.00', N'79600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (428, N'SP288', '2026-08-01', '2028-06-04', N'30.00', N'22300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (429, N'SP289', '2026-07-29', '2028-08-31', N'22.00', N'32800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (430, N'SP290', '2026-07-28', '2027-10-12', N'63.00', N'45000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (431, N'SP291', '2026-08-09', '2028-08-09', N'58.00', N'29800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (432, N'SP292', '2026-07-23', '2027-12-16', N'47.00', N'15700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (433, N'SP292', '2026-07-26', '2028-01-06', N'47.00', N'15700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (434, N'SP293', '2026-07-23', '2027-11-03', N'52.00', N'64800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (435, N'SP293', '2026-07-25', '2027-12-13', N'52.00', N'64800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (436, N'SP294', '2026-08-09', '2029-01-04', N'22.00', N'129400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (437, N'SP294', '2026-08-04', '2029-02-10', N'22.00', N'129400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (438, N'SP295', '2026-08-02', '2028-02-07', N'58.00', N'50100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (439, N'SP295', '2026-07-13', '2028-02-28', N'58.00', N'50100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (440, N'SP296', '2026-07-22', '2028-04-07', N'59.00', N'86100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (441, N'SP297', '2026-07-30', '2027-09-05', N'26.00', N'28700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (442, N'SP297', '2026-07-24', '2027-10-19', N'26.00', N'28700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (443, N'SP298', '2026-08-01', '2027-10-17', N'61.00', N'110300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (444, N'SP299', '2026-08-01', '2028-09-30', N'50.00', N'29600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (445, N'SP300', '2026-08-10', '2028-04-08', N'47.00', N'26200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (446, N'SP300', '2026-08-02', '2028-04-26', N'47.00', N'26200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (447, N'SP301', '2026-08-04', '2028-03-14', N'35.00', N'20000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (448, N'SP301', '2026-08-03', '2028-04-23', N'35.00', N'20000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (449, N'SP302', '2026-08-08', '2028-05-28', N'51.00', N'22300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (450, N'SP302', '2026-07-12', '2028-06-20', N'51.00', N'22300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (451, N'SP303', '2026-08-03', '2027-12-27', N'63.00', N'139500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (452, N'SP303', '2026-07-19', '2028-02-07', N'63.00', N'139500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (453, N'SP304', '2026-08-01', '2027-08-10', N'75.00', N'86100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (454, N'SP305', '2026-08-08', '2027-08-28', N'68.00', N'71700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (455, N'SP305', '2026-08-01', '2027-10-03', N'68.00', N'71700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (456, N'SP306', '2026-07-22', '2028-02-10', N'54.00', N'96100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (457, N'SP306', '2026-07-19', '2028-03-01', N'54.00', N'96100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (458, N'SP307', '2026-07-27', '2028-05-11', N'31.00', N'67800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (459, N'SP307', '2026-07-12', '2028-06-22', N'31.00', N'67800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (460, N'SP308', '2026-07-25', '2028-12-09', N'53.00', N'19900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (461, N'SP308', '2026-08-02', '2029-01-17', N'53.00', N'19900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (462, N'SP309', '2026-08-01', '2027-10-10', N'66.00', N'30800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (463, N'SP309', '2026-08-06', '2027-11-13', N'66.00', N'30800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (464, N'SP310', '2026-07-26', '2027-08-11', N'36.00', N'49800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (465, N'SP311', '2026-08-08', '2028-10-09', N'26.00', N'58300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (466, N'SP312', '2026-07-30', '2028-10-07', N'24.00', N'45000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (467, N'SP312', '2026-07-25', '2028-10-25', N'24.00', N'45000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (468, N'SP313', '2026-07-30', '2027-11-21', N'73.00', N'12600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (469, N'SP314', '2026-07-26', '2027-10-16', N'67.00', N'17000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (470, N'SP314', '2026-07-31', '2027-11-07', N'67.00', N'17000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (471, N'SP315', '2026-07-29', '2028-07-12', N'39.00', N'12800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (472, N'SP315', '2026-07-24', '2028-08-19', N'39.00', N'12800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (473, N'SP316', '2026-07-28', '2028-04-16', N'70.00', N'28700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (474, N'SP317', '2026-08-04', '2027-12-23', N'63.00', N'46800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (475, N'SP317', '2026-07-16', '2028-01-15', N'63.00', N'46800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (476, N'SP318', '2026-07-25', '2028-02-10', N'33.00', N'10200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (477, N'SP319', '2026-07-25', '2028-07-30', N'75.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (478, N'SP319', '2026-07-23', '2028-09-08', N'75.00', N'9000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (479, N'SP320', '2026-08-08', '2028-05-26', N'70.00', N'5600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (480, N'SP321', '2026-08-07', '2027-09-05', N'53.00', N'21200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (481, N'SP321', '2026-08-01', '2027-09-27', N'53.00', N'21200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (482, N'SP322', '2026-07-23', '2028-07-14', N'30.00', N'24000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (483, N'SP323', '2026-07-23', '2028-04-07', N'39.00', N'137600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (484, N'SP324', '2026-07-23', '2028-04-07', N'24.00', N'28700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (485, N'SP324', '2026-07-12', '2028-05-11', N'24.00', N'28700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (486, N'SP325', '2026-08-03', '2028-04-20', N'72.00', N'64100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (487, N'SP326', '2026-07-24', '2027-12-22', N'49.00', N'217200.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (488, N'SP327', '2026-08-02', '2029-01-09', N'34.00', N'190000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (489, N'SP328', '2026-07-26', '2028-07-15', N'46.00', N'122800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (490, N'SP329', '2026-07-30', '2028-09-19', N'52.00', N'230900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (491, N'SP329', '2026-07-31', '2028-10-19', N'52.00', N'230900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (492, N'SP330', '2026-07-28', '2028-02-15', N'43.00', N'30800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (493, N'SP330', '2026-07-15', '2028-03-16', N'43.00', N'30800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (494, N'SP331', '2026-07-24', '2027-11-12', N'72.00', N'22500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (495, N'SP331', '2026-08-01', '2027-12-02', N'72.00', N'22500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (496, N'SP332', '2026-08-03', '2028-01-30', N'49.00', N'71900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (497, N'SP332', '2026-08-04', '2028-02-18', N'49.00', N'71900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (498, N'SP333', '2026-07-24', '2028-01-10', N'35.00', N'116100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (499, N'SP333', '2026-08-05', '2028-02-04', N'35.00', N'116100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (500, N'SP334', '2026-08-04', '2028-03-29', N'79.00', N'37500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (501, N'SP335', '2026-07-26', '2027-08-13', N'39.00', N'388100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (502, N'SP335', '2026-07-15', '2027-09-23', N'39.00', N'388100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (503, N'SP336', '2026-07-30', '2028-07-09', N'77.00', N'315300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (504, N'SP337', '2026-08-08', '2027-10-26', N'62.00', N'334500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (505, N'SP338', '2026-08-10', '2028-02-02', N'43.00', N'180700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (506, N'SP338', '2026-08-05', '2028-03-12', N'43.00', N'180700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (507, N'SP339', '2026-07-29', '2028-11-17', N'20.00', N'59400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (508, N'SP340', '2026-07-22', '2028-09-08', N'52.00', N'70900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (509, N'SP341', '2026-08-07', '2028-04-28', N'60.00', N'61000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (510, N'SP341', '2026-07-13', '2028-05-20', N'61.00', N'61000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (511, N'SP342', '2026-08-05', '2028-07-12', N'62.00', N'13300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (512, N'SP342', '2026-07-16', '2028-08-16', N'62.00', N'13300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (513, N'SP343', '2026-08-05', '2028-06-24', N'57.00', N'23800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (514, N'SP343', '2026-08-06', '2028-08-05', N'57.00', N'23800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (515, N'SP344', '2026-08-07', '2028-06-08', N'75.00', N'127300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (516, N'SP344', '2026-07-13', '2028-07-15', N'75.00', N'127300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (517, N'SP345', '2026-08-05', '2028-09-12', N'65.00', N'70300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (518, N'SP346', '2026-08-04', '2028-12-23', N'76.00', N'63700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (519, N'SP346', '2026-07-16', '2029-01-30', N'76.00', N'63700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (520, N'SP347', '2026-07-26', '2028-06-29', N'72.00', N'202300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (521, N'SP348', '2026-08-06', '2028-04-19', N'71.00', N'307900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (522, N'SP349', '2026-07-24', '2028-08-03', N'34.00', N'196600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (523, N'SP349', '2026-08-02', '2028-09-11', N'34.00', N'196600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (524, N'SP350', '2026-07-26', '2027-10-10', N'55.00', N'31400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (525, N'SP351', '2026-08-07', '2027-09-08', N'74.00', N'17800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (526, N'SP351', '2026-08-06', '2027-10-15', N'74.00', N'17800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (527, N'SP352', '2026-08-03', '2027-09-25', N'49.00', N'26100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (528, N'SP352', '2026-07-25', '2027-10-12', N'49.00', N'26100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (529, N'SP353', '2026-07-22', '2028-09-12', N'22.00', N'20800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (530, N'SP353', '2026-07-13', '2028-10-07', N'22.00', N'20800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (531, N'SP354', '2026-08-09', '2028-04-01', N'72.00', N'116500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (532, N'SP354', '2026-07-18', '2028-04-20', N'72.00', N'116500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (533, N'SP355', '2026-07-24', '2028-06-04', N'78.00', N'134100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (534, N'SP356', '2026-07-24', '2028-04-11', N'23.00', N'31400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (535, N'SP357', '2026-07-29', '2028-05-28', N'52.00', N'47300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (536, N'SP357', '2026-07-27', '2028-07-02', N'52.00', N'47300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (537, N'SP358', '2026-08-03', '2028-05-30', N'69.00', N'13100.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (538, N'SP359', '2026-07-28', '2028-11-29', N'54.00', N'24700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (539, N'SP360', '2026-07-23', '2027-11-03', N'42.00', N'28800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (540, N'SP360', '2026-07-26', '2027-11-23', N'42.00', N'28800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (541, N'SP361', '2026-07-25', '2028-01-29', N'75.00', N'39800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (542, N'SP362', '2026-08-04', '2028-08-16', N'63.00', N'23700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (543, N'SP363', '2026-08-07', '2028-10-07', N'23.00', N'10500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (544, N'SP364', '2026-08-06', '2028-12-11', N'69.00', N'8600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (545, N'SP364', '2026-08-03', '2029-01-20', N'69.00', N'8600.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (546, N'SP365', '2026-07-29', '2028-03-20', N'64.00', N'28800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (547, N'SP365', '2026-08-04', '2028-04-04', N'64.00', N'28800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (548, N'SP366', '2026-07-24', '2028-07-10', N'37.00', N'20800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (549, N'SP366', '2026-08-04', '2028-07-26', N'37.00', N'20800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (550, N'SP367', '2026-08-07', '2027-10-22', N'63.00', N'21800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (551, N'SP367', '2026-07-24', '2027-11-12', N'63.00', N'21800.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (552, N'SP368', '2026-08-08', '2027-10-30', N'69.00', N'94900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (553, N'SP368', '2026-07-14', '2027-12-09', N'69.00', N'94900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (554, N'SP369', '2026-07-28', '2028-04-09', N'23.00', N'19500.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (555, N'SP370', '2026-07-29', '2028-02-11', N'39.00', N'132700.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (556, N'SP371', '2026-08-09', '2028-07-27', N'52.00', N'132900.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (557, N'SP372', '2026-07-31', '2028-12-21', N'45.00', N'210400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (558, N'SP372', '2026-07-12', '2029-01-28', N'45.00', N'210400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (559, N'SP373', '2026-07-30', '2028-11-12', N'76.00', N'17400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (560, N'SP374', '2026-08-10', '2027-10-11', N'23.00', N'85300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (561, N'SP374', '2026-07-28', '2027-11-05', N'23.00', N'85300.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (562, N'SP375', '2026-08-02', '2028-08-03', N'21.00', N'61400.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (563, N'SP375', '2026-08-13', '2036-06-03', N'36.00', N'36000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (564, N'SP214', '2026-08-13', '2027-08-13', N'36.00', N'7000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (565, N'SP026', '2026-08-14', '2026-08-16', N'0.00', N'7000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (566, N'SP001', '2026-08-26', '2026-09-02', N'10.00', N'25000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (567, N'SP002', '2026-08-26', '2026-09-02', N'0.00', N'100000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (568, N'SP002', '2026-08-26', '2026-08-27', N'1.00', N'100000.00')
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (569, N'SP003', '2026-08-26', '2026-09-02', N'1.00', N'60000.00')
+SET IDENTITY_INSERT [LO_HANG] OFF
+GO
+
+-- Data: PHIEU_NHAP (6 rows)
+INSERT INTO [PHIEU_NHAP] ([MaPN], [NgayNhap], [MaNV], [MaNCC], [TongTien], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu]) VALUES (N'PN20260814083849', '2026-08-14 08:38:50.017000', N'kho1', N'NCC01', N'70000.00', NULL, NULL, NULL)
+INSERT INTO [PHIEU_NHAP] ([MaPN], [NgayNhap], [MaNV], [MaNCC], [TongTien], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu]) VALUES (N'PN20260826170620', '2026-08-26 17:06:20.557000', N'kho1', N'NCC02', N'250000.00', NULL, NULL, NULL)
+INSERT INTO [PHIEU_NHAP] ([MaPN], [NgayNhap], [MaNV], [MaNCC], [TongTien], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu]) VALUES (N'PN20260826173050', '2026-08-26 17:30:50.730000', N'kho1', N'NCC02', N'100000.00', N'admin', '2026-08-26 17:49:35.560000', N'')
+INSERT INTO [PHIEU_NHAP] ([MaPN], [NgayNhap], [MaNV], [MaNCC], [TongTien], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu]) VALUES (N'PN20260826175220', '2026-08-26 17:52:20.923000', N'kho1', N'NCC02', N'100000.00', NULL, NULL, NULL)
+INSERT INTO [PHIEU_NHAP] ([MaPN], [NgayNhap], [MaNV], [MaNCC], [TongTien], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu]) VALUES (N'PN20260826193126', '2026-08-26 19:31:26.587000', N'kho1', N'NCC02', N'100000.00', NULL, NULL, NULL)
+INSERT INTO [PHIEU_NHAP] ([MaPN], [NgayNhap], [MaNV], [MaNCC], [TongTien], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu]) VALUES (N'PN20260826193703', '2026-08-26 19:37:03.210000', N'thungan1', N'NCC02', N'60000.00', NULL, NULL, NULL)
+GO
+
+-- Data: SAN_PHAM (375 rows)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP001', N'Ba chỉ heo C.P khay 500g', N'DM01', N'Khay', N'36000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP002', N'Sườn non heo C.P khay 500g', N'DM01', N'Khay', N'115000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP003', N'Nạc dăm heo C.P khay 500g', N'DM01', N'Khay', N'75000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP004', N'Nạc đùi heo C.P khay 500g', N'DM01', N'Khay', N'72000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP005', N'Thịt xay heo C.P khay 300g', N'DM01', N'Khay', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP006', N'Chân giò heo C.P khay 500g', N'DM01', N'Khay', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP007', N'Sườn que heo C.P khay 500g', N'DM01', N'Khay', N'95000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP008', N'Thịt vai heo MEATDeli khay 500g', N'DM01', N'Khay', N'78000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP009', N'Ba chỉ bò Mỹ cắt lát Pacow khay 300g', N'DM01', N'Khay', N'145000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP010', N'Bắp bò Úc Pacow khay 250g', N'DM01', N'Khay', N'95000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP011', N'Đùi bò nhập khẩu đông lạnh túi 500g', N'DM01', N'Túi', N'71600.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP012', N'Gà nguyên con C.P khay 1.4kg', N'DM01', N'Khay', N'109000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP013', N'Đùi tỏi gà C.P khay 500g', N'DM01', N'Khay', N'52000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP014', N'Cánh gà C.P khay 500g', N'DM01', N'Khay', N'49000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP015', N'Trứng gà Ba Huân hộp 10 quả', N'DM01', N'Hộp', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP016', N'Trứng gà C.P hộp 10 quả', N'DM01', N'Hộp', N'33000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP017', N'Trứng vịt muối Vĩnh Nghiêm hộp 4 quả', N'DM01', N'Hộp', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP018', N'Cá hồi phi lê tươi khay 200g', N'DM01', N'Khay', N'115000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP019', N'Cá điêu hồng làm sạch', N'DM01', N'Kg', N'72000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP020', N'Cá basa phi lê khay 500g', N'DM01', N'Khay', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP021', N'Tôm thẻ tươi khay 300g', N'DM01', N'Khay', N'79000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP022', N'Tôm sú tươi khay 300g', N'DM01', N'Khay', N'115000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP023', N'Mực ống tươi khay 300g', N'DM01', N'Khay', N'110000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP024', N'Nghêu lụa sạch túi 500g', N'DM01', N'Túi', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP025', N'Cá hú cắt khúc khay 500g', N'DM01', N'Khay', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP026', N'Cải thìa baby Đà Lạt túi 500g', N'DM02', N'Túi', N'13000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP027', N'Cà chua beef Đà Lạt khay 500g', N'DM02', N'Khay', N'16000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP028', N'Bắp cải thảo Đà Lạt', N'DM02', N'Kg', N'18000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP029', N'Khoai tây Đà Lạt túi 1kg', N'DM02', N'Túi', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP030', N'Cà rốt Đà Lạt túi 500g', N'DM02', N'Túi', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP031', N'Dưa leo baby Đà Lạt khay 500g', N'DM02', N'Khay', N'14000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP032', N'Bí đỏ hồ lô', N'DM02', N'Kg', N'22000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP033', N'Hành tây Đà Lạt túi 500g', N'DM02', N'Túi', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP034', N'Bông cải xanh Đà Lạt cái 400g', N'DM02', N'Cái', N'24000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP035', N'Rau muống cọng tím bó 300g', N'DM02', N'Bó', N'9000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP036', N'Xà lách thủy canh VinEco gói 200g', N'DM02', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP037', N'Nấm kim châm Hàn Quốc gói 200g', N'DM02', N'Gói', N'16000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP038', N'Nấm đùi gà khay 200g', N'DM02', N'Khay', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP039', N'Mướp hương', N'DM02', N'Kg', N'15000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP040', N'Khổ qua trái', N'DM02', N'Kg', N'23000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP041', N'Ớt sừng đỏ túi 100g', N'DM02', N'Túi', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP042', N'Đậu cô ve Đà Lạt khay 300g', N'DM02', N'Khay', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP043', N'Bưởi da xanh trái 1kg', N'DM02', N'Trái', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP044', N'Cam sành', N'DM02', N'Kg', N'30000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP045', N'Táo Fuji Nam Phi túi 1kg', N'DM02', N'Túi', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP046', N'Nho xanh Mỹ hộp 500g', N'DM02', N'Hộp', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP047', N'Xoài cát Hòa Lộc', N'DM02', N'Kg', N'55000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP048', N'Ổi nữ hoàng', N'DM02', N'Kg', N'28000.00', 1)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP049', N'Chuối già hương nải 1kg', N'DM02', N'Nải', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP050', N'Thanh long ruột đỏ túi 1kg', N'DM02', N'Túi', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP051', N'Dầu ăn Simply đậu nành chai 1L', N'DM03', N'Chai', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP052', N'Dầu ăn Neptune Gold chai 1L', N'DM03', N'Chai', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP053', N'Dầu ăn Tường An Premium chai 1L', N'DM03', N'Chai', N'45000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP054', N'Dầu mè Nakydaco chai 250ml', N'DM03', N'Chai', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP055', N'Nước mắm Nam Ngư đệ nhị chai 500ml', N'DM03', N'Chai', N'24000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP056', N'Nước mắm Chinsu Cá Cơm Biển Đông chai 500ml', N'DM03', N'Chai', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP057', N'Nước mắm Liên Thành Nhãn Vàng chai 500ml', N'DM03', N'Chai', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP058', N'Nước mắm Thuận Phát cốt nhĩ chai 500ml', N'DM03', N'Chai', N'52000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP059', N'Nước tương Maggi chai 300ml', N'DM03', N'Chai', N'19000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP060', N'Nước tương đậu nành Chinsu chai 500ml', N'DM03', N'Chai', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP061', N'Nước tương Tam Thái Tử chai 500ml', N'DM03', N'Chai', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP062', N'Hạt nêm Knorr Thịt Thăn Xương Ống Tủy gói 400g', N'DM03', N'Gói', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP063', N'Hạt nêm Vedan gói 400g', N'DM03', N'Gói', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP064', N'Bột ngọt Ajinomoto gói 454g', N'DM03', N'Gói', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP065', N'Bột canh Hải Châu gói 200g', N'DM03', N'Gói', N'6500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP066', N'Tương ớt Chinsu chai 250g', N'DM03', N'Chai', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP067', N'Tương ớt Cholimex chai 270g', N'DM03', N'Chai', N'14000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP068', N'Dầu hào Maggi chai 350ml', N'DM03', N'Chai', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP069', N'Giấm gạo Heinz chai 473ml', N'DM03', N'Chai', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP070', N'Đường cát trắng Biên Hòa gói 1kg', N'DM03', N'Gói', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP071', N'Muối tinh sấy Bạc Liêu gói 500g', N'DM03', N'Gói', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP072', N'Bơ lạt Anchor khối 200g', N'DM03', N'Khối', N'75000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP073', N'Tiêu đen xay Phú Quốc gói 50g', N'DM03', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP074', N'Sa tế Ớt Bà Giáo Khỏe gói 90g', N'DM03', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP075', N'Mayonnaise Kewpie chai 300g', N'DM03', N'Chai', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP076', N'Gạo thơm Jasmine Thái hảo hạng túi 5kg', N'DM04', N'Túi', N'135000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP077', N'Gạo ST25 Sóc Trăng túi 5kg', N'DM04', N'Túi', N'175000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP078', N'Gạo Nàng Hoa Bảo Minh túi 5kg', N'DM04', N'Túi', N'115000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP079', N'Gạo lứt đỏ hữu cơ túi 1kg', N'DM04', N'Túi', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP080', N'Gạo Nhật Bản A-An túi 2kg', N'DM04', N'Túi', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP081', N'Bột mì đa dụng Meizan gói 1kg', N'DM04', N'Gói', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP082', N'Bột chiên giòn Ajinomoto gói 150g', N'DM04', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP083', N'Bột năng Tài Ký gói 400g', N'DM04', N'Gói', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP084', N'Bún gạo Safoco gói 400g', N'DM04', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP085', N'Miến dong Bích Chi gói 200g', N'DM04', N'Gói', N'16000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP086', N'Nui xoắn Safoco gói 500g', N'DM04', N'Gói', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP087', N'Phở khô Bích Chi gói 400g', N'DM04', N'Gói', N'19000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP088', N'Hạt điều rang muối Lafooco hộp 200g', N'DM04', N'Hộp', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP089', N'Đậu phộng rang tỏi ớt Tân Tân gói 150g', N'DM04', N'Gói', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP090', N'Nấm mèo khô túi 100g', N'DM04', N'Túi', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP091', N'Táo đỏ Tân Cương túi 200g', N'DM04', N'Túi', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP092', N'Hạt chia hữu cơ Úc túi 250g', N'DM04', N'Túi', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP093', N'Lạp xưởng Mai Quế Lộ Vissan gói 500g', N'DM04', N'Gói', N'82000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP094', N'Khô gà lá chanh Bà Tư gói 200g', N'DM04', N'Gói', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP095', N'Tôm khô loại 1 túi 100g', N'DM04', N'Túi', N'78000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP096', N'Mì Ý sợi dẹt Barilla gói 500g', N'DM04', N'Gói', N'52000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP097', N'Đậu xanh cà túi 500g', N'DM04', N'Túi', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP098', N'Đậu đỏ túi 500g', N'DM04', N'Túi', N'26000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP099', N'Rong biển khô Hàn Quốc gói 50g', N'DM04', N'Gói', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP100', N'Mè trắng gói 100g', N'DM04', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP101', N'Mì Hảo Hảo tôm chua cay gói 75g', N'DM05', N'Gói', N'4500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP102', N'Thùng 30 gói mì Hảo Hảo tôm chua cay', N'DM05', N'Thùng', N'130000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP103', N'Mì Kokomi đại tôm chua cay gói 90g', N'DM05', N'Gói', N'3800.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP104', N'Mì Omachi xốt Spaghetti gói 91g', N'DM05', N'Gói', N'7200.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP105', N'Mì Omachi khoai tây sườn hầm gói 80g', N'DM05', N'Gói', N'6500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP106', N'Mì 3 Miền Gold tôm gói 75g', N'DM05', N'Gói', N'3800.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP107', N'Mì Cung Đình khoai tây thịt bằm gói 80g', N'DM05', N'Gói', N'5500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP108', N'Mì Đệ Nhất lẩu Thái tôm gói 83g', N'DM05', N'Gói', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP109', N'Mì Samyang cay Hàn Quốc gói 140g', N'DM05', N'Gói', N'16000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP110', N'Mì Indomie Mi Goreng gói 85g', N'DM05', N'Gói', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP111', N'Phở bò ăn liền Phở Đệ Nhất gói 65g', N'DM05', N'Gói', N'6500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP112', N'Phở gà Cung Đình gói 68g', N'DM05', N'Gói', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP113', N'Hủ tiếu Nam Vang Acecook gói 71g', N'DM05', N'Gói', N'5000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP114', N'Bún bò Huế ăn liền Acecook gói 71g', N'DM05', N'Gói', N'5000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP115', N'Miến ăn liền Phú Hương vị gà gói 55g', N'DM05', N'Gói', N'5500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP116', N'Cháo ăn liền Cháo Bổ Dưỡng thịt bằm gói 50g', N'DM05', N'Gói', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP117', N'Cháo tươi Cháo Bé Bổ vị gà gói 240g', N'DM05', N'Gói', N'14000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP118', N'Mì trộn Omachi sốt tương đen gói 91g', N'DM05', N'Gói', N'7500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP119', N'Mì Gấu Đỏ tôm chua cay gói 63g', N'DM05', N'Gói', N'3000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP120', N'Thùng 30 gói mì Kokomi đại tôm chua cay', N'DM05', N'Thùng', N'110000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP121', N'Thùng 30 gói mì Omachi xốt Spaghetti', N'DM05', N'Thùng', N'210000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP122', N'Mì Lẩu Thái Acecook tôm gói 83g', N'DM05', N'Gói', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP123', N'Mì Miliket tôm chua cay gói 65g', N'DM05', N'Gói', N'2800.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP124', N'Phở khô ăn liền Chinsu vị bò gói 80g', N'DM05', N'Gói', N'7000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP125', N'Cháo yến mạch ăn liền Quaker gói 46g', N'DM05', N'Gói', N'8500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP126', N'Sữa tươi TH true MILK ít đường lốc 4 hộp 180ml', N'DM06', N'Lốc', N'30500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP127', N'Sữa tươi tiệt trùng TH true MILK ít đường hộp 1L', N'DM06', N'Hộp', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP128', N'Sữa tươi tiệt trùng TH true MILK không đường hộp 1L', N'DM06', N'Hộp', N'33000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP129', N'Sữa tươi Vinamilk 100% có đường hộp 1L', N'DM06', N'Hộp', N'31000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP130', N'Sữa tươi Vinamilk 100% có đường lốc 4 hộp 180ml', N'DM06', N'Lốc', N'29000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP131', N'Sữa tươi Dutch Lady có đường hộp 1L', N'DM06', N'Hộp', N'30000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP132', N'Sữa tươi tiệt trùng Mộc Châu hộp 180ml', N'DM06', N'Hộp', N'7500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP133', N'Sữa đậu nành Fami nguyên chất lốc 6 hộp 200ml', N'DM06', N'Lốc', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP134', N'Sữa hạt óc chó TH true NUT hộp 180ml', N'DM06', N'Hộp', N'10500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP135', N'Sữa đặc có đường Ông Thọ lon xanh 380g', N'DM06', N'Lon', N'24000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP136', N'Sữa đặc Ngôi Sao Phương Nam lon 380g', N'DM06', N'Lon', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP137', N'Phô mai con Bò Cười hộp 8 miếng 112g', N'DM06', N'Hộp', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP138', N'Sữa bột Abbott Grow 4 lon 900g', N'DM06', N'Lon', N'380000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP139', N'Sữa bột Vinamilk Yoko Gold 3 hộp 850g', N'DM06', N'Hộp', N'365000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP140', N'Sữa Ensure Gold hương vani lon 850g', N'DM06', N'Lon', N'620000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP141', N'Sữa NutiFood Grow Plus+ đỏ lon 900g', N'DM06', N'Lon', N'290000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP142', N'Sữa bột Similac 3 lon 900g', N'DM06', N'Lon', N'425000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP143', N'Sữa tươi Nutimilk bổ sung vi chất hộp 1L', N'DM06', N'Hộp', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP144', N'Sữa tươi Lif Kun dâu hộp 180ml (lốc 4)', N'DM06', N'Lốc', N'26000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP145', N'Sữa tươi tiệt trùng VPMilk hộp 1L', N'DM06', N'Hộp', N'29000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP146', N'Sữa chua uống Probi TH chai 130ml lốc 4', N'DM06', N'Lốc', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP147', N'Sữa Milo nước hộp 180ml (lốc 4)', N'DM06', N'Lốc', N'29500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP148', N'Sữa Nuvi bổ sung canxi hộp 180ml (lốc 4)', N'DM06', N'Lốc', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP149', N'Sữa hạt Vinamilk Super Nut hộp 180ml (lốc 4)', N'DM06', N'Lốc', N'30000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP150', N'Sữa tươi Dalat Milk có đường hộp 180ml (lốc 4)', N'DM06', N'Lốc', N'24000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP151', N'Sữa chua ăn Vinamilk có đường vỉ 4 hộp 100g', N'DM07', N'Vỉ', N'26000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP152', N'Sữa chua ăn Vinamilk nha đam vỉ 4 hộp 100g', N'DM07', N'Vỉ', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP153', N'Sữa chua ăn Vinamilk việt quất vỉ 4 hộp 100g', N'DM07', N'Vỉ', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP154', N'Sữa chua ăn Vinamilk không đường vỉ 4 hộp 100g', N'DM07', N'Vỉ', N'27000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP155', N'Sữa chua uống Yomost cam lốc 4 chai 170ml', N'DM07', N'Lốc', N'31500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP156', N'Sữa chua uống TH true YOGURT lốc 4 chai 180ml', N'DM07', N'Lốc', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP157', N'Sữa chua uống Yakult lốc 5 chai 65ml', N'DM07', N'Lốc', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP158', N'Váng sữa Monte Zott vỉ 4 hộp 55g', N'DM07', N'Vỉ', N'64000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP159', N'Sữa chua Vinamilk Greek Yogurt vị dâu hộp 100g', N'DM07', N'Hộp', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP160', N'Kem Merino socola que', N'DM07', N'Cái', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP161', N'Kem Merino dưa lưới que', N'DM07', N'Cái', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP162', N'Kem hộp Celano Trio vani-socola-dâu 450ml', N'DM07', N'Hộp', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP163', N'Kem ốc quế Cornetto socola cây 78ml', N'DM07', N'Cái', N'16000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP164', N'Kem hộp Baskin Robbins cookies & cream 450ml', N'DM07', N'Hộp', N'120000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP165', N'Kem Tràng Tiền ký ức que', N'DM07', N'Cái', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP166', N'Kem que Fami đậu xanh', N'DM07', N'Cái', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP167', N'Kem Magnum Classic cây 86ml', N'DM07', N'Cái', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP168', N'Sữa chua TH true YOGURT vị dâu hộp 100g', N'DM07', N'Hộp', N'9000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP169', N'Kem Wall''s Paddle Pop que', N'DM07', N'Cái', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP170', N'Sữa chua uống Dutch Lady lốc 4 chai 150ml', N'DM07', N'Lốc', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP171', N'Kem Vinamilk sầu riêng hộp 450ml', N'DM07', N'Hộp', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP172', N'Sữa chua uống Probi Vinamilk cam lốc 4 chai 130ml', N'DM07', N'Lốc', N'30000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP173', N'Kem que Kiboo vị dừa cây', N'DM07', N'Cái', N'5000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP174', N'Sữa chua Mộc Châu có đường hộp 100g', N'DM07', N'Hộp', N'7500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP175', N'Kem hộp Vinamilk dâu tây 450ml', N'DM07', N'Hộp', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP176', N'Chả giò tôm cua Cầu Tre gói 500g', N'DM08', N'Gói', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP177', N'Há cảo tôm C.P khay 360g', N'DM08', N'Khay', N'72000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP178', N'Xúc xích Đức Vissan gói 500g', N'DM08', N'Gói', N'82000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP179', N'Xúc xích tiệt trùng Vissan gói 175g', N'DM08', N'Gói', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP180', N'Cá viên chiên SG Food gói 500g', N'DM08', N'Gói', N'45000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP181', N'Bò viên gân SG Food gói 500g', N'DM08', N'Gói', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP182', N'Giò lụa Vissan gói 500g', N'DM08', N'Gói', N'75000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP183', N'Đậu hũ non Ichiban hộp 130g', N'DM08', N'Hộp', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP184', N'Kim chi cải thảo Bibigo hộp 500g', N'DM08', N'Hộp', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP185', N'Hoành thánh tôm thịt C.P gói 200g', N'DM08', N'Gói', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP186', N'Nem nướng Vissan gói 500g', N'DM08', N'Gói', N'72000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP187', N'Phô mai que Cầu Tre gói 240g', N'DM08', N'Gói', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP188', N'Chả lụa C.P khay 200g', N'DM08', N'Khay', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP189', N'Chạo tôm Cầu Tre gói 200g', N'DM08', N'Gói', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP190', N'Bắp Mỹ ngọt đông lạnh túi 500g', N'DM08', N'Túi', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP191', N'Khoai tây chiên đông lạnh McCain gói 750g', N'DM08', N'Gói', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP192', N'Đùi gà rút xương tẩm ướp C.P gói 250g', N'DM08', N'Gói', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP193', N'Gà rán xù C.P gói 250g', N'DM08', N'Gói', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP194', N'Bánh bao nhân thịt C.P túi 6 cái', N'DM08', N'Túi', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP195', N'Tàu hũ ky Safico gói 200g', N'DM08', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP196', N'Đậu bắp đông lạnh túi 500g', N'DM08', N'Túi', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP197', N'Chả cá thát lát SG Food gói 500g', N'DM08', N'Gói', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP198', N'Sủi cảo nhân thịt C.P gói 400g', N'DM08', N'Gói', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP199', N'Bánh tráng cuốn phơi sương gói 300g', N'DM08', N'Gói', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP200', N'Thịt heo xông khói Vissan gói 200g', N'DM08', N'Gói', N'52000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP201', N'Bia Heineken lon 330ml', N'DM09', N'Lon', N'17000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP202', N'Bia Tiger Crystal lon 330ml', N'DM09', N'Lon', N'14000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP203', N'Bia 333 lon 330ml', N'DM09', N'Lon', N'10500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP204', N'Bia Sài Gòn Special lon 330ml', N'DM09', N'Lon', N'12500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP205', N'Bia Larue lon 330ml', N'DM09', N'Lon', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP206', N'Lốc 6 lon bia Heineken 330ml', N'DM09', N'Lốc', N'98000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP207', N'Thùng 24 lon bia Tiger Crystal 330ml', N'DM09', N'Thùng', N'325000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP208', N'Nước ngọt Coca Cola lon 320ml', N'DM09', N'Lon', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP209', N'Lốc 6 lon Coca Cola 320ml', N'DM09', N'Lốc', N'58000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP210', N'Nước ngọt Coca Cola chai 1.5L', N'DM09', N'Chai', N'21000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP211', N'Nước ngọt Pepsi lon 320ml', N'DM09', N'Lon', N'9500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP212', N'Nước ngọt 7Up lon 320ml', N'DM09', N'Lon', N'9500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP213', N'Nước ngọt Fanta cam lon 320ml', N'DM09', N'Lon', N'9500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP214', N'Nước tăng lực Sting dâu chai 330ml', N'DM09', N'Chai', N'9000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP215', N'Nước tăng lực Red Bull lon 250ml', N'DM09', N'Lon', N'11500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP216', N'Trà xanh C2 hương chanh chai 455ml', N'DM09', N'Chai', N'7500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP217', N'Trà xanh không độ chai 455ml', N'DM09', N'Chai', N'8500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP218', N'Trà bí đao Wonderfarm chai 500ml', N'DM09', N'Chai', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP219', N'Nước tinh khiết Aquafina chai 500ml', N'DM09', N'Chai', N'6000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP220', N'Nước khoáng Lavie chai 500ml', N'DM09', N'Chai', N'6500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP221', N'Nước ion kiềm i-on Life chai 450ml', N'DM09', N'Chai', N'7000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP222', N'Nước bù khoáng Revive chai 500ml', N'DM09', N'Chai', N'8500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP223', N'Lốc 6 lon Pepsi 320ml', N'DM09', N'Lốc', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP224', N'Nước dừa đóng hộp Cocoxim hộp 330ml', N'DM09', N'Hộp', N'14000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP225', N'Nước ép trái cây TH true JUICE lốc 3 hộp 300ml', N'DM09', N'Lốc', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP226', N'Cà phê hòa tan G7 3in1 hộp 18 gói', N'DM10', N'Hộp', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP227', N'Cà phê sữa Nescafé 3in1 đậm đà hộp 20 gói', N'DM10', N'Hộp', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP228', N'Cà phê đen hòa tan G7 2in1 hộp 15 gói', N'DM10', N'Hộp', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP229', N'Cà phê hòa tan Phúc Long 3in1 hộp 18 gói', N'DM10', N'Hộp', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP230', N'Cà phê rang xay Trung Nguyên S gói 500g', N'DM10', N'Gói', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP231', N'Cà phê đen đá hòa tan Vinacafé gói 15x16g', N'DM10', N'Hộp', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP232', N'Cà phê Birdy lon 170ml', N'DM10', N'Lon', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP233', N'Trà Lipton nhãn vàng hộp 25 túi lọc', N'DM10', N'Hộp', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP234', N'Trà Dilmah English Breakfast hộp 20 túi lọc', N'DM10', N'Hộp', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP235', N'Trà túi lọc Phúc Long ô long hộp 25 túi', N'DM10', N'Hộp', N'45000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP236', N'Trà xanh Thái Nguyên Phúc Long gói 100g', N'DM10', N'Gói', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP237', N'Trà sữa Nestea 3in1 gói 16g (lốc 12)', N'DM10', N'Lốc', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP238', N'Bột ca cao nguyên chất Cacao Mi hộp 150g', N'DM10', N'Hộp', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP239', N'Bột ngũ cốc dinh dưỡng Vinacafé gói 500g', N'DM10', N'Gói', N'52000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP240', N'Ngũ cốc ăn sáng Kellogg''s Coco Pops hộp 220g', N'DM10', N'Hộp', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP241', N'Yến mạch Quaker nguyên hạt hộp 500g', N'DM10', N'Hộp', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP242', N'Bột ngũ cốc Việt Đài bổ sung canxi gói 600g', N'DM10', N'Gói', N'45000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP243', N'Trà ô long Tea Plus chai 450ml (lốc 6)', N'DM10', N'Lốc', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP244', N'Cà phê sữa lon Highlands chai 235ml', N'DM10', N'Chai', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP245', N'Cà phê Birdy 3in1 dạng bịch 20 gói x 17g', N'DM10', N'Bịch', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP246', N'Trà atiso túi lọc Ladophar hộp 20 túi', N'DM10', N'Hộp', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP247', N'Bột ngũ cốc NutiFood 5 Nhóm Hạt gói 500g', N'DM10', N'Gói', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP248', N'Trà hoa cúc mật ong Cozy hộp 20 túi', N'DM10', N'Hộp', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP249', N'Cà phê muối Nescafé hộp 10 gói', N'DM10', N'Hộp', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP250', N'Cà phê đen đá G7 hộp 15 gói', N'DM10', N'Hộp', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP251', N'Snack khoai tây Lay''s vị tự nhiên gói 95g', N'DM11', N'Gói', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP252', N'Snack khoai tây Pringles vị kem chua & hành lon 107g', N'DM11', N'Lon', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP253', N'Snack Oishi tôm cay gói 80g', N'DM11', N'Gói', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP254', N'Bánh quy bơ Danisa hộp thiếc 454g', N'DM11', N'Hộp', N'135000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP255', N'Bánh Chocopie Orion hộp 12 cái 360g', N'DM11', N'Hộp', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP256', N'Bánh gạo An gói 111g', N'DM11', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP257', N'Bánh xốp Nabati Richoco hộp 145g', N'DM11', N'Hộp', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP258', N'Kẹo dẻo Haribo Goldbears gói 80g', N'DM11', N'Gói', N'21500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP259', N'Kẹo Alpenliebe hương dâu kem gói 40 viên', N'DM11', N'Gói', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP260', N'Bánh quy Cosy Marie thùng 576g', N'DM11', N'Thùng', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP261', N'Bánh AFC dinh dưỡng vị lúa mì hộp 200g', N'DM11', N'Hộp', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP262', N'Bánh tráng rong biển Seleco gói 28g', N'DM11', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP263', N'Bánh Oreo socola kem vani gói 119.6g', N'DM11', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP264', N'Kẹo cao su Doublemint vỉ 11.2g', N'DM11', N'Vỉ', N'5000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP265', N'Socola thanh KitKat gói 2 thanh 17g', N'DM11', N'Gói', N'10000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP266', N'Bánh Pie Lotte vị cacao hộp 6 cái 198g', N'DM11', N'Hộp', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP267', N'Snack bắp Oishi phô mai gói 40g', N'DM11', N'Gói', N'5500.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP268', N'Bánh cracker Cream-O hộp 432g', N'DM11', N'Hộp', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP269', N'Kẹo Mentos vị trái cây thỏi 37g', N'DM11', N'Thỏi', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP270', N'Socola sữa Cadbury Dairy Milk thanh 65g', N'DM11', N'Thanh', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP271', N'Snack Lay''s stax vị tự nhiên lon 105g', N'DM11', N'Lon', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP272', N'Bánh mì tươi sandwich Kinh Đô gói 100g', N'DM11', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP273', N'Bánh tươi Hữu Nghị bơ sữa hộp 252g', N'DM11', N'Hộp', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP274', N'Kẹo Skittles trái cây gói 45g', N'DM11', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP275', N'Socola Ferrero Rocher hộp 3 viên 37.5g', N'DM11', N'Hộp', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP276', N'Dầu gội Clear Bạc Hà Mát Lạnh chai 630ml', N'DM12', N'Chai', N'145000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP277', N'Dầu gội Pantene Ngăn Rụng Tóc chai 650ml', N'DM12', N'Chai', N'138000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP278', N'Dầu gội Sunsilk Mềm Mượt Diệu Kỳ chai 640ml', N'DM12', N'Chai', N'125000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP279', N'Dầu gội Dove Phục Hồi Hư Tổn chai 640ml', N'DM12', N'Chai', N'155000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP280', N'Dầu xả TRESemmé Keratin Smooth chai 620ml', N'DM12', N'Chai', N'135000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP281', N'Sữa tắm Lifebuoy Bảo vệ vượt trội 10 chai 800g', N'DM12', N'Chai', N'162000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP282', N'Sữa tắm Dove Dưỡng ẩm chai 800g', N'DM12', N'Chai', N'168000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP283', N'Sữa tắm On The Body dưỡng da cherry chai 500g', N'DM12', N'Chai', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP284', N'Kem đánh răng Colgate Ngừa Sâu Răng tuýp 225g', N'DM12', N'Tuýp', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP285', N'Kem đánh răng P/S Bảo vệ 123 tuýp 240g', N'DM12', N'Tuýp', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP286', N'Kem đánh răng Closeup hương bạc hà tuýp 230g', N'DM12', N'Tuýp', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP287', N'Nước súc miệng Listerine Cool Mint chai 750ml', N'DM12', N'Chai', N'108000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP288', N'Bàn chải đánh răng Colgate SlimSoft cây', N'DM12', N'Cây', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP289', N'Sữa rửa mặt Pond''s trắng hồng rạng rỡ tuýp 100g', N'DM12', N'Tuýp', N'48000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP290', N'Lăn khử mùi Nivea Dry Comfort chai 50ml', N'DM12', N'Chai', N'62000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP291', N'Dao cạo râu Gillette Blue 3 gói 2 cây', N'DM12', N'Gói', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP292', N'Băng vệ sinh Diana Sensi siêu mỏng gói 8 miếng', N'DM12', N'Gói', N'22000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP293', N'Dung dịch vệ sinh phụ nữ Betadine chai 250ml', N'DM12', N'Chai', N'92000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP294', N'Nước hoa hồng Mamonde Rose Toner chai 250ml', N'DM12', N'Chai', N'185000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP295', N'Kem chống nắng Sunplay Skin Aqua tuýp 30g', N'DM12', N'Tuýp', N'68000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP296', N'Sữa tắm gội nam Romano Force chai 650ml', N'DM12', N'Chai', N'115000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP297', N'Gel vuốt tóc Gatsby Styling hũ 75g', N'DM12', N'Hũ', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP298', N'Dầu gội Head & Shoulders Classic Clean chai 625ml', N'DM12', N'Chai', N'148000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP299', N'Bông tẩy trang Silcot hộp 82 miếng', N'DM12', N'Hộp', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP300', N'Khăn giấy ướt Mamamy không mùi gói 80 tờ', N'DM12', N'Gói', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP301', N'Nước rửa chén Sunlight Chanh chai 750g', N'DM13', N'Chai', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP302', N'Nước rửa chén Sunlight Extra diệt khuẩn chai 750g', N'DM13', N'Chai', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP303', N'Bột giặt Omo Comfort Tinh Dầu Thơm túi 4.1kg', N'DM13', N'Túi', N'185000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP304', N'Nước giặt Ariel khử mùi ẩm mốc túi 2.1kg', N'DM13', N'Túi', N'115000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP305', N'Nước giặt OMO Matic Cửa Trên túi 2.2kg', N'DM13', N'Túi', N'98000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP306', N'Nước xả vải Downy Huyền Bí túi 1.6L', N'DM13', N'Túi', N'132000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP307', N'Nước xả vải Comfort Một Lần Xả túi 1.6L', N'DM13', N'Túi', N'98000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP308', N'Nước lau sàn Sunlight Hương Hoa túi 1kg', N'DM13', N'Túi', N'29000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP309', N'Nước tẩy bồn cầu Vim Power chai 900ml', N'DM13', N'Chai', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP310', N'Bình xịt diệt côn trùng Raid Hương Lavender chai 600ml', N'DM13', N'Chai', N'72000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP311', N'Giấy vệ sinh Pulppy hương trà xanh lốc 10 cuộn', N'DM13', N'Lốc', N'78000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP312', N'Giấy vệ sinh Bless You Classic lốc 10 cuộn', N'DM13', N'Lốc', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP313', N'Khăn giấy khô Pulppy hộp 100 tờ', N'DM13', N'Hộp', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP314', N'Khăn giấy ăn Napkin lốc 10 gói', N'DM13', N'Lốc', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP315', N'Nước tẩy quần áo Javel Mỹ Hảo chai 1L', N'DM13', N'Chai', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP316', N'Bọt rửa tay Lifebuoy chai 180ml', N'DM13', N'Chai', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP317', N'Nước rửa tay Lifebouy diệt khuẩn chai 500g', N'DM13', N'Chai', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP318', N'Túi rác đen Handy Size M cuộn 20 túi', N'DM13', N'Cuộn', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP319', N'Bao tay nilon Saran gói 100 cái', N'DM13', N'Gói', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP320', N'Miếng rửa chén xốp Scotch-Brite miếng', N'DM13', N'Miếng', N'8000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP321', N'Nước lau kính Gift chai 580ml', N'DM13', N'Chai', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP322', N'Viên tẩy bồn cầu Bluelet Nhật hộp 2 viên', N'DM13', N'Hộp', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP323', N'Cây lau nhà xoay Spin Mop cây', N'DM13', N'Cây', N'185000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP324', N'Chổi quét nhà nhựa cây', N'DM13', N'Cây', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP325', N'Nước giặt đồ trẻ em D-nee chai 960ml', N'DM13', N'Chai', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP326', N'Tã quần Huggies Dry size L gói 68 miếng', N'DM14', N'Gói', N'295000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP327', N'Tã quần Bobby size M gói 76 miếng', N'DM14', N'Gói', N'265000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP328', N'Tã dán Pampers Newborn gói 40 miếng', N'DM14', N'Gói', N'165000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP329', N'Tã quần Merries size L gói 44 miếng', N'DM14', N'Gói', N'310000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP330', N'Khăn ướt em bé Bobby không mùi gói 100 tờ', N'DM14', N'Gói', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP331', N'Khăn ướt Mamamy có mùi gói 80 tờ', N'DM14', N'Gói', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP332', N'Dầu tắm gội Johnson''s Baby Top-to-Toe chai 500ml', N'DM14', N'Chai', N'95000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP333', N'Sữa tắm em bé Cetaphil Baby Gentle Wash chai 230ml', N'DM14', N'Chai', N'165000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP334', N'Phấn rôm Johnson''s Baby gương sen hộp 200g', N'DM14', N'Hộp', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP335', N'Sữa bột Friso Gold 4 hộp 850g', N'DM14', N'Hộp', N'520000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP336', N'Sữa bột Nan Optipro 3 lon 900g', N'DM14', N'Lon', N'450000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP337', N'Sữa bột Frisolac Gold 2 lon 850g', N'DM14', N'Lon', N'485000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP338', N'Bình sữa Pigeon PPSU 160ml', N'DM14', N'Cái', N'245000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP339', N'Núm vú giả silicone Pigeon size S cái', N'DM14', N'Cái', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP340', N'Kem bôi hăm Bepanthen tuýp 30g', N'DM14', N'Tuýp', N'95000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP341', N'Nước giặt đồ sơ sinh D-nee chai 960ml', N'DM14', N'Chai', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP342', N'Cháo tươi SG Food vị gà đậu xanh gói 240g', N'DM14', N'Gói', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP343', N'Bột ăn dặm Ridielac Gạo Sữa hộp 200g', N'DM14', N'Hộp', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP344', N'Bình tập uống Combi cái 240ml', N'DM14', N'Cái', N'185000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP345', N'Miếng lót sơ sinh Bobby Newborn gói 60 miếng', N'DM14', N'Gói', N'95000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP346', N'Nước rửa bình sữa Pigeon chai 700ml', N'DM14', N'Chai', N'85000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP347', N'Bỉm quần Huggies size XL gói 62 miếng', N'DM14', N'Gói', N'285000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP348', N'Sữa bột Enfagrow A+ 4 lon 830g', N'DM14', N'Lon', N'410000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP349', N'Tã quần GOO.N Premium size M gói 56 miếng', N'DM14', N'Gói', N'278000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP350', N'Bột giặt đồ bé Baby Care gói 800g', N'DM14', N'Gói', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP351', N'Hộp đựng thực phẩm nhựa Duy Tân hộp 800ml', N'DM15', N'Hộp', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP352', N'Màng bọc thực phẩm PVC Ringo cuộn 30cm x 100m', N'DM15', N'Cuộn', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP353', N'Túi zipper đựng thực phẩm Ringo hộp 30 túi', N'DM15', N'Hộp', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP354', N'Chảo chống dính Sunhouse 22cm cái', N'DM15', N'Cái', N'155000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP355', N'Nồi inox 3 đáy Sunhouse 20cm cái', N'DM15', N'Cái', N'195000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP356', N'Thớt nhựa kháng khuẩn Duy Tân cái', N'DM15', N'Cái', N'45000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP357', N'Kéo cắt gà inox Sunhouse cái', N'DM15', N'Cái', N'65000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP358', N'Đũa tre bộ 10 đôi', N'DM15', N'Bộ', N'18000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP359', N'Bóng đèn LED Điện Quang 7W', N'DM15', N'Cái', N'35000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP360', N'Bóng đèn LED Rạng Đông 9W', N'DM15', N'Cái', N'38000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP361', N'Pin Energizer Max AA vỉ 4 viên', N'DM15', N'Vỉ', N'55000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP362', N'Pin Panasonic AA vỉ 4 viên', N'DM15', N'Vỉ', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP363', N'Keo dán đa năng Alteco tuýp 3g', N'DM15', N'Tuýp', N'15000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP364', N'Băng keo trong cuộn 48mm x 45m', N'DM15', N'Cuộn', N'12000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP365', N'Bật lửa Cricket bộ 3 cái', N'DM15', N'Bộ', N'42000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP366', N'Khăn lau đa năng Scotch-Brite bộ 3 cái', N'DM15', N'Bộ', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP367', N'Móc áo nhựa Duy Tân bộ 10 cái', N'DM15', N'Bộ', N'32000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP368', N'Ly thủy tinh Luminarc 350ml bộ 6 cái', N'DM15', N'Bộ', N'125000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP369', N'Chén sứ Minh Long hoa 11.5cm cái', N'DM15', N'Cái', N'28000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP370', N'Phích nước giữ nhiệt Rạng Đông 2L cái', N'DM15', N'Cái', N'195000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP371', N'Bình giữ nhiệt inox Lock&Lock 500ml', N'DM15', N'Cái', N'185000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP372', N'Hộp cơm giữ nhiệt Lock&Lock 3 tầng', N'DM15', N'Cái', N'295000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP373', N'Giấy bạc nướng BBQ cuộn 30cm x 5m', N'DM15', N'Cuộn', N'25000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP374', N'Cân nhà bếp điện tử 5kg cái', N'DM15', N'Cái', N'125000.00', 0)
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong]) VALUES (N'SP375', N'Dao inox Sunhouse cái', N'DM15', N'Cái', N'85000.00', 0)
 GO

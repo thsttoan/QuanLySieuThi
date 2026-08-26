@@ -2,6 +2,7 @@ import os
 import datetime
 import pyodbc
 from flask import Flask, jsonify, request, send_from_directory, redirect
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -578,11 +579,11 @@ def login():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT MaNV, TenNV, ChucVu, Role FROM NHAN_VIEN WHERE MaNV = ? AND MatKhau = ?", (username, password))
+        cursor.execute("SELECT MaNV, TenNV, ChucVu, Role, MatKhau FROM NHAN_VIEN WHERE MaNV = ?", (username,))
         row = cursor.fetchone()
         conn.close()
         
-        if row:
+        if row and check_password_hash(row[4], password):
             role_id = row[3]
             if role_id == 0:
                 role = 'ADMIN'
@@ -656,7 +657,7 @@ def manage_employees():
             cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO NHAN_VIEN (MaNV, TenNV, ChucVu, SoDienThoai, MatKhau, Role) VALUES (?, ?, ?, ?, ?, ?)",
-                (data['MaNV'], data['TenNV'], data['ChucVu'], data['SoDienThoai'], data.get('MatKhau', '123456'), data.get('Role', 1))
+                (data['MaNV'], data['TenNV'], data['ChucVu'], data['SoDienThoai'], generate_password_hash(data.get('MatKhau', '123456')), data.get('Role', 1))
             )
             conn.commit()
             conn.close()
@@ -679,7 +680,7 @@ def update_employee(manv):
                     UPDATE NHAN_VIEN 
                     SET TenNV = ?, ChucVu = ?, SoDienThoai = ?, Role = ?, MatKhau = ?
                     WHERE MaNV = ?
-                """, (data['TenNV'], data['ChucVu'], data['SoDienThoai'], data['Role'], data['MatKhau'], manv))
+                """, (data['TenNV'], data['ChucVu'], data['SoDienThoai'], data['Role'], generate_password_hash(data['MatKhau']), manv))
             else:
                 cursor.execute("""
                     UPDATE NHAN_VIEN 
@@ -1217,4 +1218,5 @@ def demo_phantom_insert():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000, threaded=True)
+    # host='0.0.0.0' allows external devices on the same network to connect
+    app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)

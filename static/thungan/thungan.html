@@ -6,6 +6,14 @@
     <title>Thu Ngân — Bách Hóa Xanh</title>
     <link rel="stylesheet" href="/static/thungan/thungan.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+        // KIỂM TRA QUYỀN TRUY CẬP TRƯỚC KHI RENDER HTML
+        const userRole = sessionStorage.getItem('role');
+        if (userRole !== 'THUNGAN') {
+            alert("Bạn không có quyền truy cập trang Thu ngân!");
+            window.location.href = '/login';
+        }
+    </script>
 </head>
 <body>
     <div class="pos-layout">

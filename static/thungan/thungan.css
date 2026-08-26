@@ -742,26 +742,46 @@ body {
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-    .pos-main {
+@media (max-width: 1024px) {
+    body {
+        overflow: hidden;
+    }
+    .pos-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: 55vh 45vh;
+        height: 100vh;
+        overflow: hidden;
     }
-    .cart-sidebar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60vh;
-        border-top: 1px solid var(--border);
+    .pos-left {
+        height: 100%;
+        overflow: hidden;
+    }
+    .pos-right {
+        height: 100%;
         border-left: none;
-        transform: translateY(calc(100% - 50px));
-        transition: transform 0.3s ease;
-        z-index: 50;
-    }
-    .cart-sidebar.open {
-        transform: translateY(0);
+        border-top: 3px solid var(--green);
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
     }
     .products-area {
-        height: calc(100vh - 60px - 56px - 50px);
+        height: auto;
+        overflow-y: auto;
+    }
+    .pos-header {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 15px;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .pos-header .search-box {
+        max-width: 100%;
+        width: 100%;
+    }
+    .category-bar {
+        overflow-x: auto;
+        padding: 10px;
+    }
+    .cart-items {
+        max-height: calc(45vh - 220px); /* Đảm bảo có thể cuộn danh sách giỏ hàng trong 45vh */
     }
 }

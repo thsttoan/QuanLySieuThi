@@ -119,7 +119,12 @@ function renderProducts() {
             </div>
             <div class="card-body">
                 <div class="card-name" title="${p.TenSP}">${p.TenSP}</div>
-                <div class="card-unit">${p.DonViTinh || ''}</div>
+                <div class="card-unit">
+                    ${p.DonViTinh || ''}
+                    <span style="float: right; color: var(--text-muted); font-size: 0.85em; font-weight: 500;">
+                        Tồn: ${p.TongTonKho || 0}
+                    </span>
+                </div>
                 <div class="card-prices">
                     <span class="price-sale">${fmt(price)}</span>
                     ${hasPromo ? `<span class="price-original">${fmt(p.GiaBan)}</span>` : ''}

@@ -242,7 +242,15 @@ body::after {
 
 /* Responsive */
 @media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
     .login-card {
-        padding: 32px 24px;
+        padding: 24px 20px;
+        width: 100%;
+        margin: 0;
+    }
+    .login-header h2 {
+        font-size: 1.5rem;
     }
 }
