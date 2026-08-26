@@ -22,6 +22,27 @@
     </header>
 
     <main class="container">
+        <!-- CONTROL PANEL -->
+        <div class="card control-panel" style="grid-column: 1 / -1; margin-bottom: 0;">
+            <div class="card-header" style="background: var(--info-color);">
+                <h3><i class="fa-solid fa-cogs"></i> Cấu hình Sản phẩm chạy Test</h3>
+            </div>
+            <div class="card-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div>
+                    <label><strong>Sản phẩm cho Lỗi 1 (Mất cập nhật):</strong></label>
+                    <select id="select-masp-1" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                </div>
+                <div>
+                    <label><strong>Sản phẩm cho Lỗi 2 (Đọc rác):</strong></label>
+                    <select id="select-masp-2" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                </div>
+                <div>
+                    <label><strong>Sản phẩm cho Lỗi 3 (Không lặp lại):</strong></label>
+                    <select id="select-masp-3" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                </div>
+            </div>
+        </div>
+
         <!-- 1. Mất cập nhật (Lost Update) -->
         <section class="card">
             <div class="card-header">
@@ -29,7 +50,7 @@
                 <span class="badge tv3">Nhiệm vụ TV3</span>
             </div>
             <div class="card-body">
-                <p><strong>Kịch bản:</strong> 2 thu ngân cùng bấm thanh toán Lô 567 (SP002 - Sườn non heo) cùng một thời điểm.</p>
+                <p><strong>Kịch bản:</strong> 2 thu ngân cùng bấm thanh toán 1 sản phẩm <strong class="dynamic-masp-1" style="color:var(--primary-color);">SP002</strong> cùng một thời điểm.</p>
                 <div class="actions">
                     <button class="btn btn-error" onclick="runLostUpdate(false)">
                         <i class="fas fa-bug"></i> Chạy (Gây Lỗi)
@@ -52,7 +73,7 @@
                 <span class="badge tv2">Nhiệm vụ TV2</span>
             </div>
             <div class="card-body">
-                <p><strong>Kịch bản:</strong> Thu ngân mở Bill nhưng chưa chốt (treo 5s rồi hủy). Trong lúc đó, Quản lý chạy báo cáo đọc tồn kho Lô 567.</p>
+                <p><strong>Kịch bản:</strong> Thu ngân mở Bill nhưng chưa chốt (treo 5s rồi hủy). Trong lúc đó, Quản lý chạy báo cáo đếm tổng tồn kho của sản phẩm <strong class="dynamic-masp-2" style="color:var(--primary-color);">SP002</strong>.</p>
                 <div class="actions">
                     <button class="btn btn-warning" onclick="startDirtyTransaction()">
                         <i class="fas fa-play"></i> 1. Thu ngân: Chạy Giao dịch (Treo 5s rồi Hủy)
@@ -78,7 +99,7 @@
                 <span class="badge tv4">Nhiệm vụ TV4</span>
             </div>
             <div class="card-body">
-                <p><strong>Kịch bản:</strong> Thu ngân đang mở Bill tính tiền (treo 5s). Quản lý trong kho đổi giá sản phẩm `SP002`.</p>
+                <p><strong>Kịch bản:</strong> Thu ngân đang mở Bill tính tiền (treo 5s). Quản lý trong kho đổi giá sản phẩm <strong class="dynamic-masp-3" style="color:var(--primary-color);">SP002</strong>.</p>
                 <div class="actions">
                     <button class="btn btn-warning" onclick="startNonRepeatableTransaction(false)">
                         <i class="fas fa-bug"></i> 1. Thu ngân: Đọc giá (Không Khóa)

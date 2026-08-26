@@ -1005,15 +1005,44 @@ def delete_supplier(mancc):
 def demo_page():
     return send_from_directory('static/demo', 'demo.html')
 
-@app.route('/api/demo/inventory/<malo>', methods=['GET'])
-def demo_get_inventory(malo):
+@app.route('/api/demo/batches', methods=['GET'])
+def demo_get_batches():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = ?", (malo,))
+        cursor.execute("SELECT L.MaLo, S.TenSP, S.MaSP FROM LO_HANG L JOIN SAN_PHAM S ON L.MaSP = S.MaSP WHERE L.SoLuongTon > 0")
+        batches = [{"MaLo": str(r[0]), "TenSP": r[1], "MaSP": r[2]} for r in cursor.fetchall()]
+        conn.close()
+        return jsonify(batches)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/products', methods=['GET'])
+def demo_get_products():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT P.MaSP, P.TenSP, P.GiaBan, ISNULL(SUM(L.SoLuongTon), 0) 
+            FROM SAN_PHAM P 
+            LEFT JOIN LO_HANG L ON P.MaSP = L.MaSP 
+            GROUP BY P.MaSP, P.TenSP, P.GiaBan
+        """)
+        products = [{"MaSP": r[0], "TenSP": r[1], "GiaBan": float(r[2]), "SoLuongTon": float(r[3])} for r in cursor.fetchall()]
+        conn.close()
+        return jsonify(products)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/demo/inventory/<masp>', methods=['GET'])
+def demo_get_inventory(masp):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT SUM(SoLuongTon) FROM LO_HANG WHERE MaSP = ?", (masp,))
         row = cursor.fetchone()
         conn.close()
-        return jsonify({"SoLuongTon": float(row[0]) if row else 0})
+        return jsonify({"SoLuongTon": float(row[0]) if row and row[0] is not None else 0})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -1021,30 +1050,32 @@ def demo_get_inventory(malo):
 def demo_lost_update():
     mode = request.args.get('mode', 'error')
     tx = request.args.get('tx', '1')
+    masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
         conn.autocommit = False 
         cursor = conn.cursor()
         
-        # 1. Đọc số lượng tồn
+        # 1. Đọc số lượng tồn của Lô cũ nhất
         if mode == 'fixed':
-            cursor.execute("SELECT SoLuongTon FROM LO_HANG WITH (UPDLOCK, HOLDLOCK) WHERE MaLo = 567")
+            cursor.execute("SELECT TOP 1 MaLo, SoLuongTon FROM LO_HANG WITH (UPDLOCK, HOLDLOCK) WHERE MaSP = ? AND SoLuongTon > 0 ORDER BY HanSuDung ASC", (masp,))
         else:
-            cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = 567")
+            cursor.execute("SELECT TOP 1 MaLo, SoLuongTon FROM LO_HANG WHERE MaSP = ? AND SoLuongTon > 0 ORDER BY HanSuDung ASC", (masp,))
             
         row = cursor.fetchone()
         if not row:
             conn.rollback()
-            return jsonify({"error": "Không tìm thấy Lô 567 (SP002)"})
+            return jsonify({"error": f"SP {masp} đã hết hàng trong mọi lô"})
             
-        qty = row[0]
+        malo = row[0]
+        qty = row[1]
         
         # Giả lập xử lý lâu (5 giây)
         cursor.execute("WAITFOR DELAY '00:00:05'")
         
         # 2. Cập nhật số lượng
         new_qty = float(qty) - 1
-        cursor.execute("UPDATE LO_HANG SET SoLuongTon = ? WHERE MaLo = 567", (new_qty,))
+        cursor.execute("UPDATE LO_HANG SET SoLuongTon = ? WHERE MaLo = ?", (new_qty, malo))
         
         conn.commit()
         conn.close()
@@ -1054,12 +1085,18 @@ def demo_lost_update():
 
 @app.route('/api/demo/dirty_read/transaction', methods=['GET'])
 def demo_dirty_read_tx():
+    masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
         conn.autocommit = False
         cursor = conn.cursor()
         
-        cursor.execute("UPDATE LO_HANG SET SoLuongTon = 9999 WHERE MaLo = 567")
+        # Giả lập Thu Ngân chọn 1 lô của SP này và nhập sai tồn kho thành 9999
+        cursor.execute("SELECT TOP 1 MaLo FROM LO_HANG WHERE MaSP = ? ORDER BY HanSuDung ASC", (masp,))
+        row = cursor.fetchone()
+        if row:
+            cursor.execute("UPDATE LO_HANG SET SoLuongTon = 9999 WHERE MaLo = ?", (row[0],))
+            
         cursor.execute("WAITFOR DELAY '00:00:05'")
         
         conn.rollback()
@@ -1071,6 +1108,7 @@ def demo_dirty_read_tx():
 @app.route('/api/demo/dirty_read/read', methods=['GET'])
 def demo_dirty_read_read():
     mode = request.args.get('mode', 'error')
+    masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
         conn.autocommit = False
@@ -1081,18 +1119,20 @@ def demo_dirty_read_read():
         else:
             cursor.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED")
             
-        cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = 567")
+        # Đọc TỔNG tồn kho của Sản phẩm đó
+        cursor.execute("SELECT SUM(SoLuongTon) FROM LO_HANG WHERE MaSP = ?", (masp,))
         row = cursor.fetchone()
         
         conn.commit()
         conn.close()
-        return jsonify({"SoLuongTon": float(row[0]) if row else 0})
+        return jsonify({"SoLuongTon": float(row[0]) if row and row[0] is not None else 0})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/demo/non_repeatable_read/read', methods=['GET'])
 def demo_non_repeatable_read():
     mode = request.args.get('mode', 'error')
+    masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
         conn.autocommit = False
@@ -1101,13 +1141,15 @@ def demo_non_repeatable_read():
         if mode == 'fixed':
             cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
             
-        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = 'SP002'")
-        price1 = cursor.fetchone()[0]
+        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = ?", (masp,))
+        row = cursor.fetchone()
+        price1 = row[0] if row else 0
         
         cursor.execute("WAITFOR DELAY '00:00:05'")
         
-        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = 'SP002'")
-        price2 = cursor.fetchone()[0]
+        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = ?", (masp,))
+        row2 = cursor.fetchone()
+        price2 = row2[0] if row2 else 0
         
         conn.commit()
         conn.close()
@@ -1117,14 +1159,15 @@ def demo_non_repeatable_read():
 
 @app.route('/api/demo/non_repeatable_read/update', methods=['POST'])
 def demo_non_repeatable_update():
+    masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
         conn.autocommit = False
         cursor = conn.cursor()
-        cursor.execute("UPDATE SAN_PHAM SET GiaBan = GiaBan + 1000 WHERE MaSP = 'SP002'")
+        cursor.execute("UPDATE SAN_PHAM SET GiaBan = GiaBan + 1000 WHERE MaSP = ?", (masp,))
         conn.commit()
         conn.close()
-        return jsonify({"message": "Đã tăng giá SP002 thêm 1000 VNĐ!"})
+        return jsonify({"message": f"Đã tăng giá {masp} thêm 1000 VNĐ!"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

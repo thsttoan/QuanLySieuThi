@@ -145,11 +145,11 @@ Bạn có thể tiến hành kiểm thử ngay trên giao diện Web POS tại �
 
 ## 🐞 Demo Điều Khiển Tương Tranh (Concurrency Control)
 
-Dự án cung cấp một trang chuyên dụng để giả lập và kiểm thử các lỗi tương tranh phổ biến trong hệ thống đa người dùng, tại địa chỉ: `http://127.0.0.1:5000/demo`. Các lỗi được giả lập với dữ liệu thực tế (Lô 567, SP002) bao gồm:
+Dự án cung cấp một trang chuyên dụng để giả lập và kiểm thử các lỗi tương tranh phổ biến trong hệ thống đa người dùng, tại địa chỉ: `http://127.0.0.1:5000/demo`. Bạn có thể tự do cấu hình chọn Sản phẩm (qua Dropdown) để test độc lập cho từng kịch bản:
 
-1. **Mất cập nhật (Lost Update):** Hai thu ngân cùng thanh toán lô hàng 567. Khắc phục bằng khóa `UPDLOCK, HOLDLOCK` (Khóa 2PL).
-2. **Đọc rác (Dirty Read):** Quản lý đọc tồn kho lô 567 khi thu ngân đang tạm hoãn thanh toán chưa chốt. Khắc phục bằng mức cô lập `READ COMMITTED`.
-3. **Không lặp lại (Non-repeatable Read):** Thu ngân đọc giá SP002 hai lần trong 1 giao dịch, quản lý chen ngang đổi giá. Khắc phục bằng mức cô lập `REPEATABLE READ`.
+1. **Mất cập nhật (Lost Update):** Hai thu ngân cùng thanh toán 1 sản phẩm. Khắc phục bằng khóa `UPDLOCK, HOLDLOCK` (Khóa 2PL) trên lô cũ nhất.
+2. **Đọc rác (Dirty Read):** Quản lý đếm tổng tồn kho sản phẩm khi thu ngân đang tạm hoãn sửa 1 lô của sản phẩm đó chưa chốt. Khắc phục bằng mức cô lập `READ COMMITTED`.
+3. **Không lặp lại (Non-repeatable Read):** Thu ngân đọc giá sản phẩm hai lần trong 1 giao dịch, quản lý chen ngang đổi giá. Khắc phục bằng mức cô lập `REPEATABLE READ`.
 4. **Bóng ma (Phantom Read):** Quản lý đếm tổng hóa đơn, thu ngân chen ngang chèn hóa đơn rác. Khắc phục bằng mức cô lập `SERIALIZABLE`.
 
 ---
@@ -160,11 +160,12 @@ Các API dưới đây được sử dụng riêng cho phần giả lập Tươn
 
 | Endpoint | Method | Mô tả |
 |----------|--------|-------|
-| `/api/demo/inventory/<malo>` | `GET` | Lấy số lượng tồn kho hiện tại của một Lô hàng cụ thể. |
-| `/api/demo/lost_update` | `POST` | Thực thi bán 1 sản phẩm của Lô 567. Hỗ trợ tham số `?mode=fixed` để bật cơ chế khóa chống Lost Update. |
-| `/api/demo/dirty_read/tx1` | `POST` | Bắt đầu giao dịch sửa tồn kho thành 9999, treo 5 giây rồi Rollback. |
-| `/api/demo/dirty_read/read` | `GET` | Đọc tồn kho Lô 567. Hỗ trợ tham số `?mode=fixed` (READ COMMITTED) hoặc `error` (READ UNCOMMITTED). |
-| `/api/demo/non_repeatable_read/read` | `GET` | Đọc giá SP002 hai lần cách nhau 5 giây. Hỗ trợ tham số `?mode=fixed` (REPEATABLE READ). |
-| `/api/demo/non_repeatable_read/update` | `POST` | Tăng giá SP002 thêm 1000 VNĐ. |
+| `/api/demo/products` | `GET` | Lấy danh sách toàn bộ sản phẩm cùng Giá bán và Tổng số lượng tồn kho (để hiển thị lên các Dropdown). |
+| `/api/demo/inventory/<masp>` | `GET` | Lấy tổng số lượng tồn kho hiện tại của một Sản phẩm cụ thể. |
+| `/api/demo/lost_update` | `GET` | Thực thi bán 1 đơn vị của sản phẩm. Hỗ trợ tham số `?mode=fixed` (Khóa 2PL) và `?masp=...`. |
+| `/api/demo/dirty_read/transaction` | `GET` | Bắt đầu giao dịch sửa tồn kho 1 lô thành 9999, treo 5 giây rồi Rollback. Hỗ trợ tham số `?masp=...`. |
+| `/api/demo/dirty_read/read` | `GET` | Đọc tổng tồn kho sản phẩm. Hỗ trợ tham số `?mode=fixed` (READ COMMITTED) và `?masp=...`. |
+| `/api/demo/non_repeatable_read/read` | `GET` | Đọc giá sản phẩm hai lần cách nhau 5 giây. Hỗ trợ tham số `?mode=fixed` (REPEATABLE READ) và `?masp=...`. |
+| `/api/demo/non_repeatable_read/update` | `POST` | Tăng giá sản phẩm thêm 1000 VNĐ. Hỗ trợ tham số `?masp=...`. |
 | `/api/demo/phantom_read/count` | `GET` | Đếm tổng số hóa đơn 2 lần cách nhau 5 giây. Hỗ trợ tham số `?mode=fixed` (SERIALIZABLE). |
 | `/api/demo/phantom_read/insert` | `POST` | Chèn một hóa đơn rác với tổng tiền 50.000đ để giả lập Bóng ma. |
