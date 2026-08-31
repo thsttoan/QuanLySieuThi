@@ -1069,19 +1069,57 @@ def demo_lost_update():
             return jsonify({"error": f"SP {masp} đã hết hàng trong mọi lô"})
             
         malo = row[0]
-        qty = row[1]
+        qty = float(row[1])
         
-        # Giả lập xử lý lâu (5 giây)
+        # Lấy giá sản phẩm
+        cursor.execute("SELECT GiaBan, GiaKhuyenMai FROM v_SanPhamSieuThi WHERE MaSP = ?", (masp,))
+        sp_row = cursor.fetchone()
+        if not sp_row:
+            conn.rollback()
+            return jsonify({"error": f"Sản phẩm {masp} không tồn tại!"})
+        
+        gia_ban = float(sp_row[0])
+        gia_km = float(sp_row[1])
+        so_luong = 1
+        tong_tien_hang = gia_ban * so_luong
+        giam_gia_km = (gia_ban - gia_km) * so_luong
+        thanh_tien = tong_tien_hang - giam_gia_km
+        
+        # Giả lập xử lý lâu (5 giây) — cả 2 TX đều đọc cùng qty tại thời điểm này
         cursor.execute("WAITFOR DELAY '00:00:05'")
         
-        # 2. Cập nhật số lượng
-        new_qty = float(qty) - 1
+        # 2. Tạo Hóa đơn
+        import time
+        ma_nv = f"thungan{tx}"
+        timestamp_val = int(time.time())
+        ma_hd = f"HD_DEMO_{timestamp_val}_{tx}"
+        
+        # Ghi HOA_DON
+        cursor.execute(
+            "INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT) "
+            "VALUES (?, GETDATE(), ?, ?, ?, ?, N'Tiền mặt')",
+            (ma_hd, ma_nv, tong_tien_hang, giam_gia_km, thanh_tien)
+        )
+        
+        # 3. Ghi CHI_TIET_HOA_DON trực tiếp (không qua sp_BanHangFIFO để demo Lost Update)
+        cursor.execute(
+            "INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, ThanhTien) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (ma_hd, masp, malo, so_luong, gia_ban, thanh_tien)
+        )
+        
+        # 4. Trừ kho thủ công — dùng giá trị qty đã đọc từ đầu (đây là nơi lỗi Lost Update xảy ra!)
+        new_qty = qty - so_luong
         cursor.execute("UPDATE LO_HANG SET SoLuongTon = ? WHERE MaLo = ?", (new_qty, malo))
         
         conn.commit()
         conn.close()
-        return jsonify({"message": f"Đã bán 1 SP. Tồn kho tính toán: {qty} -> {new_qty}"})
+        return jsonify({"message": f"Đã bán 1 SP (HD: {ma_hd}). Tồn kho tính toán: {qty} -> {new_qty}"})
     except Exception as e:
+        try:
+            conn.rollback()
+        except:
+            pass
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/demo/dirty_read/transaction', methods=['GET'])
@@ -1092,7 +1130,7 @@ def demo_dirty_read_tx():
         conn.autocommit = False
         cursor = conn.cursor()
         
-        # Giả lập Thu Ngân chọn 1 lô của SP này và nhập sai tồn kho thành 9999
+        # Giả lập Nhân Viên Kho chọn 1 lô của SP này và nhập sai tồn kho thành 9999
         cursor.execute("SELECT TOP 1 MaLo FROM LO_HANG WHERE MaSP = ? ORDER BY HanSuDung ASC", (masp,))
         row = cursor.fetchone()
         if row:
@@ -1200,21 +1238,49 @@ def demo_phantom_read():
 @app.route('/api/demo/phantom_read/insert', methods=['POST'])
 def demo_phantom_insert():
     import time
+    masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
         conn.autocommit = False
         cursor = conn.cursor()
         
-        ma_hd = f"HD_DEMO_{int(time.time())}"
-        cursor.execute("""
-            INSERT INTO HOA_DON (MaHD, NgayLap, TongTienHang, ThanhTien, PhuongThucTT, MaNV)
-            VALUES (?, GETDATE(), 50000, 50000, 'Tiền mặt', 'thungan1')
-        """, (ma_hd,))
+        ma_hd = f"HD_PT_{int(time.time())}"
+        
+        # Lấy giá sản phẩm
+        cursor.execute("SELECT GiaBan, GiaKhuyenMai FROM v_SanPhamSieuThi WHERE MaSP = ?", (masp,))
+        sp_row = cursor.fetchone()
+        if not sp_row:
+            conn.rollback()
+            return jsonify({"error": f"Sản phẩm {masp} không tồn tại!"})
+        
+        gia_ban = float(sp_row[0])
+        gia_km = float(sp_row[1])
+        so_luong = 1
+        tong_tien_hang = gia_ban * so_luong
+        giam_gia_km = (gia_ban - gia_km) * so_luong
+        thanh_tien = tong_tien_hang - giam_gia_km
+        
+        # Ghi HOA_DON
+        cursor.execute(
+            "INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT) "
+            "VALUES (?, GETDATE(), 'thungan1', ?, ?, ?, N'Tiền mặt')",
+            (ma_hd, tong_tien_hang, giam_gia_km, thanh_tien)
+        )
+        
+        # Gọi sp_BanHangFIFO để trừ kho + ghi CHI_TIET_HOA_DON
+        cursor.execute(
+            "EXEC sp_BanHangFIFO @MaHD=?, @MaSP=?, @SoLuongYeuCau=?, @DonGiaGoc=?, @SoTienGiam=?, @ThanhTien=?",
+            (ma_hd, masp, so_luong, gia_ban, giam_gia_km, thanh_tien)
+        )
         
         conn.commit()
         conn.close()
-        return jsonify({"message": "Đã chèn 1 hóa đơn rác (50,000 VNĐ)!"})
+        return jsonify({"message": f"Đã tạo hóa đơn {ma_hd} (SP: {masp}, {thanh_tien:,.0f} VNĐ)"})
     except Exception as e:
+        try:
+            conn.rollback()
+        except:
+            pass
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':

@@ -40,6 +40,10 @@
                     <label><strong>Sản phẩm cho Lỗi 3 (Không lặp lại):</strong></label>
                     <select id="select-masp-3" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
                 </div>
+                <div>
+                    <label><strong>Sản phẩm cho Lỗi 4 (Bóng ma):</strong></label>
+                    <select id="select-masp-4" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                </div>
             </div>
         </div>
 
@@ -73,10 +77,10 @@
                 <span class="badge tv2">Nhiệm vụ TV2</span>
             </div>
             <div class="card-body">
-                <p><strong>Kịch bản:</strong> Thu ngân mở Bill nhưng chưa chốt (treo 5s rồi hủy). Trong lúc đó, Quản lý chạy báo cáo đếm tổng tồn kho của sản phẩm <strong class="dynamic-masp-2" style="color:var(--primary-color);">SP002</strong>.</p>
+                <p><strong>Kịch bản:</strong> Nhân viên Kho kiểm kê và chỉnh sửa tồn kho nhưng chưa lưu (treo 5s rồi hủy). Trong lúc đó, Quản lý chạy báo cáo đếm tổng tồn kho của sản phẩm <strong class="dynamic-masp-2" style="color:var(--primary-color);">SP002</strong>.</p>
                 <div class="actions">
                     <button class="btn btn-warning" onclick="startDirtyTransaction()">
-                        <i class="fas fa-play"></i> 1. Thu ngân: Chạy Giao dịch (Treo 5s rồi Hủy)
+                        <i class="fas fa-play"></i> 1. Nhân viên Kho: Chạy Giao dịch (Treo 5s rồi Hủy)
                     </button>
                     <button class="btn btn-error" onclick="runDirtyRead(false)">
                         <i class="fas fa-bug"></i> 2. Quản lý: Đọc rác (READ UNCOMMITTED)
@@ -125,7 +129,7 @@
                 <span class="badge tv5">Nhiệm vụ TV5</span>
             </div>
             <div class="card-body">
-                <p><strong>Kịch bản:</strong> Quản lý đang chạy hàm SUM đếm tổng số hóa đơn (mất 5s). Thu ngân chèn 1 hóa đơn mới vào.</p>
+                <p><strong>Kịch bản:</strong> Quản lý đang chạy hàm SUM đếm tổng số hóa đơn (mất 5s). Thu ngân thanh toán sản phẩm <strong class="dynamic-masp-4" style="color:var(--primary-color);">SP002</strong> để tạo 1 hóa đơn mới vào DB.</p>
                 <div class="actions">
                     <button class="btn btn-warning" onclick="startPhantomTransaction(false)">
                         <i class="fas fa-bug"></i> 1. Quản lý: Đếm Hóa Đơn (Không Khóa Range)

@@ -3,25 +3,29 @@ async function loadDemoData() {
     const selects = [
         document.getElementById('select-masp-1'),
         document.getElementById('select-masp-2'),
-        document.getElementById('select-masp-3')
+        document.getElementById('select-masp-3'),
+        document.getElementById('select-masp-4')
     ];
-    
+
     products.forEach(p => {
         const optInventory = `<option value="${p.MaSP}">${p.MaSP} - ${p.TenSP} (Tồn kho: ${p.SoLuongTon})</option>`;
         const optPrice = `<option value="${p.MaSP}">${p.MaSP} - ${p.TenSP} (Giá: ${p.GiaBan}đ)</option>`;
-        
+
         if (selects[0]) selects[0].innerHTML += optInventory;
         if (selects[1]) selects[1].innerHTML += optInventory;
         if (selects[2]) selects[2].innerHTML += optPrice;
+        if (selects[3]) selects[3].innerHTML += optInventory;
     });
 
     updateDynamicText1();
     updateDynamicText2();
     updateDynamicText3();
+    updateDynamicText4();
 
     if (selects[0]) selects[0].addEventListener('change', updateDynamicText1);
     if (selects[1]) selects[1].addEventListener('change', updateDynamicText2);
     if (selects[2]) selects[2].addEventListener('change', updateDynamicText3);
+    if (selects[3]) selects[3].addEventListener('change', updateDynamicText4);
 }
 
 function updateDynamicText1() {
@@ -35,6 +39,10 @@ function updateDynamicText2() {
 function updateDynamicText3() {
     const masp = document.getElementById('select-masp-3').value;
     document.querySelectorAll('.dynamic-masp-3').forEach(el => el.innerText = masp);
+}
+function updateDynamicText4() {
+    const el = document.getElementById('select-masp-4');
+    if (el) document.querySelectorAll('.dynamic-masp-4').forEach(e => e.innerText = el.value);
 }
 
 document.addEventListener('DOMContentLoaded', loadDemoData);
@@ -58,7 +66,7 @@ async function runLostUpdate(isFixed) {
     clearConsole('log-lost-update');
     const mode = isFixed ? 'fixed' : 'error';
     const masp = document.getElementById('select-masp-1').value;
-    
+
     logToConsole('log-lost-update', `Bắt đầu test Mất Cập Nhật - Chế độ: ${isFixed ? 'Khóa 2PL' : 'Không Khóa'} (SP: ${masp})`, isFixed ? 'log-success' : 'log-error');
     logToConsole('log-lost-update', 'Đang gọi Thu Ngân 1 và Thu Ngân 2 cùng lúc...', 'log-success');
 
@@ -69,10 +77,10 @@ async function runLostUpdate(isFixed) {
 
     logToConsole('log-lost-update', `[Thu Ngân 1] ${res1.error || res1.message}`, 'log-tx1');
     logToConsole('log-lost-update', `[Thu Ngân 2] ${res2.error || res2.message}`, 'log-tx2');
-    
+
     // Kiểm tra kết quả cuối cùng
     const finalRes = await fetch(`/api/demo/inventory/${masp}`).then(r => r.json());
-    logToConsole('log-lost-update', `=> Tổng Tồn kho cuối cùng của SP ${masp}: ${finalRes.SoLuongTon}`, 
+    logToConsole('log-lost-update', `=> Tổng Tồn kho cuối cùng của SP ${masp}: ${finalRes.SoLuongTon}`,
         isFixed ? 'log-success' : 'log-error');
 }
 
@@ -80,23 +88,23 @@ async function runLostUpdate(isFixed) {
 async function startDirtyTransaction() {
     clearConsole('log-dirty-read');
     const masp = document.getElementById('select-masp-2').value;
-    logToConsole('log-dirty-read', `[Thu Ngân] Bắt đầu Giao dịch (Sửa tồn kho 1 lô của SP ${masp} thành 9999)...`, 'log-tx1');
-    logToConsole('log-dirty-read', `[Thu Ngân] Đang treo 5 giây... (Hãy bấm Đọc Rác ở Quản lý nhanh lên!)`, 'log-success');
-    
+    logToConsole('log-dirty-read', `[Nhân Viên Kho] Bắt đầu Giao dịch (Sửa tồn kho 1 lô của SP ${masp} thành 9999)...`, 'log-tx1');
+    logToConsole('log-dirty-read', `[Nhân Viên Kho] Đang treo 5 giây... (Bấm Quản lý đọc...)`, 'log-success');
+
     const res = await fetch(`/api/demo/dirty_read/transaction?masp=${masp}`).then(r => r.json());
-    logToConsole('log-dirty-read', `[Thu Ngân] ${res.message || res.error}`, 'log-error');
+    logToConsole('log-dirty-read', `[Nhân Viên Kho] ${res.message || res.error}`, 'log-error');
 }
 
 async function runDirtyRead(isFixed) {
     const mode = isFixed ? 'fixed' : 'error';
     const masp = document.getElementById('select-masp-2').value;
     logToConsole('log-dirty-read', `[Quản Lý] Bắt đầu đếm tổng tồn kho (Chế độ: ${isFixed ? 'READ COMMITTED' : 'READ UNCOMMITTED'})`, isFixed ? 'log-success' : 'log-error');
-    
+
     const res = await fetch(`/api/demo/dirty_read/read?mode=${mode}&masp=${masp}`).then(r => r.json());
     if (res.error) {
-         logToConsole('log-dirty-read', `[Quản Lý] Lỗi hoặc bị Block: ${res.error}`, 'log-error');
+        logToConsole('log-dirty-read', `[Quản Lý] Lỗi hoặc bị Block: ${res.error}`, 'log-error');
     } else {
-         logToConsole('log-dirty-read', `[Quản Lý] Đã đọc được Tồn Kho = ${res.SoLuongTon}`, res.SoLuongTon == 9999 ? 'log-error' : 'log-success');
+        logToConsole('log-dirty-read', `[Quản Lý] Đã đọc được Tồn Kho = ${res.SoLuongTon}`, res.SoLuongTon == 9999 ? 'log-error' : 'log-success');
     }
 }
 
@@ -106,10 +114,10 @@ async function startNonRepeatableTransaction(isFixed) {
     const mode = isFixed ? 'fixed' : 'error';
     const masp = document.getElementById('select-masp-3').value;
     logToConsole('log-non-repeatable', `[Thu Ngân] Bắt đầu đọc Giá ${masp} (Chế độ: ${isFixed ? 'REPEATABLE READ' : 'Mặc định'})...`, 'log-tx1');
-    logToConsole('log-non-repeatable', `[Thu Ngân] Đọc lần 1 xong, đang treo 5 giây (Quản lý hãy đổi giá đi!)...`, 'log-warning');
-    
+    logToConsole('log-non-repeatable', `[Thu Ngân] Đọc lần 1 xong, đang treo 5 giây (Bấm Quản lý đổi giá)`, 'log-warning');
+
     const res = await fetch(`/api/demo/non_repeatable_read/read?mode=${mode}&masp=${masp}`).then(r => r.json());
-    
+
     logToConsole('log-non-repeatable', `[Thu Ngân] Đọc lần 1: ${res.price1} VNĐ`, 'log-tx1');
     logToConsole('log-non-repeatable', `[Thu Ngân] Đọc lần 2: ${res.price2} VNĐ`, res.price1 === res.price2 ? 'log-success' : 'log-error');
     if (res.price1 !== res.price2) {
@@ -119,7 +127,7 @@ async function startNonRepeatableTransaction(isFixed) {
 
 async function updatePrice() {
     const masp = document.getElementById('select-masp-3').value;
-    logToConsole('log-non-repeatable', `[Quản Lý] Cố gắng cập nhật Giá ${masp} thêm 1000 VNĐ...`, 'log-tx2');
+    logToConsole('log-non-repeatable', `[Quản Lý] Cập nhật Giá ${masp} thêm 1000 VNĐ...`, 'log-tx2');
     const res = await fetch(`/api/demo/non_repeatable_read/update?masp=${masp}`, { method: 'POST' }).then(r => r.json());
     logToConsole('log-non-repeatable', `[Quản Lý] ${res.message}`, 'log-success');
 }
@@ -129,10 +137,10 @@ async function startPhantomTransaction(isFixed) {
     clearConsole('log-phantom-read');
     const mode = isFixed ? 'fixed' : 'error';
     logToConsole('log-phantom-read', `[Quản Lý] Bắt đầu đếm tổng số Hóa Đơn (Chế độ: ${isFixed ? 'SERIALIZABLE' : 'Mặc định'})...`, 'log-tx1');
-    logToConsole('log-phantom-read', `[Quản Lý] Đếm lần 1 xong, đang treo 5 giây (Thu Ngân hãy chèn HD đi!)...`, 'log-warning');
-    
+    logToConsole('log-phantom-read', `[Quản Lý] Đếm lần 1 xong, đang treo 5 giây (Bấm Thu Ngân chèn Hóa Đơn mới)`, 'log-warning');
+
     const res = await fetch(`/api/demo/phantom_read/read?mode=${mode}`).then(r => r.json());
-    
+
     logToConsole('log-phantom-read', `[Quản Lý] Tổng HD (Lần 1): ${res.count1}`, 'log-tx1');
     logToConsole('log-phantom-read', `[Quản Lý] Tổng HD (Lần 2): ${res.count2}`, res.count1 === res.count2 ? 'log-success' : 'log-error');
     if (res.count1 !== res.count2) {
@@ -141,8 +149,9 @@ async function startPhantomTransaction(isFixed) {
 }
 
 async function insertPhantomBill() {
-    logToConsole('log-phantom-read', `[Thu Ngân] Cố gắng chèn 1 Hóa Đơn mới...`, 'log-tx2');
-    const res = await fetch(`/api/demo/phantom_read/insert`, { method: 'POST' }).then(r => r.json());
+    const masp = document.getElementById('select-masp-4').value;
+    logToConsole('log-phantom-read', `[Thu Ngân] Đang thanh toán SP ${masp} để tạo Hóa Đơn mới...`, 'log-tx2');
+    const res = await fetch(`/api/demo/phantom_read/insert?masp=${masp}`, { method: 'POST' }).then(r => r.json());
     if (res.error) {
         logToConsole('log-phantom-read', `[Thu Ngân] Bị khóa/Lỗi: ${res.error}`, 'log-warning');
     } else {
