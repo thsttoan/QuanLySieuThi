@@ -120,167 +120,66 @@ def get_customers():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 4. API: Lập hóa đơn bán hàng (Giao tác checkout phức tạp)
+# 4. API: Lập hóa đơn bán hàng (Toàn bộ tính toán và giao tác được đẩy xuống SQL Server sp_ThanhToanHoaDon)
 @app.route('/api/checkout', methods=['POST'])
 def checkout():
     data = request.get_json()
     if not data or 'cart' not in data or not data['cart']:
         return jsonify({"error": "Giỏ hàng trống!"}), 400
     
-    ma_nv = data.get('ma_nv', 'NV001')
-    sdt_kh = data.get('sdt_kh', '')
+    ma_nv = data.get('ma_nv')
+    if not ma_nv or ma_nv == 'NV001':
+        ma_nv = 'thungan1'
+    sdt_kh = data.get('sdt_kh', '').strip() or None
     diem_su_dung = int(data.get('diem_su_dung', 0))
     pt_thanh_toan = data.get('pt_thanh_toan', 'Tiền mặt')
-    cart = data['cart'] # list of {ma_sp, so_luong}
+    ma_voucher = data.get('ma_voucher', '').strip() or None
+    cart_json = json.dumps(data['cart'])
     
     conn = get_db_connection()
-    conn.autocommit = False # Bắt đầu giao tác thủ công ở Backend
     cursor = conn.cursor()
     
     try:
-        # Lấy thông tin khách hàng nếu có SĐT
-        ma_kh = None
-        diem_hien_co = 0
-        if sdt_kh:
-            cursor.execute("SELECT MaKH, DiemTichLuy FROM KHACH_HANG WHERE SoDienThoai = ?", (sdt_kh,))
-            row = cursor.fetchone()
-            if row:
-                ma_kh = row[0]
-                diem_hien_co = row[1]
-            else:
-                conn.close()
-                return jsonify({"error": f"Số điện thoại khách hàng {sdt_kh} chưa đăng ký hội viên!"}), 400
-        
-        # Kiểm tra tính hợp lệ của điểm sử dụng
-        if diem_su_dung > 0:
-            if not ma_kh:
-                conn.close()
-                return jsonify({"error": "Không thể dùng điểm tích lũy cho khách vãng lai!"}), 400
-            if diem_su_dung > diem_hien_co:
-                conn.close()
-                return jsonify({"error": f"Khách hàng chỉ có {diem_hien_co} điểm, không thể sử dụng {diem_su_dung} điểm!"}), 400
-        
-        # 1. Tính toán giá sản phẩm, tổng tiền hàng và giảm giá khuyến mãi trên Backend từ cơ sở dữ liệu
-        tong_tien_hang = 0.0
-        giam_gia_km = 0.0
-        
-        # Đọc thông tin chi tiết từng sản phẩm trong giỏ hàng
-        cart_items_details = []
-        for item in cart:
-            ma_sp = item['ma_sp']
-            so_luong = float(item['so_luong'])
-            
-            cursor.execute("SELECT GiaBan, GiaKhuyenMai FROM v_SanPhamSieuThi WHERE MaSP = ?", (ma_sp,))
-            sp_row = cursor.fetchone()
-            if not sp_row:
-                raise Exception(f"Sản phẩm {ma_sp} không tồn tại!")
-            
-            gia_ban = float(sp_row[0])
-            gia_km = float(sp_row[1])
-            
-            tong_tien_hang += so_luong * gia_ban
-            giam_gia_km += so_luong * (gia_ban - gia_km)
-            
-            cart_items_details.append({
-                'ma_sp': ma_sp,
-                'so_luong': so_luong,
-                'gia_ban': gia_ban,
-                'gia_km': gia_km
-            })
-            
-        # Áp dụng mã Voucher nếu có
-        ma_voucher = data.get('ma_voucher', '').strip()
-        giam_gia_voucher = 0.0
-        tang_san_pham = []
-        if ma_voucher:
-            cursor.execute("SELECT LoaiVoucher, GiaTri, MaSPTang, SoLuongTang FROM VOUCHER WHERE MaVoucher = ? AND GETDATE() BETWEEN NgayBatDau AND NgayKetThuc", (ma_voucher,))
-            v_row = cursor.fetchone()
-            if v_row:
-                loai_v = v_row[0]
-                if loai_v == 'GiamGia':
-                    phan_tram = float(v_row[1]) if v_row[1] else 0.0
-                    giam_gia_voucher = (tong_tien_hang - giam_gia_km) * (phan_tram / 100.0)
-                elif loai_v == 'TangSanPham':
-                    ma_sp_tang = v_row[2]
-                    sl_tang = int(v_row[3]) if v_row[3] else 1
-                    tang_san_pham.append({'ma_sp': ma_sp_tang, 'so_luong': sl_tang, 'gia_ban': 0.0, 'gia_km': 0.0})
-            
-        thanh_tien = tong_tien_hang - giam_gia_km - giam_gia_voucher - (diem_su_dung * 100)
-        if thanh_tien < 0:
-            thanh_tien = 0.0
-            
-        # 2. Tạo Mã Hóa Đơn tự động (HD + YYYYMMDDHHMMSS)
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        cursor.execute("SELECT COUNT(*) FROM HOA_DON WHERE MaHD LIKE ?", (f"HD{timestamp}%",))
-        cnt = cursor.fetchone()[0]
-        ma_hd = f"HD{timestamp}{cnt+1:03d}"
-        
-        # 3. Ghi vào bảng HOA_DON
         cursor.execute(
-            "INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, MaKH, TongTienHang, GiamGiaKM, MaVoucher, GiamGiaVoucher, DiemSuDung, ThanhTien, PhuongThucTT) "
-            "VALUES (?, GETDATE(), ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (ma_hd, ma_nv, ma_kh, tong_tien_hang, giam_gia_km, ma_voucher if ma_voucher else None, giam_gia_voucher, diem_su_dung, thanh_tien, pt_thanh_toan)
+            "EXEC sp_ThanhToanHoaDon @MaNV=?, @SoDienThoaiKH=?, @DiemSuDung=?, @MaVoucher=?, @PhuongThucTT=?, @ChiTietGioHangJSON=?",
+            (ma_nv, sdt_kh, diem_su_dung, ma_voucher, pt_thanh_toan, cart_json)
         )
-        
-        # Add free products to cart_items_details for FIFO deduction
-        for p_tang in tang_san_pham:
-            cart_items_details.append(p_tang)
-        
-        # 4. Trừ kho theo lô FIFO cho từng sản phẩm bằng cách gọi Stored Procedure
-        sql_log = []
-        sql_log.append(f"INSERT INTO HOA_DON (MaHD='{ma_hd}', ThanhTien={thanh_tien})")
-        for item in cart_items_details:
-            # Stored Procedure sp_BanHangFIFO sẽ:
-            # - Tự động tìm các lô hàng chưa hết hạn
-            # - Trừ kho theo thứ tự hạn sử dụng sớm nhất (FIFO)
-            # - Ghi dữ liệu vào bảng CHI_TIET_HOA_DON
-            # - Báo lỗi (RAISERROR) nếu không đủ hàng
-            # Calculate line-item specific discount and total
-            # 1. Product specific discount
-            item_prod_discount = item['so_luong'] * (item['gia_ban'] - item['gia_km'])
-            
-            # 2. Distributed invoice discount (voucher + points)
-            item_gia_sau_km = item['so_luong'] * item['gia_km']
-            total_gia_sau_km = tong_tien_hang - giam_gia_km
-            
-            item_invoice_discount = 0.0
-            total_invoice_discount = giam_gia_voucher + (diem_su_dung * 100)
-            if total_gia_sau_km > 0:
-                item_invoice_discount = (item_gia_sau_km / total_gia_sau_km) * total_invoice_discount
-                
-            item_total_discount = item_prod_discount + item_invoice_discount
-            item_thanh_tien = (item['so_luong'] * item['gia_ban']) - item_total_discount
-            if item_thanh_tien < 0: item_thanh_tien = 0.0
-
-            cursor.execute(
-                "EXEC sp_BanHangFIFO @MaHD=?, @MaSP=?, @SoLuongYeuCau=?, @DonGiaGoc=?, @SoTienGiam=?, @ThanhTien=?",
-                (ma_hd, item['ma_sp'], item['so_luong'], item['gia_ban'], item_total_discount, item_thanh_tien)
-            )
-            sql_log.append(f"EXEC sp_BanHangFIFO @MaHD='{ma_hd}', @MaSP='{item['ma_sp']}', @SoLuong={item['so_luong']}, @DonGiaGoc={item['gia_ban']}, @SoTienGiam={item_total_discount}, @ThanhTien={item_thanh_tien}")
-            
-        # Nếu mọi thứ chạy tốt, COMMIT giao tác
+        row = cursor.fetchone()
         conn.commit()
         
         return jsonify({
             "status": "success",
-            "message": "Thanh toán thành công (COMMIT)!",
-            "ma_hd": ma_hd,
-            "thanh_tien": thanh_tien,
-            "diem_su_dung": diem_su_dung,
-            "diem_tich_luy_moi": int(thanh_tien // 1000), # Tương ứng fn_TinhDiemTichLuy (1 điểm = 1000 VNĐ)
-            "sql_log": sql_log
+            "message": "Thanh toán thành công (COMMIT CSDL)!",
+            "ma_hd": row.MaHD,
+            "tong_tien_hang": float(row.TongTienHang),
+            "giam_gia_km": float(row.GiamGiaKM),
+            "giam_gia_voucher": float(row.GiamGiaVoucher),
+            "diem_su_dung": int(row.DiemSuDung),
+            "thanh_tien": float(row.ThanhTien),
+            "diem_tich_luy_moi": int(row.DiemTichLuyMoi),
+            "ma_voucher": row.MaVoucher or "",
+            "sql_log": [f"EXEC sp_ThanhToanHoaDon @MaNV='{ma_nv}', @SoDienThoaiKH='{sdt_kh}', @DiemSuDung={diem_su_dung}, @MaVoucher='{ma_voucher}', @PhuongThucTT=N'{pt_thanh_toan}'"]
         })
-        
     except Exception as e:
-        # Nếu xảy ra bất kỳ lỗi gì, ROLLBACK toàn bộ giao tác để đảm bảo tính nhất quán kho hàng và điểm tích lũy
         conn.rollback()
+        conn.close()
+        err_msg = str(e)
+        if '[SQL Server]' in err_msg:
+            parts = err_msg.split('[SQL Server]')
+            clean_err = parts[-1].strip().split('(50000)')[0].strip()
+            if clean_err:
+                err_msg = clean_err
         return jsonify({
             "status": "rollback",
-            "error": str(e),
-            "message": "Giao tác bị lỗi và đã ROLLBACK thành công! Không có thay đổi nào được ghi lại."
+            "error": err_msg,
+            "message": f"Giao tác CSDL bị lỗi và đã ROLLBACK! {err_msg}"
         }), 400
     finally:
-        conn.close()
+        try:
+            conn.close()
+        except:
+            pass
+
 
 # 5. API: Nhập kho thêm lô hàng mới
 @app.route('/api/import', methods=['POST'])
@@ -304,22 +203,25 @@ def import_stock():
     cursor = conn.cursor()
     
     try:
-        # Tạo mã phiếu nhập tự động
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        ma_pn = f"PN{timestamp}"
-        
-        # Thực hiện gọi Stored Procedure nhập kho (đã tích hợp BEGIN/COMMIT TRANSACTION trong Proc)
         cursor.execute(
-            "EXEC sp_NhapKho @MaPN=?, @MaNV=?, @MaNCC=?, @MaSP=?, @SoLuong=?, @GiaNhap=?, @NgaySanXuat=?, @HanSuDung=?",
-            (ma_pn, ma_nv, ma_ncc, ma_sp, so_luong, gia_nhap, ngay_sx, han_sd)
+            "EXEC sp_NhapKho @MaPN=NULL, @MaNV=?, @MaNCC=?, @MaSP=?, @SoLuong=?, @GiaNhap=?, @NgaySanXuat=?, @HanSuDung=?",
+            (ma_nv, ma_ncc, ma_sp, so_luong, gia_nhap, ngay_sx, han_sd)
         )
+        row = cursor.fetchone()
+        ma_pn = row[0] if row else "PN"
         conn.commit()
         conn.close()
         return jsonify({"status": "success", "message": f"Nhập lô hàng mới thành công (Mã Phiếu Nhập: {ma_pn})!"})
     except Exception as e:
         conn.rollback()
         conn.close()
-        return jsonify({"error": str(e)}), 400
+        err_msg = str(e)
+        if '[SQL Server]' in err_msg:
+            parts = err_msg.split('[SQL Server]')
+            clean_err = parts[-1].strip().split('(50000)')[0].strip()
+            if clean_err:
+                err_msg = clean_err
+        return jsonify({"error": err_msg}), 400
 
 # 5.1 API: Chỉnh sửa số lượng tồn kho của một lô
 @app.route('/api/inventory/<malo>', methods=['PUT'])
@@ -337,36 +239,18 @@ def update_inventory(malo):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 5.2 API: Tiêu hủy hàng hết hạn
+# 5.2 API: Tiêu hủy hàng hết hạn (đóng gói trong Transaction CSDL sp_TieuHuyHang)
 @app.route('/api/inventory/destroy', methods=['POST'])
 def destroy_inventory():
     data = request.json
     ma_lo = data.get('ma_lo')
     ma_sp = data.get('ma_sp')
-    so_luong = float(data.get('so_luong', 0))
-    ma_nv = data.get('ma_nv')
+    ly_do = data.get('ly_do', 'Hết hạn sử dụng')
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        
-        # Check current SoLuongTon
-        cursor.execute("SELECT SoLuongTon FROM LO_HANG WHERE MaLo = ?", (ma_lo,))
-        row = cursor.fetchone()
-        if not row:
-            return jsonify({"status": "error", "error": "Lô hàng không tồn tại."}), 404
-        if row.SoLuongTon < so_luong:
-            return jsonify({"status": "error", "error": "Số lượng hủy lớn hơn tồn kho."}), 400
-
-        # Update LO_HANG
-        cursor.execute("UPDATE LO_HANG SET SoLuongTon = SoLuongTon - ? WHERE MaLo = ?", (so_luong, ma_lo))
-        
-        # Insert into HANG_TIEU_HUY
-        cursor.execute("""
-            INSERT INTO HANG_TIEU_HUY (MaSP, MaLo, SoLuongHuy, NgayTieuHuy, MaNV)
-            VALUES (?, ?, ?, GETDATE(), ?)
-        """, (ma_sp, ma_lo, so_luong, ma_nv))
-        
+        cursor.execute("EXEC sp_TieuHuyHang @MaLo=?, @MaSP=?, @LyDo=?", (ma_lo, ma_sp, ly_do))
         conn.commit()
         conn.close()
         return jsonify({"status": "success"})
@@ -418,21 +302,83 @@ def get_revenue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# 6.1 API: Thống kê doanh thu theo danh mục (truy vấn từ View v_DoanhThuTheoDanhMuc)
 @app.route('/api/revenue/category', methods=['GET'])
 def get_revenue_category():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("""
-            SELECT c.TenDanhMuc, SUM(ct.ThanhTien) AS DoanhThu
-            FROM CHI_TIET_HOA_DON ct
-            JOIN SAN_PHAM s ON ct.MaSP = s.MaSP
-            JOIN DANH_MUC c ON s.MaDanhMuc = c.MaDanhMuc
-            GROUP BY c.TenDanhMuc
-            ORDER BY DoanhThu DESC
-        """)
+        cursor.execute("SELECT TenDanhMuc, DoanhThu FROM v_DoanhThuTheoDanhMuc ORDER BY DoanhThu DESC")
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        conn.close()
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# 6.2 API: Top 10 sản phẩm bán chạy nhất (truy vấn từ View v_TopSanPhamBanChay)
+@app.route('/api/revenue/top_products', methods=['GET'])
+def get_top_products():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT MaSP, TenSP, TenDanhMuc, DonViTinh, TongSoLuongBan, TongDoanhThu FROM v_TopSanPhamBanChay")
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        conn.close()
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# 6.3 API: Báo cáo hiệu suất thu ngân (truy vấn từ View v_BaoCaoHieuSuatNhanVien)
+@app.route('/api/revenue/staff', methods=['GET'])
+def get_staff_performance():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT MaNV, TenNV, ChucVu, SoHoaDonDaLap, TongDoanhThuBanDuoc FROM v_BaoCaoHieuSuatNhanVien ORDER BY TongDoanhThuBanDuoc DESC")
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        conn.close()
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# 6.4 API: Báo cáo doanh thu theo khoảng ngày linh hoạt (gọi Inline TVF fn_BaoCaoDoanhThuTheoKhoangNgay)
+@app.route('/api/revenue/range', methods=['GET'])
+def get_revenue_range():
+    tu_ngay = request.args.get('tu_ngay', '2026-01-01')
+    den_ngay = request.args.get('den_ngay', '2026-12-31')
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT Ngay, SoHoaDon, TongTienHang, TongGiamGia, TongDiemSuDung, DoanhThuThucTe FROM dbo.fn_BaoCaoDoanhThuTheoKhoangNgay(?, ?) ORDER BY Ngay DESC", (tu_ngay, den_ngay))
+        columns = [column[0] for column in cursor.description]
+        results = []
+        for row in cursor.fetchall():
+            item = dict(zip(columns, row))
+            if isinstance(item['Ngay'], (datetime.date, datetime.datetime)):
+                item['Ngay'] = item['Ngay'].strftime("%Y-%m-%d")
+            results.append(item)
+        conn.close()
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# 6.5 API: Lịch sử biến động giá bán (truy vấn từ bảng audit BANG_LOG_GIA sinh bởi trigger)
+@app.route('/api/price_logs', methods=['GET'])
+def get_price_logs():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT TOP 50 l.MaLog, l.MaSP, sp.TenSP, l.GiaCu, l.GiaMoi, l.NgayThayDoi, l.NguoiThayDoi FROM BANG_LOG_GIA l LEFT JOIN SAN_PHAM sp ON l.MaSP = sp.MaSP ORDER BY l.NgayThayDoi DESC")
+        columns = [column[0] for column in cursor.description]
+        results = []
+        for row in cursor.fetchall():
+            item = dict(zip(columns, row))
+            if isinstance(item['NgayThayDoi'], (datetime.date, datetime.datetime)):
+                item['NgayThayDoi'] = item['NgayThayDoi'].strftime("%Y-%m-%d %H:%M:%S")
+            results.append(item)
         conn.close()
         return jsonify(results)
     except Exception as e:
@@ -1054,72 +1000,13 @@ def demo_lost_update():
     masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
-        conn.autocommit = False 
+        conn.autocommit = True
         cursor = conn.cursor()
-        
-        # 1. Đọc số lượng tồn của Lô cũ nhất
-        if mode == 'fixed':
-            cursor.execute("SELECT TOP 1 MaLo, SoLuongTon FROM LO_HANG WITH (UPDLOCK, HOLDLOCK) WHERE MaSP = ? AND SoLuongTon > 0 ORDER BY HanSuDung ASC", (masp,))
-        else:
-            cursor.execute("SELECT TOP 1 MaLo, SoLuongTon FROM LO_HANG WHERE MaSP = ? AND SoLuongTon > 0 ORDER BY HanSuDung ASC", (masp,))
-            
+        cursor.execute("EXEC sp_Demo_LostUpdate @Mode=?, @Tx=?, @MaSP=?", (mode, tx, masp))
         row = cursor.fetchone()
-        if not row:
-            conn.rollback()
-            return jsonify({"error": f"SP {masp} đã hết hàng trong mọi lô"})
-            
-        malo = row[0]
-        qty = float(row[1])
-        
-        # Lấy giá sản phẩm
-        cursor.execute("SELECT GiaBan, GiaKhuyenMai FROM v_SanPhamSieuThi WHERE MaSP = ?", (masp,))
-        sp_row = cursor.fetchone()
-        if not sp_row:
-            conn.rollback()
-            return jsonify({"error": f"Sản phẩm {masp} không tồn tại!"})
-        
-        gia_ban = float(sp_row[0])
-        gia_km = float(sp_row[1])
-        so_luong = 1
-        tong_tien_hang = gia_ban * so_luong
-        giam_gia_km = (gia_ban - gia_km) * so_luong
-        thanh_tien = tong_tien_hang - giam_gia_km
-        
-        # Giả lập xử lý lâu (5 giây) — cả 2 TX đều đọc cùng qty tại thời điểm này
-        cursor.execute("WAITFOR DELAY '00:00:05'")
-        
-        # 2. Tạo Hóa đơn
-        import time
-        ma_nv = f"thungan{tx}"
-        timestamp_val = int(time.time())
-        ma_hd = f"HD_DEMO_{timestamp_val}_{tx}"
-        
-        # Ghi HOA_DON
-        cursor.execute(
-            "INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT) "
-            "VALUES (?, GETDATE(), ?, ?, ?, ?, N'Tiền mặt')",
-            (ma_hd, ma_nv, tong_tien_hang, giam_gia_km, thanh_tien)
-        )
-        
-        # 3. Ghi CHI_TIET_HOA_DON trực tiếp (không qua sp_BanHangFIFO để demo Lost Update)
-        cursor.execute(
-            "INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, ThanhTien) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
-            (ma_hd, masp, malo, so_luong, gia_ban, thanh_tien)
-        )
-        
-        # 4. Trừ kho thủ công — dùng giá trị qty đã đọc từ đầu (đây là nơi lỗi Lost Update xảy ra!)
-        new_qty = qty - so_luong
-        cursor.execute("UPDATE LO_HANG SET SoLuongTon = ? WHERE MaLo = ?", (new_qty, malo))
-        
-        conn.commit()
         conn.close()
-        return jsonify({"message": f"Đã bán 1 SP (HD: {ma_hd}). Tồn kho tính toán: {qty} -> {new_qty}"})
+        return jsonify({"message": row.ThongBao if row else ""})
     except Exception as e:
-        try:
-            conn.rollback()
-        except:
-            pass
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/demo/dirty_read/transaction', methods=['GET'])
@@ -1127,20 +1014,12 @@ def demo_dirty_read_tx():
     masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
-        conn.autocommit = False
+        conn.autocommit = True
         cursor = conn.cursor()
-        
-        # Giả lập Nhân Viên Kho chọn 1 lô của SP này và nhập sai tồn kho thành 9999
-        cursor.execute("SELECT TOP 1 MaLo FROM LO_HANG WHERE MaSP = ? ORDER BY HanSuDung ASC", (masp,))
+        cursor.execute("EXEC sp_Demo_DirtyRead_Transaction @MaSP=?", (masp,))
         row = cursor.fetchone()
-        if row:
-            cursor.execute("UPDATE LO_HANG SET SoLuongTon = 9999 WHERE MaLo = ?", (row[0],))
-            
-        cursor.execute("WAITFOR DELAY '00:00:05'")
-        
-        conn.rollback()
         conn.close()
-        return jsonify({"message": "Giao dịch đã bị Hủy (Rollback). Tồn kho quay về ban đầu!"})
+        return jsonify({"message": row.ThongBao if row else "Giao dịch đã bị Hủy (Rollback). Tồn kho quay về ban đầu!"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -1150,21 +1029,12 @@ def demo_dirty_read_read():
     masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
-        conn.autocommit = False
+        conn.autocommit = True
         cursor = conn.cursor()
-        
-        if mode == 'fixed':
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED")
-        else:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED")
-            
-        # Đọc TỔNG tồn kho của Sản phẩm đó
-        cursor.execute("SELECT SUM(SoLuongTon) FROM LO_HANG WHERE MaSP = ?", (masp,))
+        cursor.execute("EXEC sp_Demo_DirtyRead_Read @Mode=?, @MaSP=?", (mode, masp))
         row = cursor.fetchone()
-        
-        conn.commit()
         conn.close()
-        return jsonify({"SoLuongTon": float(row[0]) if row and row[0] is not None else 0})
+        return jsonify({"SoLuongTon": float(row.SoLuongTon) if row and row.SoLuongTon is not None else 0})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -1174,25 +1044,12 @@ def demo_non_repeatable_read():
     masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
-        conn.autocommit = False
+        conn.autocommit = True
         cursor = conn.cursor()
-        
-        if mode == 'fixed':
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
-            
-        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = ?", (masp,))
+        cursor.execute("EXEC sp_Demo_NonRepeatableRead_Read @Mode=?, @MaSP=?", (mode, masp))
         row = cursor.fetchone()
-        price1 = row[0] if row else 0
-        
-        cursor.execute("WAITFOR DELAY '00:00:05'")
-        
-        cursor.execute("SELECT GiaBan FROM SAN_PHAM WHERE MaSP = ?", (masp,))
-        row2 = cursor.fetchone()
-        price2 = row2[0] if row2 else 0
-        
-        conn.commit()
         conn.close()
-        return jsonify({"price1": float(price1), "price2": float(price2)})
+        return jsonify({"price1": float(row.price1) if row else 0, "price2": float(row.price2) if row else 0})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -1201,12 +1058,12 @@ def demo_non_repeatable_update():
     masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
-        conn.autocommit = False
+        conn.autocommit = True
         cursor = conn.cursor()
-        cursor.execute("UPDATE SAN_PHAM SET GiaBan = GiaBan + 1000 WHERE MaSP = ?", (masp,))
-        conn.commit()
+        cursor.execute("EXEC sp_Demo_NonRepeatableRead_Update @MaSP=?", (masp,))
+        row = cursor.fetchone()
         conn.close()
-        return jsonify({"message": f"Đã tăng giá {masp} thêm 1000 VNĐ!"})
+        return jsonify({"message": row.ThongBao if row else f"Đã tăng giá {masp} thêm 1000 VNĐ!"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -1215,73 +1072,29 @@ def demo_phantom_read():
     mode = request.args.get('mode', 'error')
     try:
         conn = get_db_connection()
-        conn.autocommit = False
+        conn.autocommit = True
         cursor = conn.cursor()
-        
-        if mode == 'fixed':
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE")
-            
-        cursor.execute("SELECT COUNT(*) FROM HOA_DON")
-        count1 = cursor.fetchone()[0]
-        
-        cursor.execute("WAITFOR DELAY '00:00:05'")
-        
-        cursor.execute("SELECT COUNT(*) FROM HOA_DON")
-        count2 = cursor.fetchone()[0]
-        
-        conn.commit()
+        cursor.execute("EXEC sp_Demo_PhantomRead_Read @Mode=?", (mode,))
+        row = cursor.fetchone()
         conn.close()
-        return jsonify({"count1": count1, "count2": count2})
+        return jsonify({"count1": row.count1 if row else 0, "count2": row.count2 if row else 0})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/demo/phantom_read/insert', methods=['POST'])
 def demo_phantom_insert():
-    import time
     masp = request.args.get('masp', 'SP002')
     try:
         conn = get_db_connection()
-        conn.autocommit = False
+        conn.autocommit = True
         cursor = conn.cursor()
-        
-        ma_hd = f"HD_PT_{int(time.time())}"
-        
-        # Lấy giá sản phẩm
-        cursor.execute("SELECT GiaBan, GiaKhuyenMai FROM v_SanPhamSieuThi WHERE MaSP = ?", (masp,))
-        sp_row = cursor.fetchone()
-        if not sp_row:
-            conn.rollback()
-            return jsonify({"error": f"Sản phẩm {masp} không tồn tại!"})
-        
-        gia_ban = float(sp_row[0])
-        gia_km = float(sp_row[1])
-        so_luong = 1
-        tong_tien_hang = gia_ban * so_luong
-        giam_gia_km = (gia_ban - gia_km) * so_luong
-        thanh_tien = tong_tien_hang - giam_gia_km
-        
-        # Ghi HOA_DON
-        cursor.execute(
-            "INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT) "
-            "VALUES (?, GETDATE(), 'thungan1', ?, ?, ?, N'Tiền mặt')",
-            (ma_hd, tong_tien_hang, giam_gia_km, thanh_tien)
-        )
-        
-        # Gọi sp_BanHangFIFO để trừ kho + ghi CHI_TIET_HOA_DON
-        cursor.execute(
-            "EXEC sp_BanHangFIFO @MaHD=?, @MaSP=?, @SoLuongYeuCau=?, @DonGiaGoc=?, @SoTienGiam=?, @ThanhTien=?",
-            (ma_hd, masp, so_luong, gia_ban, giam_gia_km, thanh_tien)
-        )
-        
-        conn.commit()
+        cursor.execute("EXEC sp_Demo_PhantomRead_Insert @MaSP=?", (masp,))
+        row = cursor.fetchone()
         conn.close()
-        return jsonify({"message": f"Đã tạo hóa đơn {ma_hd} (SP: {masp}, {thanh_tien:,.0f} VNĐ)"})
+        return jsonify({"message": row.ThongBao if row else f"Đã tạo hóa đơn mới cho SP {masp}"})
     except Exception as e:
-        try:
-            conn.rollback()
-        except:
-            pass
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
+
