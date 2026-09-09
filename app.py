@@ -1284,5 +1284,4 @@ def demo_phantom_insert():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    # host='0.0.0.0' allows external devices on the same network to connect
-    app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
+    app.run(debug=True)
