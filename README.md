@@ -170,7 +170,7 @@ Các API dưới đây được sử dụng riêng cho phần giả lập Tươn
 | `/api/demo/phantom_read/count` | `GET` | Đếm tổng số hóa đơn 2 lần cách nhau 5 giây. Hỗ trợ tham số `?mode=fixed` (SERIALIZABLE). |
 | `/api/demo/phantom_read/insert` | `POST` | Chèn một hóa đơn mua hàng thực tế mới để giả lập Bóng ma. Hỗ trợ tham số `?masp=...`. |
 
-## 5. Khóa chết (Deadlock): Hai thu ngân cùng cập nhật tồn kho nhưng khóa các lô hàng theo thứ tự khác nhau, dẫn đến hai giao tác chờ lẫn nhau. SQL Server phát hiện Deadlock và chọn một giao tác làm Deadlock Victim để Rollback.
+## 5. Khóa chết (Deadlock): Hai nhân viên kho cùng cập nhật tồn kho nhưng khóa các lô hàng theo thứ tự khác nhau, dẫn đến hai giao tác chờ lẫn nhau. SQL Server phát hiện Deadlock và chọn một giao tác làm Deadlock Victim để Rollback.
 
 1. Mất cập nhật (Lost Update): Hai thu ngân cùng thanh toán một sản phẩm, dẫn đến dữ liệu tồn kho bị ghi đè. Khắc phục bằng UPDLOCK, HOLDLOCK (2PL).
 
@@ -180,4 +180,14 @@ Các API dưới đây được sử dụng riêng cho phần giả lập Tươn
 
 4. Đọc bóng ma (Phantom Read): Quản lý kiểm tra số lượng hóa đơn trong khi thu ngân thêm hóa đơn mới, làm kết quả truy vấn thay đổi. Khắc phục bằng SERIALIZABLE.
 
-5. Khóa chết (Deadlock): Hai thu ngân cùng cập nhật tồn kho nhưng khóa các lô hàng theo thứ tự khác nhau, dẫn đến hai giao tác chờ lẫn nhau. SQL Server phát hiện Deadlock và chọn một giao tác làm Deadlock Victim để Rollback.
+5. Khóa chết (Deadlock): Hai nhân viên kho cùng cập nhật tồn kho nhưng khóa các lô hàng theo thứ tự khác nhau, dẫn đến hai giao tác chờ lẫn nhau. SQL Server phát hiện Deadlock và chọn một giao tác làm Deadlock Victim để Rollback.
+
+## 📡 API Documentation (Demo Endpoints)
+
+| Demo | Endpoint | Method |
+|---|---|---|
+| Lost Update | `/api/demo/lost-update` | GET |
+| Dirty Read | `/api/demo/dirty-read` | GET |
+| Non-repeatable Read | `/api/demo/non-repeatable-read` | GET |
+| Phantom Read | `/api/demo/phantom-read` | GET |
+| Deadlock | `/api/demo/deadlock` | GET |
