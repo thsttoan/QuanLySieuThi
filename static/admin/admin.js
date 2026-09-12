@@ -147,13 +147,15 @@ function editProduct(masp) {
 
 async function submitProduct(e) {
     e.preventDefault();
+    const currentUser = sessionStorage.getItem('manv') || 'admin';
     const data = {
         MaSP: document.getElementById('pf-masp').value,
         TenSP: document.getElementById('pf-tensp').value,
         MaDanhMuc: document.getElementById('pf-danhmuc').value,
         DonViTinh: document.getElementById('pf-dvt').value,
         GiaBan: parseFloat(document.getElementById('pf-gia').value),
-        LaHangTuoiSong: parseInt(document.getElementById('pf-tuoisong').value)
+        LaHangTuoiSong: parseInt(document.getElementById('pf-tuoisong').value),
+        MaNVSuaCuoi: currentUser
     };
 
     try {

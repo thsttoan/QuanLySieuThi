@@ -1,4 +1,5 @@
 import os
+import json
 import datetime
 import pyodbc
 from flask import Flask, jsonify, request, send_from_directory, redirect
@@ -54,7 +55,31 @@ def get_products():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT MaSP, TenSP, TenDanhMuc, DonViTinh, GiaBan, GiaKhuyenMai, TongTonKho, LaHangTuoiSong FROM v_SanPhamSieuThi")
+        cursor.execute("""
+            SELECT 
+                sp.MaSP, 
+                sp.TenSP, 
+                sp.MaDanhMuc, 
+                dm.TenDanhMuc, 
+                sp.DonViTinh, 
+                sp.GiaBan, 
+                dbo.fn_TinhTienSauKhuyenMai(sp.MaSP, sp.GiaBan) AS GiaKhuyenMai, 
+                ISNULL((
+                    SELECT SUM(lh.SoLuongTon)
+                    FROM LO_HANG lh
+                    WHERE lh.MaSP = sp.MaSP AND lh.HanSuDung > GETDATE()
+                ), 0) AS TongTonKho, 
+                sp.LaHangTuoiSong,
+                ISNULL((
+                    SELECT TOP 1 lh2.GiaNhap
+                    FROM LO_HANG lh2
+                    WHERE lh2.MaSP = sp.MaSP
+                    ORDER BY lh2.MaLo DESC
+                ), ROUND(sp.GiaBan * 0.75, -2)) AS GiaNhapGoiY
+            FROM SAN_PHAM sp
+            INNER JOIN DANH_MUC dm ON sp.MaDanhMuc = dm.MaDanhMuc
+            ORDER BY sp.MaDanhMuc, sp.MaSP
+        """)
         columns = [column[0] for column in cursor.description]
         results = []
         for row in cursor.fetchall():
@@ -181,15 +206,73 @@ def checkout():
             pass
 
 
-# 5. API: Nhập kho thêm lô hàng mới
+# 5. API: Nhập kho thêm lô hàng mới (Đơn lẻ hoặc Hàng loạt theo Danh mục)
 @app.route('/api/import', methods=['POST'])
 def import_stock():
     data = request.get_json()
     if not data:
         return jsonify({"error": "Dữ liệu nhập trống!"}), 400
         
-    ma_nv = data.get('ma_nv', 'NV002')
+    ma_nv = data.get('ma_nv', 'kho1')
+    if not ma_nv or ma_nv == 'NV002':
+        ma_nv = 'kho1'
     ma_ncc = data.get('ma_ncc', 'NCC01')
+    
+    # 1. Kiểm tra nếu là NHẬP HÀNG LOẠT (nhiều sản phẩm)
+    items = data.get('items')
+    if items and isinstance(items, list) and len(items) > 0:
+        valid_items = []
+        for it in items:
+            sp = it.get('ma_sp')
+            sl = float(it.get('so_luong', 0))
+            gn = float(it.get('gia_nhap', 0))
+            nsx = it.get('ngay_sx') or None
+            hsd = it.get('han_sd')
+            if sp and sl > 0 and gn > 0 and hsd:
+                valid_items.append({
+                    'ma_sp': sp,
+                    'so_luong': sl,
+                    'gia_nhap': gn,
+                    'ngay_sx': nsx,
+                    'han_sd': hsd
+                })
+        if not valid_items:
+            return jsonify({"error": "Không có sản phẩm hợp lệ để nhập kho!"}), 400
+            
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            # Sinh 1 mã phiếu nhập duy nhất cho toàn bộ danh sách sản phẩm
+            cursor.execute("SELECT dbo.fn_SinhMaPhieuNhap()")
+            row = cursor.fetchone()
+            ma_pn = row[0] if row else None
+            
+            # Gọi sp_NhapKho cho từng sản phẩm với cùng @MaPN
+            for it in valid_items:
+                cursor.execute(
+                    "EXEC sp_NhapKho @MaPN=?, @MaNV=?, @MaNCC=?, @MaSP=?, @SoLuong=?, @GiaNhap=?, @NgaySanXuat=?, @HanSuDung=?",
+                    (ma_pn, ma_nv, ma_ncc, it['ma_sp'], it['so_luong'], it['gia_nhap'], it['ngay_sx'], it['han_sd'])
+                )
+            conn.commit()
+            conn.close()
+            return jsonify({
+                "status": "success", 
+                "ma_pn": ma_pn, 
+                "count": len(valid_items),
+                "message": f"Nhập kho thành công {len(valid_items)} sản phẩm vào Phiếu Nhập: {ma_pn}!"
+            })
+        except Exception as e:
+            conn.rollback()
+            conn.close()
+            err_msg = str(e)
+            if '[SQL Server]' in err_msg:
+                parts = err_msg.split('[SQL Server]')
+                clean_err = parts[-1].strip().split('(50000)')[0].strip()
+                if clean_err:
+                    err_msg = clean_err
+            return jsonify({"error": err_msg}), 400
+
+    # 2. Nhập đơn lẻ (1 sản phẩm)
     ma_sp = data.get('ma_sp', '')
     so_luong = float(data.get('so_luong', 0))
     gia_nhap = float(data.get('gia_nhap', 0))
@@ -211,7 +294,7 @@ def import_stock():
         ma_pn = row[0] if row else "PN"
         conn.commit()
         conn.close()
-        return jsonify({"status": "success", "message": f"Nhập lô hàng mới thành công (Mã Phiếu Nhập: {ma_pn})!"})
+        return jsonify({"status": "success", "ma_pn": ma_pn, "message": f"Nhập lô hàng mới thành công (Mã Phiếu Nhập: {ma_pn})!"})
     except Exception as e:
         conn.rollback()
         conn.close()
@@ -239,23 +322,83 @@ def update_inventory(malo):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 5.2 API: Tiêu hủy hàng hết hạn (đóng gói trong Transaction CSDL sp_TieuHuyHang)
+# 5.2 API: Tiêu hủy hàng hết hạn (đơn lẻ hoặc hàng loạt qua sp_TieuHuyHang)
 @app.route('/api/inventory/destroy', methods=['POST'])
 def destroy_inventory():
     data = request.json
+    if not data:
+        return jsonify({"status": "error", "error": "Thiếu dữ liệu tiêu hủy!"}), 400
+
+    ma_nv = data.get('ma_nv', 'kho1')
+    if not ma_nv or ma_nv == 'NV002':
+        ma_nv = 'kho1'
+
+    # Kiểm tra nếu tiêu hủy hàng loạt (nhiều lô cùng lúc)
+    items = data.get('items')
+    if items and isinstance(items, list) and len(items) > 0:
+        valid_items = []
+        for it in items:
+            malo = it.get('ma_lo')
+            masp = it.get('ma_sp')
+            sl = float(it.get('so_luong', 0))
+            if malo and masp and sl > 0:
+                valid_items.append((malo, masp, sl))
+        if not valid_items:
+            return jsonify({"status": "error", "error": "Không có lô hàng hợp lệ để tiêu hủy!"}), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            for malo, masp, sl in valid_items:
+                cursor.execute(
+                    "EXEC sp_TieuHuyHang @MaLo=?, @MaSP=?, @SoLuongHuy=?, @MaNV=?",
+                    (malo, masp, sl, ma_nv)
+                )
+            conn.commit()
+            conn.close()
+            return jsonify({
+                "status": "success", 
+                "count": len(valid_items),
+                "message": f"Đã tiêu hủy thành công {len(valid_items)} lô hàng!"
+            })
+        except Exception as e:
+            conn.rollback()
+            conn.close()
+            err_msg = str(e)
+            if '[SQL Server]' in err_msg:
+                parts = err_msg.split('[SQL Server]')
+                clean_err = parts[-1].strip().split('(50000)')[0].strip()
+                if clean_err:
+                    err_msg = clean_err
+            return jsonify({"status": "error", "error": err_msg}), 400
+
+    # Tiêu hủy đơn lẻ (1 lô hàng)
     ma_lo = data.get('ma_lo')
     ma_sp = data.get('ma_sp')
-    ly_do = data.get('ly_do', 'Hết hạn sử dụng')
+    so_luong = float(data.get('so_luong', 0))
+    if not ma_lo or not ma_sp or so_luong <= 0:
+        return jsonify({"status": "error", "error": "Thông tin tiêu hủy không hợp lệ!"}), 400
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC sp_TieuHuyHang @MaLo=?, @MaSP=?, @LyDo=?", (ma_lo, ma_sp, ly_do))
+        cursor.execute(
+            "EXEC sp_TieuHuyHang @MaLo=?, @MaSP=?, @SoLuongHuy=?, @MaNV=?",
+            (ma_lo, ma_sp, so_luong, ma_nv)
+        )
         conn.commit()
         conn.close()
-        return jsonify({"status": "success"})
+        return jsonify({"status": "success", "message": f"Đã tiêu hủy thành công lô #{ma_lo}!"})
     except Exception as e:
-        return jsonify({"status": "error", "error": str(e)}), 500
+        conn.rollback()
+        conn.close()
+        err_msg = str(e)
+        if '[SQL Server]' in err_msg:
+            parts = err_msg.split('[SQL Server]')
+            clean_err = parts[-1].strip().split('(50000)')[0].strip()
+            if clean_err:
+                err_msg = clean_err
+        return jsonify({"status": "error", "error": err_msg}), 400
 
 # 5.3 API: Lấy lịch sử tiêu hủy hàng
 @app.route('/api/inventory/destroy_history', methods=['GET'])
@@ -569,12 +712,15 @@ def add_product():
 @app.route('/api/products/<ma_sp>', methods=['PUT'])
 def update_product(ma_sp):
     data = request.get_json()
+    ma_nv = data.get('MaNVSuaCuoi') or data.get('MaNV') or 'admin'
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE SAN_PHAM SET TenSP = ?, MaDanhMuc = ?, DonViTinh = ?, GiaBan = ?, LaHangTuoiSong = ? WHERE MaSP = ?",
-            (data['TenSP'], data['MaDanhMuc'], data['DonViTinh'], data['GiaBan'], data['LaHangTuoiSong'], ma_sp)
+            """UPDATE SAN_PHAM 
+               SET TenSP = ?, MaDanhMuc = ?, DonViTinh = ?, GiaBan = ?, LaHangTuoiSong = ?, MaNVSuaCuoi = ?, NgaySuaCuoi = GETDATE() 
+               WHERE MaSP = ?""",
+            (data['TenSP'], data['MaDanhMuc'], data['DonViTinh'], data['GiaBan'], data['LaHangTuoiSong'], ma_nv, ma_sp)
         )
         conn.commit()
         conn.close()
@@ -1056,11 +1202,12 @@ def demo_non_repeatable_read():
 @app.route('/api/demo/non_repeatable_read/update', methods=['POST'])
 def demo_non_repeatable_update():
     masp = request.args.get('masp', 'SP002')
+    manv = request.args.get('manv', 'demo')
     try:
         conn = get_db_connection()
         conn.autocommit = True
         cursor = conn.cursor()
-        cursor.execute("EXEC sp_Demo_NonRepeatableRead_Update @MaSP=?", (masp,))
+        cursor.execute("EXEC sp_Demo_NonRepeatableRead_Update @MaSP=?, @MaNV=?", (masp, manv))
         row = cursor.fetchone()
         conn.close()
         return jsonify({"message": row.ThongBao if row else f"Đã tăng giá {masp} thêm 1000 VNĐ!"})
@@ -1094,6 +1241,27 @@ def demo_phantom_insert():
         return jsonify({"message": row.ThongBao if row else f"Đã tạo hóa đơn mới cho SP {masp}"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# 13. API Demo Deadlock (Chương 4: Xử lý Deadlock)
+@app.route('/api/demo/deadlock', methods=['GET'])
+def demo_deadlock():
+    mode = request.args.get('mode', 'error')  # 'error', 'fixed', 'timeout'
+    tx = request.args.get('tx', '1')          # '1' hoặc '2'
+    malo1 = request.args.get('malo1', 11, type=int)
+    malo2 = request.args.get('malo2', 12, type=int)
+    try:
+        conn = get_db_connection()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        cursor.execute("EXEC sp_Demo_Deadlock @Mode=?, @Tx=?, @MaLo1=?, @MaLo2=?", (mode, tx, malo1, malo2))
+        row = cursor.fetchone()
+        conn.close()
+        return jsonify({
+            "status": row.Status if row else "SUCCESS",
+            "message": row.Message if row else ""
+        })
+    except Exception as e:
+        return jsonify({"status": "ERROR", "error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)

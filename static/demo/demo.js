@@ -1,3 +1,19 @@
+function switchDemoTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+    const content = document.getElementById(tabId);
+    if (content) content.classList.add('active');
+
+    if (tabId === 'tab-concurrency') {
+        const b = document.getElementById('btn-tab-concurrency');
+        if (b) b.classList.add('active');
+    } else if (tabId === 'tab-deadlock') {
+        const b = document.getElementById('btn-tab-deadlock');
+        if (b) b.classList.add('active');
+    }
+}
+
 async function loadDemoData() {
     const products = await fetch('/api/demo/products').then(r => r.json());
     const selects = [
@@ -127,9 +143,9 @@ async function startNonRepeatableTransaction(isFixed) {
 
 async function updatePrice() {
     const masp = document.getElementById('select-masp-3').value;
-    logToConsole('log-non-repeatable', `[Quản Lý] Cập nhật Giá ${masp} thêm 1000 VNĐ...`, 'log-tx2');
-    const res = await fetch(`/api/demo/non_repeatable_read/update?masp=${masp}`, { method: 'POST' }).then(r => r.json());
-    logToConsole('log-non-repeatable', `[Quản Lý] ${res.message}`, 'log-success');
+    logToConsole('log-non-repeatable', `[Quản Lý (Demo)] Cập nhật Giá ${masp} thêm 1000 VNĐ...`, 'log-tx2');
+    const res = await fetch(`/api/demo/non_repeatable_read/update?masp=${masp}&manv=demo`, { method: 'POST' }).then(r => r.json());
+    logToConsole('log-non-repeatable', `[Quản Lý (Demo)] ${res.message}`, 'log-success');
 }
 
 // 4. Phantom Read
@@ -156,5 +172,41 @@ async function insertPhantomBill() {
         logToConsole('log-phantom-read', `[Thu Ngân] Bị khóa/Lỗi: ${res.error}`, 'log-warning');
     } else {
         logToConsole('log-phantom-read', `[Thu Ngân] ${res.message}`, 'log-warning');
+    }
+}
+
+// 5. Deadlock (Chương 4: Xử lý Deadlock)
+async function runDeadlock(mode) {
+    clearConsole('log-deadlock');
+    const malo1 = 11;
+    const malo2 = 12;
+
+    let modeTitle = 'Chế độ 1: GÂY LỖI DEADLOCK (Hai nhân viên kho khóa ngược thứ tự)';
+    let badgeType = 'log-error';
+    if (mode === 'fixed') {
+        modeTitle = 'Chế độ 2: FIX BẰNG ORDERING PROTOCOL (Sắp xếp thứ tự các đơn vị dữ liệu)';
+        badgeType = 'log-success';
+    } else if (mode === 'timeout') {
+        modeTitle = 'Chế độ 3: FIX BẰNG TIMEOUT (SET LOCK_TIMEOUT 3s)';
+        badgeType = 'log-warning';
+    }
+
+    logToConsole('log-deadlock', `>>> BẮT ĐẦU: ${modeTitle}`, badgeType);
+    logToConsole('log-deadlock', `[Kịch bản] Hai nhân viên kho cùng cập nhật tồn kho: Nhân viên kho 1 (Lô ${malo1} -> Lô ${malo2}) và Nhân viên kho 2 (Lô ${malo2} -> Lô ${malo1}) cùng thực hiện song song...`, 'log-tx1');
+
+    const [res1, res2] = await Promise.all([
+        fetch(`/api/demo/deadlock?mode=${mode}&tx=1&malo1=${malo1}&malo2=${malo2}`).then(r => r.json()),
+        fetch(`/api/demo/deadlock?mode=${mode}&tx=2&malo1=${malo1}&malo2=${malo2}`).then(r => r.json())
+    ]);
+
+    logToConsole('log-deadlock', res1.message || res1.error, res1.status === 'SUCCESS' ? 'log-success' : 'log-error');
+    logToConsole('log-deadlock', res2.message || res2.error, res2.status === 'SUCCESS' ? 'log-success' : 'log-error');
+
+    if (mode === 'error') {
+        logToConsole('log-deadlock', '=> KẾT LUẬN CHƯƠNG 4: SQL Server tự động phát hiện Chu trình đồ thị chờ T1 <-> T2 và chọn một giao tác làm DEADLOCK VICTIM (Lỗi 1205) để Rollback giải phóng hệ thống!', 'log-error');
+    } else if (mode === 'fixed') {
+        logToConsole('log-deadlock', '=> KẾT LUẬN CHƯƠNG 4: Áp dụng Giao thức Sắp xếp thứ tự (Ordering Protocol), cả 2 nhân viên kho cùng cập nhật Lô 11 trước rồi Lô 12 sau => Đồ thị chờ không có chu trình => 100% TRIỆT TIÊU DEADLOCK!', 'log-success');
+    } else if (mode === 'timeout') {
+        logToConsole('log-deadlock', '=> KẾT LUẬN CHƯƠNG 4: Áp dụng Timeout (3 giây), giao tác chờ quá hạn tự động hủy (Lỗi 1222) và Rollback, giúp giải phóng tài nguyên!', 'log-warning');
     }
 }

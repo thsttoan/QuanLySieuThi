@@ -318,6 +318,7 @@ async function processCheckout() {
             showToast(data.error || data.message || 'Lỗi thanh toán!', true);
         }
     } catch (e) {
+        console.error('Checkout error:', e);
         showToast('Lỗi kết nối server!', true);
     } finally {
         btn.disabled = false;

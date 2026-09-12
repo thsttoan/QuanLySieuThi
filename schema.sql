@@ -21,7 +21,7 @@ CREATE TABLE [HANG_TIEU_HUY] (
     [MaSP] varchar(15) NOT NULL,
     [MaLo] int NOT NULL,
     [SoLuongHuy] decimal(10,2) NOT NULL,
-    [NgayTieuHuy] datetime NULL,
+    [NgayTieuHuy] datetime NULL DEFAULT (getdate()),
     [MaNV] varchar(10) NOT NULL
 );
 GO
@@ -40,7 +40,9 @@ CREATE TABLE [SAN_PHAM] (
     [MaDanhMuc] varchar(10) NULL,
     [DonViTinh] nvarchar(20) NOT NULL,
     [GiaBan] decimal(18,2) NOT NULL,
-    [LaHangTuoiSong] bit NULL
+    [LaHangTuoiSong] bit NULL DEFAULT ((0)),
+    [MaNVSuaCuoi] varchar(10) NULL,
+    [NgaySuaCuoi] datetime NULL
 );
 GO
 
@@ -71,7 +73,7 @@ CREATE TABLE [KHUYEN_MAI] (
     [PhanTramGiam] int NOT NULL,
     [NgayBatDau] datetime NOT NULL,
     [NgayKetThuc] datetime NOT NULL,
-    [LoaiKM] varchar(20) NULL
+    [LoaiKM] varchar(20) NULL DEFAULT ('SanPham')
 );
 GO
 
@@ -87,9 +89,9 @@ CREATE TABLE [KHACH_HANG] (
     [MaKH] int identity NOT NULL,
     [SoDienThoai] varchar(15) NOT NULL,
     [TenKH] nvarchar(100) NOT NULL,
-    [DiemTichLuy] int NULL,
-    [NgayDangKy] datetime NULL,
-    [HangThanhVien] nvarchar(20) NULL
+    [DiemTichLuy] int NULL DEFAULT ((0)),
+    [NgayDangKy] datetime NULL DEFAULT (getdate()),
+    [HangThanhVien] nvarchar(20) NULL DEFAULT (N'Đồng')
 );
 GO
 
@@ -100,19 +102,19 @@ CREATE TABLE [NHAN_VIEN] (
     [ChucVu] nvarchar(50) NOT NULL,
     [SoDienThoai] varchar(15) NULL,
     [MatKhau] varchar(255) NOT NULL,
-    [Role] int NULL
+    [Role] int NULL DEFAULT ((1))
 );
 GO
 
 -- Table: [HOA_DON]
 CREATE TABLE [HOA_DON] (
     [MaHD] varchar(20) NOT NULL,
-    [NgayLap] datetime NULL,
+    [NgayLap] datetime NULL DEFAULT (getdate()),
     [MaNV] varchar(10) NULL,
     [MaKH] int NULL,
     [TongTienHang] decimal(18,2) NOT NULL,
-    [GiamGiaKM] decimal(18,2) NULL,
-    [DiemSuDung] int NULL,
+    [GiamGiaKM] decimal(18,2) NULL DEFAULT ((0)),
+    [DiemSuDung] int NULL DEFAULT ((0)),
     [ThanhTien] decimal(18,2) NOT NULL,
     [PhuongThucTT] nvarchar(30) NOT NULL,
     [MaNVSuaCuoi] varchar(10) NULL,
@@ -131,14 +133,14 @@ CREATE TABLE [CHI_TIET_HOA_DON] (
     [SoLuong] decimal(10,2) NOT NULL,
     [DonGia] decimal(18,2) NOT NULL,
     [ThanhTien] decimal(18,2) NOT NULL,
-    [SoTienGiam] decimal(18,2) NOT NULL
+    [SoTienGiam] decimal(18,2) NOT NULL DEFAULT ((0))
 );
 GO
 
 -- Table: [PHIEU_NHAP]
 CREATE TABLE [PHIEU_NHAP] (
     [MaPN] varchar(20) NOT NULL,
-    [NgayNhap] datetime NULL,
+    [NgayNhap] datetime NULL DEFAULT (getdate()),
     [MaNV] varchar(10) NULL,
     [MaNCC] varchar(10) NULL,
     [TongTien] decimal(18,2) NOT NULL,
@@ -165,8 +167,8 @@ CREATE TABLE [BANG_LOG_GIA] (
     [MaSP] varchar(15) NOT NULL,
     [GiaCu] decimal(18,2) NULL,
     [GiaMoi] decimal(18,2) NULL,
-    [NgayThayDoi] datetime NULL,
-    [NguoiThayDoi] nvarchar(50) NULL
+    [NgayThayDoi] datetime NULL DEFAULT (getdate()),
+    [NguoiThayDoi] nvarchar(50) NULL DEFAULT (N'Hệ Thống')
 );
 GO
 
@@ -348,11 +350,14 @@ CREATE   FUNCTION dbo.fn_SinhMaPhieuNhap()
     RETURNS VARCHAR(20)
     AS
     BEGIN
-        DECLARE @Prefix VARCHAR(16) = 'PN' + CONVERT(VARCHAR(8), GETDATE(), 112) + 
-                                      REPLACE(CONVERT(VARCHAR(8), GETDATE(), 108), ':', '');
+        DECLARE @Base VARCHAR(16) = 'PN' + CONVERT(VARCHAR(8), GETDATE(), 112) + 
+                                    REPLACE(CONVERT(VARCHAR(8), GETDATE(), 108), ':', '');
+        IF NOT EXISTS (SELECT 1 FROM PHIEU_NHAP WHERE MaPN = @Base)
+            RETURN @Base;
+            
         DECLARE @Count INT = 0;
-        SELECT @Count = COUNT(*) FROM PHIEU_NHAP WHERE MaPN LIKE @Prefix + '%';
-        RETURN @Prefix + RIGHT('000' + CAST((@Count + 1) AS VARCHAR(3)), 3);
+        SELECT @Count = COUNT(*) FROM PHIEU_NHAP WHERE MaPN LIKE @Base + '%';
+        RETURN @Base + '_' + CAST((@Count + 1) AS VARCHAR(3));
     END;
 GO
 
@@ -498,27 +503,23 @@ GROUP BY CAST(NgayLap AS DATE);
 GO
 
 -- View: v_SanPhamSieuThi
---------------------------------------------------------------------------------
--- ĐỐI TƯỢNG 2: VIEWS (KHUNG NHÌN)
---------------------------------------------------------------------------------
-
--- View 1: Danh sách sản phẩm siêu thị và tổng tồn kho của các lô hàng còn hạn sử dụng
-CREATE VIEW v_SanPhamSieuThi AS
-SELECT 
-    sp.MaSP,
-    sp.TenSP,
-    dm.TenDanhMuc,
-    sp.DonViTinh,
-    sp.GiaBan,
-    dbo.fn_TinhTienSauKhuyenMai(sp.MaSP, sp.GiaBan) AS GiaKhuyenMai,
-    ISNULL((
-        SELECT SUM(lh.SoLuongTon)
-        FROM LO_HANG lh
-        WHERE lh.MaSP = sp.MaSP AND lh.HanSuDung > GETDATE()
-    ), 0) AS TongTonKho,
-    sp.LaHangTuoiSong
-FROM SAN_PHAM sp
-INNER JOIN DANH_MUC dm ON sp.MaDanhMuc = dm.MaDanhMuc;
+CREATE   VIEW v_SanPhamSieuThi AS
+    SELECT 
+        sp.MaSP,
+        sp.TenSP,
+        sp.MaDanhMuc,
+        dm.TenDanhMuc,
+        sp.DonViTinh,
+        sp.GiaBan,
+        dbo.fn_TinhTienSauKhuyenMai(sp.MaSP, sp.GiaBan) AS GiaKhuyenMai,
+        ISNULL((
+            SELECT SUM(lh.SoLuongTon)
+            FROM LO_HANG lh
+            WHERE lh.MaSP = sp.MaSP AND lh.HanSuDung > GETDATE()
+        ), 0) AS TongTonKho,
+        sp.LaHangTuoiSong
+    FROM SAN_PHAM sp
+    INNER JOIN DANH_MUC dm ON sp.MaDanhMuc = dm.MaDanhMuc;
 GO
 
 -- View: v_TopSanPhamBanChay
@@ -615,6 +616,104 @@ BEGIN
 END;
 GO
 
+-- Procedure: sp_Demo_Deadlock
+CREATE   PROCEDURE sp_Demo_Deadlock
+    @Mode VARCHAR(10) = 'error', -- 'error' (Gây lỗi), 'fixed' (Sắp xếp thứ tự), 'timeout' (Giới hạn chờ)
+    @Tx VARCHAR(10) = '1',       -- '1': Nhân viên kho 1, '2': Nhân viên kho 2
+    @MaLo1 INT = 11,             -- Lô hàng 11
+    @MaLo2 INT = 12              -- Lô hàng 12
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT OFF;
+
+    -- Cấu hình Timeout nếu chọn chế độ timeout
+    IF @Mode = 'timeout'
+        SET LOCK_TIMEOUT 3000; -- Timeout 3 giây (Ném lỗi 1222)
+    ELSE
+        SET LOCK_TIMEOUT -1;   -- Chờ mặc định của hệ thống
+
+    BEGIN TRANSACTION;
+
+    DECLARE @FirstLo INT, @SecondLo INT;
+    DECLARE @LogMsg NVARCHAR(MAX);
+
+    IF @Mode = 'fixed'
+    BEGIN
+        -- GIAO THỨC SẮP XẾP THỨ TỰ CÁC ĐƠN VỊ DỮ LIỆU (Ordering Protocol)
+        -- Chuẩn hóa: Luôn xin khóa Lô hàng có mã nhỏ hơn trước, mã lớn hơn sau
+        IF @MaLo1 < @MaLo2
+        BEGIN
+            SET @FirstLo = @MaLo1; SET @SecondLo = @MaLo2;
+        END
+        ELSE
+        BEGIN
+            SET @FirstLo = @MaLo2; SET @SecondLo = @MaLo1;
+        END
+    END
+    ELSE
+    BEGIN
+        -- KỊCH BẢN GÂY DEADLOCK: 
+        -- Nhân viên kho 1 (Tx 1): Khóa Lô 1 -> đòi Lô 2
+        -- Nhân viên kho 2 (Tx 2): Khóa Lô 2 -> đòi Lô 1
+        -- Tạo chu trình chờ khép kín trong Đồ thị chờ (Waiting Graph): T1 <-> T2
+        IF @Tx = '1'
+        BEGIN
+            SET @FirstLo = @MaLo1; SET @SecondLo = @MaLo2;
+        END
+        ELSE
+        BEGIN
+            SET @FirstLo = @MaLo2; SET @SecondLo = @MaLo1;
+        END
+    END
+
+    BEGIN TRY
+        -- Bước 1: Nhân viên kho cập nhật giảm số lượng tồn lô hàng thứ nhất (giữ khóa Exclusive X-Lock)
+        UPDATE LO_HANG WITH (ROWLOCK) 
+        SET SoLuongTon = SoLuongTon - 1 
+        WHERE MaLo = @FirstLo;
+
+        -- Bước 2: Tạm dừng 3 giây để giao tác của nhân viên kho còn lại kịp khóa lô hàng thứ hai
+        WAITFOR DELAY '00:00:03';
+
+        -- Bước 3: Nhân viên kho tiếp tục yêu cầu cập nhật lô hàng thứ hai (gây xung đột chu trình nếu ngược thứ tự)
+        UPDATE LO_HANG WITH (ROWLOCK) 
+        SET SoLuongTon = SoLuongTon - 1 
+        WHERE MaLo = @SecondLo;
+
+        -- Hoàn lại số lượng đã trừ test để bảo toàn dữ liệu tồn kho ban đầu
+        UPDATE LO_HANG 
+        SET SoLuongTon = SoLuongTon + 1 
+        WHERE MaLo IN (@FirstLo, @SecondLo);
+
+        COMMIT TRANSACTION;
+
+        IF @Mode = 'fixed'
+            SET @LogMsg = N'[Nhân viên kho ' + @Tx + N'] THÀNH CÔNG: Đã áp dụng Giao thức sắp xếp thứ tự khóa (Lô ' + CAST(@FirstLo AS NVARCHAR) + N' -> Lô ' + CAST(@SecondLo AS NVARCHAR) + N'). Đồ thị chờ không có chu trình (KHÔNG BỊ DEADLOCK)!';
+        ELSE
+            SET @LogMsg = N'[Nhân viên kho ' + @Tx + N'] THÀNH CÔNG: Sống sót qua kiểm tra Deadlock (Lô ' + CAST(@FirstLo AS NVARCHAR) + N' -> Lô ' + CAST(@SecondLo AS NVARCHAR) + N')!';
+
+        SELECT 'SUCCESS' AS Status, @LogMsg AS Message;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrNum INT = ERROR_NUMBER();
+        DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+
+        IF XACT_STATE() <> 0
+            ROLLBACK TRANSACTION;
+
+        IF @ErrNum = 1205
+            SET @LogMsg = N'[Nhân viên kho ' + @Tx + N'] PHÁT HIỆN DEADLOCK (Mã lỗi 1205): Hai nhân viên kho khóa lô hàng ngược nhau tạo chu trình T1 <-> T2. SQL Server phát hiện Deadlock, chọn giao tác này làm DEADLOCK VICTIM và tự động ROLLBACK!';
+        ELSE IF @ErrNum = 1222
+            SET @LogMsg = N'[Nhân viên kho ' + @Tx + N'] TIMEOUT KHÓA (Mã lỗi 1222): Chờ khóa Lô hàng quá 3 giây nên tự động hủy và ROLLBACK để giải phóng hệ thống!';
+        ELSE
+            SET @LogMsg = N'[Nhân viên kho ' + @Tx + N'] LỖI (' + CAST(@ErrNum AS VARCHAR(10)) + N'): ' + @ErrMsg;
+
+        SELECT 'ERROR' AS Status, @LogMsg AS Message;
+    END CATCH
+END;
+GO
+
 -- Procedure: sp_Demo_DirtyRead_Read
 -- 3. Demo Dirty Read: Giao tác đọc
 CREATE   PROCEDURE sp_Demo_DirtyRead_Read
@@ -665,73 +764,69 @@ END
 GO
 
 -- Procedure: sp_Demo_LostUpdate
--- 1. Demo Lost Update (Mất cập nhật)
 CREATE   PROCEDURE sp_Demo_LostUpdate
-    @Mode VARCHAR(10) = 'error',
-    @Tx VARCHAR(10) = '1',
-    @MaSP VARCHAR(15) = 'SP002'
-AS
-BEGIN
-    SET NOCOUNT ON;
-    SET XACT_ABORT ON;
-    BEGIN TRANSACTION;
-
-    DECLARE @MaLo INT, @Qty FLOAT, @GiaBan DECIMAL(18,2), @GiaKM DECIMAL(18,2);
-    DECLARE @SoLuong FLOAT = 1.0;
-    DECLARE @TongTienHang DECIMAL(18,2), @GiamGiaKM DECIMAL(18,2), @ThanhTien DECIMAL(18,2);
-    DECLARE @NewQty FLOAT;
-    DECLARE @MaHD VARCHAR(50);
-    DECLARE @MaNV VARCHAR(20) = 'thungan' + @Tx;
-
-    IF @Mode = 'fixed'
+        @Mode VARCHAR(10) = 'error',
+        @Tx VARCHAR(10) = '1',
+        @MaSP VARCHAR(15) = 'SP002'
+    AS
     BEGIN
-        SELECT TOP 1 @MaLo = MaLo, @Qty = SoLuongTon
-        FROM LO_HANG WITH (UPDLOCK, HOLDLOCK)
-        WHERE MaSP = @MaSP AND SoLuongTon > 0
-        ORDER BY HanSuDung ASC;
+        SET NOCOUNT ON;
+        SET XACT_ABORT ON;
+        BEGIN TRANSACTION;
+
+        DECLARE @MaLo INT, @Qty FLOAT, @GiaBan DECIMAL(18,2), @GiaKM DECIMAL(18,2);
+        DECLARE @SoLuong FLOAT = 1.0;
+        DECLARE @TongTienHang DECIMAL(18,2), @GiamGiaKM DECIMAL(18,2), @ThanhTien DECIMAL(18,2);
+        DECLARE @NewQty FLOAT;
+        DECLARE @MaHD VARCHAR(20);
+        DECLARE @MaNV VARCHAR(20) = 'thungan' + @Tx;
+
+        IF @Mode = 'fixed'
+        BEGIN
+            SELECT TOP 1 @MaLo = MaLo, @Qty = SoLuongTon
+            FROM LO_HANG WITH (UPDLOCK, HOLDLOCK)
+            WHERE MaSP = @MaSP AND SoLuongTon > 0
+            ORDER BY HanSuDung ASC;
+        END
+        ELSE
+        BEGIN
+            SELECT TOP 1 @MaLo = MaLo, @Qty = SoLuongTon
+            FROM LO_HANG
+            WHERE MaSP = @MaSP AND SoLuongTon > 0
+            ORDER BY HanSuDung ASC;
+        END
+
+        IF @MaLo IS NULL
+        BEGIN
+            ROLLBACK TRANSACTION;
+            THROW 50000, N'Sản phẩm đã hết hàng trong mọi lô', 1;
+        END
+
+        SELECT @GiaBan = GiaBan, @GiaKM = GiaKhuyenMai
+        FROM v_SanPhamSieuThi WHERE MaSP = @MaSP;
+
+        SET @TongTienHang = @GiaBan * @SoLuong;
+        SET @GiamGiaKM = ISNULL((@GiaBan - @GiaKM) * @SoLuong, 0);
+        SET @ThanhTien = @TongTienHang - @GiamGiaKM;
+
+        WAITFOR DELAY '00:00:05';
+
+        SET @MaHD = 'HD' + FORMAT(GETDATE(), 'yyMMddHHmmss') + @Tx;
+
+        INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT)
+        VALUES (@MaHD, GETDATE(), @MaNV, @TongTienHang, @GiamGiaKM, @ThanhTien, N'Tiền mặt');
+
+        INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, ThanhTien, SoTienGiam)
+        VALUES (@MaHD, @MaSP, @MaLo, @SoLuong, @GiaBan, @ThanhTien, @GiamGiaKM);
+
+        SET @NewQty = @Qty - @SoLuong;
+        UPDATE LO_HANG SET SoLuongTon = @NewQty WHERE MaLo = @MaLo;
+
+        COMMIT TRANSACTION;
+
+        SELECT @MaHD AS MaHD, @Qty AS QtyOld, @NewQty AS QtyNew, 
+               N'Đã bán 1 SP (HD: ' + @MaHD + N'). Tồn kho tính toán: ' + CAST(@Qty AS NVARCHAR(20)) + N' -> ' + CAST(@NewQty AS NVARCHAR(20)) AS ThongBao;
     END
-    ELSE
-    BEGIN
-        SELECT TOP 1 @MaLo = MaLo, @Qty = SoLuongTon
-        FROM LO_HANG
-        WHERE MaSP = @MaSP AND SoLuongTon > 0
-        ORDER BY HanSuDung ASC;
-    END
-
-    IF @MaLo IS NULL
-    BEGIN
-        ROLLBACK TRANSACTION;
-        THROW 50000, N'Sản phẩm đã hết hàng trong mọi lô', 1;
-    END
-
-    SELECT @GiaBan = GiaBan, @GiaKM = GiaKhuyenMai
-    FROM v_SanPhamSieuThi WHERE MaSP = @MaSP;
-
-    SET @TongTienHang = @GiaBan * @SoLuong;
-    SET @GiamGiaKM = (@GiaBan - @GiaKM) * @SoLuong;
-    SET @ThanhTien = @TongTienHang - @GiamGiaKM;
-
-    -- Giả lập độ trễ xử lý (5 giây) để 2 giao dịch tranh chấp đồng thời
-    WAITFOR DELAY '00:00:05';
-
-    -- Sinh mã HĐ demo
-    SET @MaHD = 'HD_DEMO_' + REPLACE(CONVERT(VARCHAR(30), GETDATE(), 126), ':', '') + '_' + @Tx;
-
-    INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT)
-    VALUES (@MaHD, GETDATE(), @MaNV, @TongTienHang, @GiamGiaKM, @ThanhTien, N'Tiền mặt');
-
-    INSERT INTO CHI_TIET_HOA_DON (MaHD, MaSP, MaLo, SoLuong, DonGia, ThanhTien)
-    VALUES (@MaHD, @MaSP, @MaLo, @SoLuong, @GiaBan, @ThanhTien);
-
-    -- Trừ kho thủ công bằng số lượng đọc lúc đầu (Lost Update xảy ra ở đây nếu không khóa)
-    SET @NewQty = @Qty - @SoLuong;
-    UPDATE LO_HANG SET SoLuongTon = @NewQty WHERE MaLo = @MaLo;
-
-    COMMIT TRANSACTION;
-
-    SELECT @MaHD AS MaHD, @Qty AS QtyOld, @NewQty AS QtyNew, 
-           N'Đã bán 1 SP (HD: ' + @MaHD + N'). Tồn kho tính toán: ' + CAST(@Qty AS NVARCHAR(20)) + N' -> ' + CAST(@NewQty AS NVARCHAR(20)) AS ThongBao;
-END
 GO
 
 -- Procedure: sp_Demo_NonRepeatableRead_Read
@@ -764,51 +859,55 @@ END
 GO
 
 -- Procedure: sp_Demo_NonRepeatableRead_Update
--- 5. Demo Non-repeatable Read: Cập nhật giá xen giữa
 CREATE   PROCEDURE sp_Demo_NonRepeatableRead_Update
-    @MaSP VARCHAR(15) = 'SP002'
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE SAN_PHAM SET GiaBan = GiaBan + 1000 WHERE MaSP = @MaSP;
-    SELECT N'Đã tăng giá ' + @MaSP + N' thêm 1000 VNĐ!' AS ThongBao;
-END
+        @MaSP VARCHAR(15) = 'SP002',
+        @MaNV VARCHAR(10) = 'demo'
+    AS
+    BEGIN
+        SET NOCOUNT ON;
+        UPDATE SAN_PHAM 
+        SET GiaBan = GiaBan + 1000,
+            MaNVSuaCuoi = @MaNV,
+            NgaySuaCuoi = GETDATE()
+        WHERE MaSP = @MaSP;
+
+        SELECT N'Đã cập nhật giá sản phẩm ' + @MaSP + N' tăng thêm 1,000 VNĐ (Người đổi: ' + @MaNV + N') và ghi vào BANG_LOG_GIA!' AS ThongBao;
+    END;
 GO
 
 -- Procedure: sp_Demo_PhantomRead_Insert
--- 7. Demo Phantom Read: Chèn hóa đơn xen giữa
 CREATE   PROCEDURE sp_Demo_PhantomRead_Insert
-    @MaSP VARCHAR(15) = 'SP002'
-AS
-BEGIN
-    SET NOCOUNT ON;
-    SET XACT_ABORT ON;
-    BEGIN TRANSACTION;
+        @MaSP VARCHAR(15) = 'SP002'
+    AS
+    BEGIN
+        SET NOCOUNT ON;
+        SET XACT_ABORT ON;
+        BEGIN TRANSACTION;
 
-    DECLARE @MaHD VARCHAR(50);
-    SET @MaHD = 'HD_PT_' + REPLACE(CONVERT(VARCHAR(30), GETDATE(), 126), ':', '');
+        DECLARE @MaHD VARCHAR(20);
+        SET @MaHD = 'HDPT' + FORMAT(GETDATE(), 'yyMMddHHmmss');
 
-    DECLARE @GiaBan DECIMAL(18,2), @GiaKM DECIMAL(18,2);
-    DECLARE @SoLuong FLOAT = 1.0;
-    DECLARE @TongTienHang DECIMAL(18,2), @GiamGiaKM DECIMAL(18,2), @ThanhTien DECIMAL(18,2);
+        DECLARE @GiaBan DECIMAL(18,2), @GiaKM DECIMAL(18,2);
+        DECLARE @SoLuong FLOAT = 1.0;
+        DECLARE @TongTienHang DECIMAL(18,2), @GiamGiaKM DECIMAL(18,2), @ThanhTien DECIMAL(18,2);
 
-    SELECT @GiaBan = GiaBan, @GiaKM = GiaKhuyenMai
-    FROM v_SanPhamSieuThi WHERE MaSP = @MaSP;
+        SELECT @GiaBan = GiaBan, @GiaKM = GiaKhuyenMai
+        FROM v_SanPhamSieuThi WHERE MaSP = @MaSP;
 
-    SET @TongTienHang = @GiaBan * @SoLuong;
-    SET @GiamGiaKM = (@GiaBan - @GiaKM) * @SoLuong;
-    SET @ThanhTien = @TongTienHang - @GiamGiaKM;
+        SET @TongTienHang = @GiaBan * @SoLuong;
+        SET @GiamGiaKM = (@GiaBan - @GiaKM) * @SoLuong;
+        SET @ThanhTien = @TongTienHang - @GiamGiaKM;
 
-    INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT)
-    VALUES (@MaHD, GETDATE(), 'thungan1', @TongTienHang, @GiamGiaKM, @ThanhTien, N'Tiền mặt');
+        INSERT INTO HOA_DON (MaHD, NgayLap, MaNV, TongTienHang, GiamGiaKM, ThanhTien, PhuongThucTT)
+        VALUES (@MaHD, GETDATE(), 'thungan1', @TongTienHang, @GiamGiaKM, @ThanhTien, N'Tiền mặt');
 
-    EXEC sp_BanHangFIFO @MaHD=@MaHD, @MaSP=@MaSP, @SoLuongYeuCau=@SoLuong, @DonGiaGoc=@GiaBan, @SoTienGiam=@GiamGiaKM, @ThanhTien=@ThanhTien;
+        EXEC sp_BanHangFIFO @MaHD=@MaHD, @MaSP=@MaSP, @SoLuongYeuCau=@SoLuong, @DonGiaGoc=@GiaBan, @SoTienGiam=@GiamGiaKM, @ThanhTien=@ThanhTien;
 
-    COMMIT TRANSACTION;
+        COMMIT TRANSACTION;
 
-    SELECT @MaHD AS MaHD, @ThanhTien AS ThanhTien,
-           N'Đã tạo hóa đơn ' + @MaHD + N' (SP: ' + @MaSP + N', ' + FORMAT(@ThanhTien, 'N0') + N' VNĐ)' AS ThongBao;
-END
+        SELECT @MaHD AS MaHD, @ThanhTien AS ThanhTien,
+               N'Đã tạo hóa đơn ' + @MaHD + N' (SP: ' + @MaSP + N', ' + FORMAT(@ThanhTien, 'N0') + N' VNĐ)' AS ThongBao;
+    END
 GO
 
 -- Procedure: sp_Demo_PhantomRead_Read
@@ -1298,22 +1397,26 @@ GO
 -- ============================================================================
 
 -- Trigger: trg_Audit_GiaSanPham
--- 8. TRIGGER: TỰ ĐỘNG AUDIT NHẬT KÝ THAY ĐỔI GIÁ BÁN SẢN PHẨM
 CREATE   TRIGGER dbo.trg_Audit_GiaSanPham
-ON dbo.SAN_PHAM
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-    IF UPDATE(GiaBan)
+    ON dbo.SAN_PHAM
+    AFTER UPDATE
+    AS
     BEGIN
-        INSERT INTO dbo.BANG_LOG_GIA (MaSP, GiaCu, GiaMoi, NgayThayDoi, NguoiThayDoi)
-        SELECT d.MaSP, d.GiaBan, i.GiaBan, GETDATE(), SUSER_SNAME()
-        FROM deleted d
-        JOIN inserted i ON d.MaSP = i.MaSP
-        WHERE d.GiaBan <> i.GiaBan;
-    END
-END;
+        SET NOCOUNT ON;
+        IF UPDATE(GiaBan)
+        BEGIN
+            INSERT INTO dbo.BANG_LOG_GIA (MaSP, GiaCu, GiaMoi, NgayThayDoi, NguoiThayDoi)
+            SELECT 
+                i.MaSP, 
+                d.GiaBan, 
+                i.GiaBan, 
+                GETDATE(), 
+                ISNULL(i.MaNVSuaCuoi, 'demo')
+            FROM deleted d
+            JOIN inserted i ON d.MaSP = i.MaSP
+            WHERE d.GiaBan <> i.GiaBan;
+        END
+    END;
 GO
 
 -- Trigger: trg_KiemTraHSDKhiBan

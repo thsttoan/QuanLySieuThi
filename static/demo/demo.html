@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Lỗi Tương Tranh - Bách Hóa Xanh</title>
+    <title>Demo Tương Tranh & Deadlock - Bách Hóa Xanh</title>
     <link rel="stylesheet" href="/static/demo/demo.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,138 +15,211 @@
             <h1>Hệ thống Quản lý Bách Hóa Xanh</h1>
         </div>
         <div class="header-title">
-            <h2>Kiểm thử Điều khiển Tương tranh (Concurrency Control)</h2>
+            <h2>Hệ Quản Trị CSDL: Concurrency Control & Deadlock</h2>
         </div>
+        <div class="nav-links">
             <a href="/login"><i class="fas fa-home"></i> Trang chủ</a>
         </div>
     </header>
 
+    <!-- NAVIGATION TABS -->
+    <div class="tab-navigation">
+        <button id="btn-tab-concurrency" class="tab-btn active" onclick="switchDemoTab('tab-concurrency')">
+            <i class="fas fa-layer-group"></i> Chương 3: Điều Khiển Tương Tranh (4 Lỗi)
+        </button>
+        <button id="btn-tab-deadlock" class="tab-btn tab-deadlock" onclick="switchDemoTab('tab-deadlock')">
+            <i class="fas fa-skull-crossbones"></i> Chương 4: Xử Lý Deadlock (Khóa Chết)
+        </button>
+    </div>
+
     <main class="container">
-        <!-- CONTROL PANEL -->
-        <div class="card control-panel" style="grid-column: 1 / -1; margin-bottom: 0;">
-            <div class="card-header" style="background: var(--info-color);">
-                <h3><i class="fa-solid fa-cogs"></i> Cấu hình Sản phẩm chạy Test</h3>
+        <!-- ================================================================= -->
+        <!-- TAB 1: CHƯƠNG 3 - ĐIỀU KHIỂN TƯƠNG TRANH (4 LỖI) -->
+        <!-- ================================================================= -->
+        <div id="tab-concurrency" class="tab-content active">
+            <!-- CONTROL PANEL -->
+            <div class="card control-panel" style="margin-bottom: 20px;">
+                <div class="card-header" style="background: var(--info-color);">
+                    <h3><i class="fa-solid fa-cogs"></i> Cấu hình Sản phẩm chạy Test (Chương 3)</h3>
+                </div>
+                <div class="card-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                    <div>
+                        <label><strong>Sản phẩm Lỗi 1 (Mất cập nhật):</strong></label>
+                        <select id="select-masp-1" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                    </div>
+                    <div>
+                        <label><strong>Sản phẩm Lỗi 2 (Đọc rác):</strong></label>
+                        <select id="select-masp-2" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                    </div>
+                    <div>
+                        <label><strong>Sản phẩm Lỗi 3 (Không lặp lại):</strong></label>
+                        <select id="select-masp-3" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                    </div>
+                    <div>
+                        <label><strong>Sản phẩm Lỗi 4 (Bóng ma):</strong></label>
+                        <select id="select-masp-4" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
+                    </div>
+                </div>
             </div>
-            <div class="card-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                <div>
-                    <label><strong>Sản phẩm cho Lỗi 1 (Mất cập nhật):</strong></label>
-                    <select id="select-masp-1" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
-                </div>
-                <div>
-                    <label><strong>Sản phẩm cho Lỗi 2 (Đọc rác):</strong></label>
-                    <select id="select-masp-2" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
-                </div>
-                <div>
-                    <label><strong>Sản phẩm cho Lỗi 3 (Không lặp lại):</strong></label>
-                    <select id="select-masp-3" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
-                </div>
-                <div>
-                    <label><strong>Sản phẩm cho Lỗi 4 (Bóng ma):</strong></label>
-                    <select id="select-masp-4" class="form-control" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;"></select>
-                </div>
+
+            <!-- GRID 4 CARDS CHO CHƯƠNG 3 -->
+            <div class="concurrency-grid">
+                <!-- 1. Mất cập nhật (Lost Update) -->
+                <section class="card">
+                    <div class="card-header">
+                        <h3>1. Mất Cập Nhật (Lost Update)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kịch bản:</strong> 2 thu ngân cùng bấm thanh toán 1 sản phẩm <strong class="dynamic-masp-1" style="color:var(--primary-color);">SP002</strong> cùng một thời điểm.</p>
+                        <div class="actions">
+                            <button class="btn btn-error" onclick="runLostUpdate(false)">
+                                <i class="fas fa-bug"></i> Chạy (Gây Lỗi)
+                            </button>
+                            <button class="btn btn-success" onclick="runLostUpdate(true)">
+                                <i class="fas fa-shield-alt"></i> Chạy (Đã Fix - Khóa 2PL)
+                            </button>
+                        </div>
+                        <div class="console" id="log-lost-update">
+                            <div class="console-header">Console Log</div>
+                            <div class="console-body"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Đọc rác (Dirty Read) -->
+                <section class="card">
+                    <div class="card-header">
+                        <h3>2. Đọc Rác (Dirty Read)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kịch bản:</strong> Nhân viên Kho kiểm kê chỉnh sửa tồn kho nhưng chưa lưu (treo 5s rồi hủy). Quản lý chạy báo cáo đếm tổng tồn kho sản phẩm <strong class="dynamic-masp-2" style="color:var(--primary-color);">SP002</strong>.</p>
+                        <div class="actions">
+                            <button class="btn btn-warning" onclick="startDirtyTransaction()">
+                                <i class="fas fa-play"></i> 1. Kho: Treo 5s rồi Hủy
+                            </button>
+                            <button class="btn btn-error" onclick="runDirtyRead(false)">
+                                <i class="fas fa-bug"></i> 2. Đọc rác (READ UNCOMMITTED)
+                            </button>
+                            <button class="btn btn-success" onclick="runDirtyRead(true)">
+                                <i class="fas fa-shield-alt"></i> 2. Đọc chuẩn (READ COMMITTED)
+                            </button>
+                        </div>
+                        <div class="console" id="log-dirty-read">
+                            <div class="console-header">Console Log</div>
+                            <div class="console-body"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Không lặp lại (Non-repeatable Read) -->
+                <section class="card">
+                    <div class="card-header">
+                        <h3>3. Không Lặp Lại (Non-repeatable Read)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kịch bản:</strong> Thu ngân đọc giá sản phẩm <strong class="dynamic-masp-3" style="color:var(--primary-color);">SP002</strong> lần 1 (treo 5s). Quản lý đổi giá SP xen giữa trước khi đọc lần 2.</p>
+                        <div class="actions">
+                            <button class="btn btn-warning" onclick="startNonRepeatableTransaction(false)">
+                                <i class="fas fa-bug"></i> 1. Thu ngân: Không Khóa
+                            </button>
+                            <button class="btn btn-success" onclick="startNonRepeatableTransaction(true)">
+                                <i class="fas fa-shield-alt"></i> 1. REPEATABLE READ
+                            </button>
+                            <button class="btn btn-danger" onclick="updatePrice()">
+                                <i class="fas fa-edit"></i> 2. Quản lý: Đổi giá
+                            </button>
+                        </div>
+                        <div class="console" id="log-non-repeatable">
+                            <div class="console-header">Console Log</div>
+                            <div class="console-body"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Bóng ma (Phantom Read) -->
+                <section class="card">
+                    <div class="card-header">
+                        <h3>4. Bóng Ma (Phantom Read)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kịch bản:</strong> Quản lý đếm tổng số hóa đơn 2 lần (cách nhau 5s). Thu ngân thanh toán sản phẩm <strong class="dynamic-masp-4" style="color:var(--primary-color);">SP002</strong> để chèn 1 hóa đơn mới xen giữa.</p>
+                        <div class="actions">
+                            <button class="btn btn-warning" onclick="startPhantomTransaction(false)">
+                                <i class="fas fa-bug"></i> 1. Đếm (Không Khóa Range)
+                            </button>
+                            <button class="btn btn-success" onclick="startPhantomTransaction(true)">
+                                <i class="fas fa-shield-alt"></i> 1. SERIALIZABLE
+                            </button>
+                            <button class="btn btn-danger" onclick="insertPhantomBill()">
+                                <i class="fas fa-plus"></i> 2. Thu ngân: Chèn HĐ mới
+                            </button>
+                        </div>
+                        <div class="console" id="log-phantom-read">
+                            <div class="console-header">Console Log</div>
+                            <div class="console-body"></div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
 
-        <!-- 1. Mất cập nhật (Lost Update) -->
-        <section class="card">
-            <div class="card-header">
-                <h3>1. Mất Cập Nhật (Lost Update)</h3>
-                <span class="badge tv3">Nhiệm vụ TV3</span>
-            </div>
-            <div class="card-body">
-                <p><strong>Kịch bản:</strong> 2 thu ngân cùng bấm thanh toán 1 sản phẩm <strong class="dynamic-masp-1" style="color:var(--primary-color);">SP002</strong> cùng một thời điểm.</p>
-                <div class="actions">
-                    <button class="btn btn-error" onclick="runLostUpdate(false)">
-                        <i class="fas fa-bug"></i> Chạy (Gây Lỗi)
-                    </button>
-                    <button class="btn btn-success" onclick="runLostUpdate(true)">
-                        <i class="fas fa-shield-alt"></i> Chạy (Đã Fix - Khóa 2PL)
-                    </button>
+        <!-- ================================================================= -->
+        <!-- TAB 2: CHƯƠNG 4 - XỬ LÝ DEADLOCK (KHÓA CHẾT) - HOÀN TOÀN RIÊNG BIỆT -->
+        <!-- ================================================================= -->
+        <div id="tab-deadlock" class="tab-content">
+            <section class="card">
+                <div class="card-header" style="background: #c0392b; color: white;">
+                    <h3><i class="fas fa-skull-crossbones"></i> CHƯƠNG 4: XỬ LÝ DEADLOCK (KHÓA CHẾT)</h3>
                 </div>
-                <div class="console" id="log-lost-update">
-                    <div class="console-header">Console Log</div>
-                    <div class="console-body"></div>
-                </div>
-            </div>
-        </section>
+                <div class="card-body">
+                    <!-- FLOW MINH HỌA -->
+                    <div class="deadlock-flow">
+                        <div class="flow-box">
+                            <h4 style="color: #2980b9;"><i class="fas fa-warehouse"></i> Giao tác 1 (Nhân Viên Kho 1 - T1)</h4>
+                            <p style="margin-top: 6px;">1. Khóa cập nhật: <strong style="color: #e74c3c;">Lô hàng 11</strong> (Đã giữ X-Lock)</p>
+                            <p>2. Chờ 3 giây...</p>
+                            <p>3. Yêu cầu khóa tiếp: <strong style="color: #e74c3c;">Lô hàng 12</strong> (Đang bị T2 giữ)</p>
+                            <div style="margin-top: 8px; font-weight: bold; color: #c0392b;">&rarr; T1 phải chờ T2</div>
+                        </div>
+                        <div class="flow-vs">
+                            <i class="fas fa-exchange-alt"></i>
+                            <div style="font-size: 0.85rem; font-weight: 500; color: #7f8c8d; margin-top: 5px;">Chu trình Đồ thị chờ<br>(Waiting Graph Cycle)</div>
+                        </div>
+                        <div class="flow-box">
+                            <h4 style="color: #8e44ad;"><i class="fas fa-warehouse"></i> Giao tác 2 (Nhân Viên Kho 2 - T2)</h4>
+                            <p style="margin-top: 6px;">1. Khóa cập nhật: <strong style="color: #e74c3c;">Lô hàng 12</strong> (Đã giữ X-Lock)</p>
+                            <p>2. Chờ 3 giây...</p>
+                            <p>3. Yêu cầu khóa tiếp: <strong style="color: #e74c3c;">Lô hàng 11</strong> (Đang bị T1 giữ)</p>
+                            <div style="margin-top: 8px; font-weight: bold; color: #c0392b;">&rarr; T2 phải chờ T1</div>
+                        </div>
+                    </div>
 
-        <!-- 2. Đọc rác (Dirty Read) -->
-        <section class="card">
-            <div class="card-header">
-                <h3>2. Đọc Rác (Dirty Read)</h3>
-                <span class="badge tv2">Nhiệm vụ TV2</span>
-            </div>
-            <div class="card-body">
-                <p><strong>Kịch bản:</strong> Nhân viên Kho kiểm kê và chỉnh sửa tồn kho nhưng chưa lưu (treo 5s rồi hủy). Trong lúc đó, Quản lý chạy báo cáo đếm tổng tồn kho của sản phẩm <strong class="dynamic-masp-2" style="color:var(--primary-color);">SP002</strong>.</p>
-                <div class="actions">
-                    <button class="btn btn-warning" onclick="startDirtyTransaction()">
-                        <i class="fas fa-play"></i> 1. Nhân viên Kho: Chạy Giao dịch (Treo 5s rồi Hủy)
-                    </button>
-                    <button class="btn btn-error" onclick="runDirtyRead(false)">
-                        <i class="fas fa-bug"></i> 2. Quản lý: Đọc rác (READ UNCOMMITTED)
-                    </button>
-                    <button class="btn btn-success" onclick="runDirtyRead(true)">
-                        <i class="fas fa-shield-alt"></i> 2. Quản lý: Đọc chuẩn (READ COMMITTED)
-                    </button>
-                </div>
-                <div class="console" id="log-dirty-read">
-                    <div class="console-header">Console Log</div>
-                    <div class="console-body"></div>
-                </div>
-            </div>
-        </section>
+                    <!-- NÚT BẤM THỰC NGHIỆM -->
+                    <div style="margin: 20px 0 10px;">
+                        <h4 style="margin-bottom: 10px; color: #333;"><i class="fas fa-flask"></i> Chọn Kịch bản Kiểm nghiệm:</h4>
+                        <div class="actions" style="flex-wrap: wrap; gap: 12px;">
+                            <button class="btn btn-error" onclick="runDeadlock('error')" style="padding: 12px 18px; font-size: 0.95rem;">
+                                <i class="fas fa-skull"></i> 1. Chạy Gây Deadlock (Chu trình Đồ thị chờ - Lỗi 1205)
+                            </button>
+                            <button class="btn btn-success" onclick="runDeadlock('fixed')" style="padding: 12px 18px; font-size: 0.95rem;">
+                                <i class="fas fa-sort-amount-down"></i> 2. Fix: Giao thức Sắp xếp thứ tự (Ordering Items)
+                            </button>
+                            <button class="btn btn-warning" onclick="runDeadlock('timeout')" style="padding: 12px 18px; font-size: 0.95rem;">
+                                <i class="fas fa-stopwatch"></i> 3. Fix: Kỹ thuật Timeout 3s (SET LOCK_TIMEOUT)
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- 3. Không lặp lại (Non-repeatable Read) -->
-        <section class="card">
-            <div class="card-header">
-                <h3>3. Không Lặp Lại (Non-repeatable Read)</h3>
-                <span class="badge tv4">Nhiệm vụ TV4</span>
-            </div>
-            <div class="card-body">
-                <p><strong>Kịch bản:</strong> Thu ngân đang mở Bill tính tiền (treo 5s). Quản lý trong kho đổi giá sản phẩm <strong class="dynamic-masp-3" style="color:var(--primary-color);">SP002</strong>.</p>
-                <div class="actions">
-                    <button class="btn btn-warning" onclick="startNonRepeatableTransaction(false)">
-                        <i class="fas fa-bug"></i> 1. Thu ngân: Đọc giá (Không Khóa)
-                    </button>
-                    <button class="btn btn-success" onclick="startNonRepeatableTransaction(true)">
-                        <i class="fas fa-shield-alt"></i> 1. Thu ngân: Đọc giá (REPEATABLE READ)
-                    </button>
-                    <button class="btn btn-danger" onclick="updatePrice()">
-                        <i class="fas fa-edit"></i> 2. Quản lý: Đổi giá SP01 ngay lập tức
-                    </button>
+                    <!-- CONSOLE LOG RIÊNG -->
+                    <div class="console" id="log-deadlock" style="margin-top: 20px;">
+                        <div class="console-header" style="background: #222; color: #ffb700; font-weight: 600;">
+                            <i class="fas fa-terminal"></i> Console Log - Giám sát Giao tác & Deadlock Monitor (SQL Server)
+                        </div>
+                        <div class="console-body" style="min-height: 180px; font-size: 0.9rem;"></div>
+                    </div>
                 </div>
-                <div class="console" id="log-non-repeatable">
-                    <div class="console-header">Console Log</div>
-                    <div class="console-body"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. Bóng ma (Phantom Read) -->
-        <section class="card">
-            <div class="card-header">
-                <h3>4. Bóng Ma (Phantom Read)</h3>
-                <span class="badge tv5">Nhiệm vụ TV5</span>
-            </div>
-            <div class="card-body">
-                <p><strong>Kịch bản:</strong> Quản lý đang chạy hàm SUM đếm tổng số hóa đơn (mất 5s). Thu ngân thanh toán sản phẩm <strong class="dynamic-masp-4" style="color:var(--primary-color);">SP002</strong> để tạo 1 hóa đơn mới vào DB.</p>
-                <div class="actions">
-                    <button class="btn btn-warning" onclick="startPhantomTransaction(false)">
-                        <i class="fas fa-bug"></i> 1. Quản lý: Đếm Hóa Đơn (Không Khóa Range)
-                    </button>
-                    <button class="btn btn-success" onclick="startPhantomTransaction(true)">
-                        <i class="fas fa-shield-alt"></i> 1. Quản lý: Đếm Hóa Đơn (SERIALIZABLE)
-                    </button>
-                    <button class="btn btn-danger" onclick="insertPhantomBill()">
-                        <i class="fas fa-plus"></i> 2. Thu ngân: Chèn Hóa Đơn mới
-                    </button>
-                </div>
-                <div class="console" id="log-phantom-read">
-                    <div class="console-header">Console Log</div>
-                    <div class="console-body"></div>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
     <script src="/static/demo/demo.js"></script>

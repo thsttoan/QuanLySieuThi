@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
         }
     </script>
 </head>
+
 <body>
     <div class="dashboard-layout">
 
@@ -57,7 +59,8 @@
             <header class="main-header">
                 <h1 id="pageTitle"><i class="fa-solid fa-boxes-stacked"></i> Quản Lý Tồn Kho</h1>
                 <div class="header-actions">
-                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm..." oninput="handleSearch()">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm..."
+                        oninput="handleSearch()">
                 </div>
             </header>
 
@@ -95,46 +98,174 @@
 
                 <!-- TAB: Nhập Kho -->
                 <div class="tab-pane" id="tab-import">
-                    <div class="form-card">
-                        <h3><i class="fa-solid fa-truck-ramp-box"></i> Phiếu Nhập Kho Mới</h3>
-                        <form id="importForm" onsubmit="submitImport(event)">
-                            <div class="form-grid">
-                                <div class="form-group" style="grid-column: 1 / -1; margin-bottom: 5px;">
-                                    <label>Sản phẩm</label>
-                                    <div style="display: flex; gap: 8px;">
-                                        <input type="text" id="imp-search" placeholder="🔍 Nhập tên sản phẩm để tìm..." oninput="filterImportProducts()" style="flex: 1;">
-                                        <select id="imp-product" required style="flex: 2;"></select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Nhà cung cấp</label>
-                                    <select id="imp-supplier" required></select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Số lượng</label>
-                                    <input type="number" id="imp-qty" step="0.01" min="0.01" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Giá nhập (VNĐ)</label>
-                                    <input type="number" id="imp-price" step="100" min="0" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Ngày sản xuất</label>
-                                    <input type="date" id="imp-mfg">
-                                </div>
-                                <div class="form-group">
-                                    <label>Hạn sử dụng</label>
-                                    <input type="date" id="imp-exp" required>
-                                </div>
-                            </div>
-                            <br>
-                            <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> Nhập Kho
-                            </button>
-                        </form>
+
+                    <!-- Chuyển đổi chế độ nhập kho -->
+                    <div class="import-mode-tabs">
+                        <button type="button" class="import-mode-btn active" id="btnModeBatch"
+                            onclick="switchImportMode('batch')">
+                            <i class="fa-solid fa-layer-group"></i> Nhập Hàng Loạt Theo Danh Mục (Nhiều SP)
+                        </button>
+                        <button type="button" class="import-mode-btn" id="btnModeSingle"
+                            onclick="switchImportMode('single')">
+                            <i class="fa-solid fa-box"></i> Nhập 1 Sản Phẩm Đơn Lẻ
+                        </button>
                     </div>
 
-                    <h3 style="margin-bottom:12px;">Lịch sử lô hàng gần đây</h3>
+                    <!-- CHẾ ĐỘ 1: NHẬP HÀNG LOẠT THEO DANH MỤC -->
+                    <div id="batchImportContainer">
+                        <div class="form-card">
+                            <h3><i class="fa-solid fa-layer-group"></i> Đợt Nhập Hàng Mới Theo Danh Mục</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-tags"></i> Chọn Danh Mục Sản Phẩm</label>
+                                    <select id="batch-category" onchange="onBatchCategoryChange()" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-truck"></i> Nhà Cung Cấp</label>
+                                    <select id="batch-supplier" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-calendar-plus"></i> Ngày Sản Xuất Chung</label>
+                                    <input type="date" id="batch-mfg">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-calendar-xmark"></i> Hạn Sử Dụng Chung</label>
+                                    <div style="display: flex; gap: 6px;">
+                                        <input type="date" id="batch-exp" onchange="applyBatchExpToAll()" required
+                                            style="flex: 1;">
+                                    </div>
+                                    <div style="display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap;">
+                                        <button type="button" class="btn-sub" onclick="setQuickExp(7)">+7 ngày</button>
+                                        <button type="button" class="btn-sub" onclick="setQuickExp(10)">+10
+                                            ngày</button>
+                                        <button type="button" class="btn-sub" onclick="setQuickExp(30)">+30
+                                            ngày</button>
+                                        <button type="button" class="btn-sub" onclick="setQuickExp(180)">+6
+                                            tháng</button>
+                                        <button type="button" class="btn-sub" onclick="setQuickExp(365)">+1 năm</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Thanh công cụ lọc sản phẩm trong danh mục & Gán SL nhanh -->
+                            <div class="batch-toolbar">
+                                <div style="display: flex; gap: 10px; align-items: center; flex: 1; min-width: 260px;">
+                                    <input type="text" id="batch-search"
+                                        placeholder="🔍 Tìm tên hoặc mã SP trong danh mục..."
+                                        oninput="renderBatchTable()"
+                                        style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                    <select id="batch-stock-filter" onchange="renderBatchTable()"
+                                        style="padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; min-width: 190px;">
+                                        <option value="ALL">Tất cả mức tồn</option>
+                                        <option value="EMPTY">🔴 Đã hết hàng (0)</option>
+                                        <option value="LOW10" selected>🟠 Sắp hết hàng (&le; 10)</option>
+                                        <option value="LOW30">🟡 Mức thấp (&le; 30)</option>
+                                        <option value="OK">🟢 Tồn dồi dào (&gt; 30)</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                    <div
+                                        style="display: flex; gap: 4px; align-items: center; background: #fff; padding: 2px 6px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                        <span style="font-size: 0.8rem; color: #64748b;">Gán SL:</span>
+                                        <input type="number" id="batch-quick-qty" value="30" min="1"
+                                            style="width: 55px; padding: 2px 4px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                                        <button type="button" class="btn-apply-qty"
+                                            onclick="applyQuickQtyToChecked()"><i
+                                                class="fa-solid fa-wand-magic-sparkles"></i> Áp dụng</button>
+                                    </div>
+                                    <button type="button" class="btn-sub" onclick="toggleSelectAllBatch(true)"><i
+                                            class="fa-solid fa-square-check"></i> Chọn tất cả</button>
+                                    <button type="button" class="btn-sub highlight" onclick="selectLowStockBatch()"><i
+                                            class="fa-solid fa-triangle-exclamation"></i> Chọn SP &le; 10</button>
+                                    <button type="button" class="btn-sub" onclick="toggleSelectAllBatch(false)"><i
+                                            class="fa-regular fa-square"></i> Bỏ chọn</button>
+                                </div>
+                            </div>
+
+                            <!-- Bảng sản phẩm thuộc danh mục -->
+                            <div class="batch-table-container">
+                                <table class="data-table batch-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40px; text-align: center;"><input type="checkbox"
+                                                    id="checkAllBatch" onchange="toggleSelectAllBatch(this.checked)">
+                                            </th>
+                                            <th>Ảnh</th>
+                                            <th>Mã SP</th>
+                                            <th>Tên Sản Phẩm</th>
+                                            <th>ĐVT</th>
+                                            <th style="text-align: center;">Tồn Hiện Tại (SL Còn Lại)</th>
+                                            <th style="width: 120px;">Giá Nhập (VNĐ)</th>
+                                            <th style="width: 90px;">SL Nhập</th>
+                                            <th style="width: 130px;">Hạn Sử Dụng</th>
+                                            <th style="text-align: right;">Thành Tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="batchTableBody"></tbody>
+                                </table>
+                            </div>
+
+                            <!-- Thanh tổng kết & Tạo phiếu nhập -->
+                            <div class="batch-import-summary">
+                                <div class="summary-stats">
+                                    <span>Đã chọn: <strong id="batchSelectedCount">0</strong> sản phẩm</span>
+                                    <span>Tổng số lượng: <strong id="batchSelectedQty">0</strong> đơn vị</span>
+                                    <span>Tổng tiền hàng: <strong id="batchSelectedMoney">0đ</strong></span>
+                                </div>
+                                <button type="button" class="btn-primary-large" id="btnSubmitBatch"
+                                    onclick="submitBatchImport()">
+                                    <i class="fa-solid fa-truck-ramp-box"></i> Tạo Phiếu Nhập Kho (<span
+                                        id="batchSubmitCount">0</span> SP)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CHẾ ĐỘ 2: NHẬP ĐƠN LẺ 1 SẢN PHẨM -->
+                    <div id="singleImportContainer" style="display: none;">
+                        <div class="form-card">
+                            <h3><i class="fa-solid fa-box"></i> Phiếu Nhập 1 Sản Phẩm Đơn Lẻ</h3>
+                            <form id="importForm" onsubmit="submitImport(event)">
+                                <div class="form-grid">
+                                    <div class="form-group" style="grid-column: 1 / -1; margin-bottom: 5px;">
+                                        <label>Sản phẩm</label>
+                                        <div style="display: flex; gap: 8px;">
+                                            <input type="text" id="imp-search"
+                                                placeholder="🔍 Nhập tên sản phẩm để tìm..."
+                                                oninput="filterImportProducts()" style="flex: 1;">
+                                            <select id="imp-product" required style="flex: 2;"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nhà cung cấp</label>
+                                        <select id="imp-supplier" required></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Số lượng</label>
+                                        <input type="number" id="imp-qty" step="0.01" min="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Giá nhập (VNĐ)</label>
+                                        <input type="number" id="imp-price" step="100" min="0" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ngày sản xuất</label>
+                                        <input type="date" id="imp-mfg">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Hạn sử dụng</label>
+                                        <input type="date" id="imp-exp" required>
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fa-solid fa-plus"></i> Nhập Kho
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-bottom:12px; margin-top: 24px;">Lịch sử lô hàng gần đây</h3>
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -149,7 +280,8 @@
                             <tbody id="recentImports"></tbody>
                         </table>
                     </div>
-                    <h3 style="margin-top:24px; margin-bottom:12px;"><i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Các Phiếu Nhập Kho</h3>
+                    <h3 style="margin-top:24px; margin-bottom:12px;"><i class="fa-solid fa-clock-rotate-left"></i> Lịch
+                        Sử Các Phiếu Nhập Kho</h3>
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -171,6 +303,7 @@
                 <!-- TAB: Cảnh Báo -->
                 <div class="tab-pane" id="tab-alerts">
                     <div class="stats-row" id="alertStats"></div>
+                    <div id="batchAlertsActionBar"></div>
                     <div class="alert-cards" id="alertCards"></div>
                 </div>
 
@@ -242,8 +375,54 @@
         </div>
     </div>
 
+    <!-- Modal Xác Nhận Tiêu Hủy Hàng Loạt -->
+    <div class="modal-overlay" id="batchDestroyModalOverlay" onclick="closeBatchDestroyModal(event)">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white;">
+                <h3><i class="fa-solid fa-fire"></i> Xác Nhận Tiêu Hủy Hàng Loạt</h3>
+                <span class="modal-close" style="color:white;" onclick="closeBatchDestroyModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 12px; color: #475569; font-size: 0.95rem;">
+                    Bạn đang yêu cầu tiêu hủy <strong id="modalDestroyCount"
+                        style="color:#ef4444; font-size: 1.1rem;">0</strong> lô hàng với tổng số lượng <strong
+                        id="modalDestroyTotalQty" style="color:#ef4444; font-size: 1.1rem;">0</strong> đơn vị. Thao tác
+                    này sẽ trừ kho và ghi nhận lịch sử tiêu hủy trong CSDL.
+                </p>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Lý do tiêu hủy</label>
+                    <input type="text" id="batchDestroyReason" value="Hết hạn sử dụng / Hư hỏng kiểm kê"
+                        placeholder="Nhập lý do tiêu hủy...">
+                </div>
+                <h4 style="margin-bottom: 8px;"><i class="fa-solid fa-list-check"></i> Danh sách các lô sẽ bị tiêu hủy
+                </h4>
+                <div class="table-container" style="max-height: 240px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Lô</th>
+                                <th>Sản Phẩm</th>
+                                <th>HSD</th>
+                                <th>Tồn Hiện Tại</th>
+                                <th>SL Tiêu Hủy</th>
+                            </tr>
+                        </thead>
+                        <tbody id="batchDestroyModalBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" style="background: var(--red);" onclick="confirmBatchDestroy()">
+                    <i class="fa-solid fa-fire"></i> Xác Nhận Tiêu Hủy Hàng Loạt
+                </button>
+                <button class="btn-cancel" onclick="closeBatchDestroyModal()">Hủy Bỏ</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script src="/static/kho/kho.js?v=2"></script>
 </body>
+
 </html>
