@@ -147,12 +147,7 @@ project/
 │   ├── demo/              # Giao diện kiểm thử Concurrency & Deadlock (demo.html, demo.js, demo.css)
 │   ├── login/             # Giao diện đăng nhập tập trung & phân quyền
 │   └── image/             # Hình ảnh mặt hàng thực tế của siêu thị (/static/image/SPxxx.jpg)
-├── scripts/
-│   ├── deploy_concurrency_demos.sql # Script triển khai các SP demo tương tranh Chương 3
-│   ├── deploy_deadlock.sql          # Script triển khai SP xử lý Deadlock Chương 4
-│   └── export_schema_and_seed.py    # Script trích xuất và đồng bộ schema.sql / seed.sql
 ├── app.py                 # Backend Flask thuần I/O (không tính toán nghiệp vụ)
-├── deadlock.sql           # Hướng dẫn & kịch bản thực nghiệm Deadlock chi tiết trên SSMS
 ├── schema.sql             # Toàn bộ mã nguồn DDL (15 Tables, 7 Views, 7 Funcs, 4 Triggers, 14 Procs)
 ├── seed.sql               # Dữ liệu mẫu chuẩn mực của siêu thị Bách Hóa Xanh
 └── README.md              # Tài liệu báo cáo kiến trúc và hướng dẫn vận hành
@@ -200,11 +195,10 @@ python app.py
 
 | Phân hệ | Tài khoản | Mật khẩu | Phân quyền (Role) | Giao diện tự động chuyển hướng |
 | :--- | :--- | :--- | :---: | :--- |
-| **Quản trị viên** | `admin` | `admin123` | **0** | Màn hình Quản trị Admin (`/admin`) |
-| **Nhân viên Kho** | `kho1` | `kho123` | **2** | Màn hình Quản lý Kho (`/kho`) |
-| **Thu ngân 1** | `thungan1` | `thungan123` | **1** | Màn hình Bán hàng POS (`/thungan`) |
-| **Thu ngân 2** | `thungan2` | `thungan123` | **1** | Màn hình Bán hàng POS (`/thungan`) |
-| **Tài khoản Demo** | `demo` | `demo` | **1** | Kiểm thử Điều khiển tương tranh & Deadlock (`/demo`) |
+| **Quản trị viên** | `admin` | `1` | **0** | Màn hình Quản trị Admin (`/admin`) |
+| **Nhân viên Kho** | `kho1` | `1` | **2** | Màn hình Quản lý Kho (`/kho`) |
+| **Thu ngân 1** | `thungan1` | `1` | **1** | Màn hình Bán hàng POS (`/thungan`) |
+| **Thu ngân 2** | `thungan2` | `1` | **1** | Màn hình Bán hàng POS (`/thungan`) |
 
 ---
 
