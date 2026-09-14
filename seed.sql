@@ -46,10 +46,11 @@ INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (
 INSERT INTO [NHA_CUNG_CAP] ([MaNCC], [TenNCC], [SoDienThoai], [DiaChi]) VALUES (N'NCC05', N'Công ty TNHH Unilever Việt Nam', N'02838236666', N'Quận 7, TP. Hồ Chí Minh')
 GO
 
--- Data: NHAN_VIEN (5 rows)
+-- Data: NHAN_VIEN (6 rows)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'admin', N'Quản trị viên', N'Admin / Quản lý', N'0999999999', N'scrypt:32768:8:1$aHcqfArPgDOIbSTx$71d68d9dd348b424e4b6d53cbe56c7a352ed2de8d6cc8100b7328c3145c052729e6185b80f0bb14b217d631abe089873eae536746d0e4683715c3f0c7f4f8d58', 0)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'demo', N'Tài khoản Demo Hệ thống', N'Demo Tester', N'0999999999', N'demo', 1)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'kho1', N'Thủ Kho 1', N'Nhân viên kho', N'0922233344', N'scrypt:32768:8:1$lqOBkIzs93IqsFZS$6a17c0425297e5c7e4999afd64595e124884f0adb633ece7039039f696d4004872f1c8e49496010445efc8c96ced86869b47536639b9d35ba8ce57e544e113ff', 2)
+INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'kho2', N'Thủ Kho 2', N'Nhân viên kho', N'0922233345', N'scrypt:32768:8:1$kXtxhR9g5ZZoxffB$04854fc4e6c74ef0f720d3907f82d5b3123be864b21d5c6199a5e31e619ece14933fed80773843e8b1b26404d63ff7bd8f50755d4158a7ab649ac78a32432773', 2)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'thungan1', N'Thu Ngân 1', N'Thu ngân', N'0911122233', N'scrypt:32768:8:1$RWfKHag9deB8wj3P$a500cf18e49f52d7b3a74240f78eb3ccc489ec9f3f17e2de20784e9ca37149b307b858a64502dc3a948f7af1e8bc19cdd8fa3b94ff83d21679b8e04bc8433e05', 1)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'thungan2', N'Thu Ngân 2', N'Thu ngân', N'0911122234', N'scrypt:32768:8:1$B6y0fSflKSBk1WAs$79cce84d1a3a7262520b506af828da303dddcdf4bcb9853810e771fe4e3bcc4f444f33928bc61665665d1cbcc78f2c6606ef80f6b012b68edf22fb3e8095ada0', 1)
 GO
@@ -64,7 +65,7 @@ SET IDENTITY_INSERT [KHACH_HANG] OFF;
 GO
 
 -- Data: SAN_PHAM (375 rows)
-INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong], [MaNVSuaCuoi], [NgaySuaCuoi]) VALUES (N'SP001', N'Ba chỉ heo C.P khay 500g', N'DM01', N'Khay', 39000.00, 1, N'demo', N'2026-09-13 00:48:28.083000')
+INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong], [MaNVSuaCuoi], [NgaySuaCuoi]) VALUES (N'SP001', N'Ba chỉ heo C.P khay 500g', N'DM01', N'Khay', 40000.00, 1, N'admin', N'2026-09-13 02:11:30.550000')
 INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong], [MaNVSuaCuoi], [NgaySuaCuoi]) VALUES (N'SP002', N'Sườn non heo C.P khay 500g', N'DM01', N'Khay', 115000.00, 0, N'demo', N'2026-09-13 00:47:52.583000')
 INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong], [MaNVSuaCuoi], [NgaySuaCuoi]) VALUES (N'SP003', N'Nạc dăm heo C.P khay 500g', N'DM01', N'Khay', 75000.00, 0, NULL, NULL)
 INSERT INTO [SAN_PHAM] ([MaSP], [TenSP], [MaDanhMuc], [DonViTinh], [GiaBan], [LaHangTuoiSong], [MaNVSuaCuoi], [NgaySuaCuoi]) VALUES (N'SP004', N'Nạc đùi heo C.P khay 500g', N'DM01', N'Khay', 72000.00, 0, NULL, NULL)
@@ -1093,7 +1094,7 @@ INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon],
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (571, N'SP003', N'2026-08-31', N'2026-09-07', 0.00, 60000.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (572, N'SP040', N'2026-08-31', N'2026-09-30', 0.00, 10000.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (573, N'SP002', N'2026-08-31', N'2026-10-05', 0.00, 100000.00)
-INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (674, N'SP001', N'2026-09-13', N'2026-09-23', 30.00, 25000.00)
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (674, N'SP001', N'2026-09-13', N'2026-09-23', 29.00, 25000.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (675, N'SP002', N'2026-09-13', N'2026-09-23', 58.00, 100000.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (676, N'SP003', N'2026-09-13', N'2026-09-23', 30.00, 60000.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (677, N'SP004', N'2026-09-13', N'2026-09-23', 30.00, 53800.00)
@@ -1106,7 +1107,7 @@ INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon],
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (684, N'SP011', N'2026-09-13', N'2026-09-23', 30.00, 50600.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (685, N'SP012', N'2026-09-13', N'2026-09-23', 30.00, 79300.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (686, N'SP013', N'2026-09-13', N'2026-09-23', 30.00, 39000.00)
-INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (687, N'SP014', N'2026-09-13', N'2026-09-23', 30.00, 36200.00)
+INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (687, N'SP014', N'2026-09-13', N'2026-09-23', 0.00, 36200.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (688, N'SP015', N'2026-09-13', N'2026-09-23', 30.00, 26400.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (689, N'SP016', N'2026-09-13', N'2026-09-23', 30.00, 23900.00)
 INSERT INTO [LO_HANG] ([MaLo], [MaSP], [NgaySanXuat], [HanSuDung], [SoLuongTon], [GiaNhap]) VALUES (690, N'SP017', N'2026-09-13', N'2026-09-23', 30.00, 19600.00)
@@ -1323,7 +1324,7 @@ GO
 SET IDENTITY_INSERT [HANG_TIEU_HUY] OFF;
 GO
 
--- Data: HOA_DON (19 rows)
+-- Data: HOA_DON (21 rows)
 INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD_DEMO_1787741682_1', N'2026-08-26 17:54:42.433000', N'thungan1', NULL, 50000.00, 0.00, 0, 50000.00, N'Ti?n m?t', NULL, NULL, NULL, NULL, NULL)
 INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD_DEMO_1788167433_1', N'2026-08-31 16:10:33.180000', N'thungan1', NULL, 75000.00, 0.00, 0, 75000.00, N'Tiền mặt', NULL, NULL, NULL, NULL, NULL)
 INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD_DEMO_1788167947_1', N'2026-08-31 16:19:07.953000', N'thungan1', NULL, 115000.00, 0.00, 0, 115000.00, N'Tiền mặt', NULL, NULL, NULL, NULL, NULL)
@@ -1343,9 +1344,11 @@ INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamG
 INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260913015059001', N'2026-09-13 01:50:59.623000', N'thungan1', 1, 115000.00, 0.00, 10, 114000.00, N'Tiền mặt', NULL, NULL, NULL, NULL, 0.00)
 INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260913015103001', N'2026-09-13 01:51:03.503000', N'thungan1', 1, 115000.00, 0.00, 10, 114000.00, N'Tiền mặt', NULL, NULL, NULL, NULL, 0.00)
 INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260913015128001', N'2026-09-13 01:51:28.990000', N'thungan1', 1, 1470000.00, 0.00, 1271, 1342900.00, N'Tiền mặt', NULL, NULL, NULL, NULL, 0.00)
+INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260913021152001', N'2026-09-13 02:11:52.737000', N'thungan1', NULL, 40000.00, 0.00, 0, 40000.00, N'Tiền mặt', NULL, NULL, NULL, NULL, 0.00)
+INSERT INTO [HOA_DON] ([MaHD], [NgayLap], [MaNV], [MaKH], [TongTienHang], [GiamGiaKM], [DiemSuDung], [ThanhTien], [PhuongThucTT], [MaNVSuaCuoi], [NgaySuaCuoi], [GhiChu], [MaVoucher], [GiamGiaVoucher]) VALUES (N'HD20260913021813001', N'2026-09-13 02:18:13.850000', N'thungan1', NULL, 1470000.00, 0.00, 0, 1470000.00, N'Tiền mặt', NULL, NULL, NULL, NULL, 0.00)
 GO
 
--- Data: CHI_TIET_HOA_DON (35 rows)
+-- Data: CHI_TIET_HOA_DON (37 rows)
 INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD_DEMO_1788167433_1', N'SP003', 569, 1.00, 75000.00, 75000.00, 0.00)
 INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD_DEMO_1788167947_1', N'SP002', 570, 1.00, 115000.00, 115000.00, 0.00)
 INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD_DEMO_1788167947_2', N'SP002', 570, 1.00, 115000.00, 115000.00, 0.00)
@@ -1381,15 +1384,18 @@ INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [Th
 INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260913015059001', N'SP002', 675, 1.00, 115000.00, 114000.00, 1000.00)
 INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260913015103001', N'SP002', 675, 1.00, 115000.00, 114000.00, 1000.00)
 INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260913015128001', N'SP014', 687, 30.00, 49000.00, 1342900.00, 127100.00)
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260913021152001', N'SP001', 674, 1.00, 40000.00, 40000.00, 0.00)
+INSERT INTO [CHI_TIET_HOA_DON] ([MaHD], [MaSP], [MaLo], [SoLuong], [DonGia], [ThanhTien], [SoTienGiam]) VALUES (N'HD20260913021813001', N'SP014', 687, 30.00, 49000.00, 1470000.00, 0.00)
 GO
 
--- Data: BANG_LOG_GIA (4 rows)
+-- Data: BANG_LOG_GIA (5 rows)
 SET IDENTITY_INSERT [BANG_LOG_GIA] ON;
 GO
 INSERT INTO [BANG_LOG_GIA] ([MaLog], [MaSP], [GiaCu], [GiaMoi], [NgayThayDoi], [NguoiThayDoi]) VALUES (1, N'SP001', 38000.00, 35000.00, N'2026-09-13 00:37:45.707000', N'admin')
 INSERT INTO [BANG_LOG_GIA] ([MaLog], [MaSP], [GiaCu], [GiaMoi], [NgayThayDoi], [NguoiThayDoi]) VALUES (7, N'SP002', 115000.00, 116000.00, N'2026-09-13 00:47:52.580000', N'demo')
 INSERT INTO [BANG_LOG_GIA] ([MaLog], [MaSP], [GiaCu], [GiaMoi], [NgayThayDoi], [NguoiThayDoi]) VALUES (8, N'SP002', 116000.00, 115000.00, N'2026-09-13 00:47:52.583000', N'demo')
 INSERT INTO [BANG_LOG_GIA] ([MaLog], [MaSP], [GiaCu], [GiaMoi], [NgayThayDoi], [NguoiThayDoi]) VALUES (9, N'SP001', 38000.00, 39000.00, N'2026-09-13 00:48:28.090000', N'demo')
+INSERT INTO [BANG_LOG_GIA] ([MaLog], [MaSP], [GiaCu], [GiaMoi], [NgayThayDoi], [NguoiThayDoi]) VALUES (10, N'SP001', 39000.00, 40000.00, N'2026-09-13 02:11:30.557000', N'admin')
 GO
 
 SET IDENTITY_INSERT [BANG_LOG_GIA] OFF;
