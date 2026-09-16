@@ -196,9 +196,13 @@ python app.py
 | Phân hệ | Tài khoản | Mật khẩu | Phân quyền (Role) | Giao diện tự động chuyển hướng |
 | :--- | :--- | :--- | :---: | :--- |
 | **Quản trị viên** | `admin` | `1` | **0** | Màn hình Quản trị Admin (`/admin`) |
-| **Nhân viên Kho** | `kho1` | `1` | **2** | Màn hình Quản lý Kho (`/kho`) |
+| **Nhân viên Kho 1** | `kho1` | `1` | **2** | Màn hình Quản lý Kho (`/kho`) |
+| **Nhân viên Kho 2** | `kho2` | `1` | **2** | Màn hình Quản lý Kho (`/kho`) |
 | **Thu ngân 1** | `thungan1` | `1` | **1** | Màn hình Bán hàng POS (`/thungan`) |
 | **Thu ngân 2** | `thungan2` | `1` | **1** | Màn hình Bán hàng POS (`/thungan`) |
+
+> 💡 **Ghi chú phân hệ Demo Tương Tranh & Deadlock**: Phân hệ kiểm thử tại `http://127.0.0.1:5000/demo` là trung tâm thực nghiệm mở công khai, có thể truy cập trực tiếp bằng URL mà không yêu cầu đăng nhập. (Hệ thống sử dụng định danh ngầm `manv=demo` khi chạy kịch bản thử nghiệm để ghi vết phân biệt trên bảng audit `BANG_LOG_GIA`).
+
 
 ---
 
