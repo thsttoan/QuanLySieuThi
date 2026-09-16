@@ -28,6 +28,8 @@ async function handleLogin(e) {
                 window.location.href = '/admin';
             } else if (data.role === 'KHO') {
                 window.location.href = '/kho';
+            } else if (data.role === 'DEMO') {
+                window.location.href = '/demo';
             } else {
                 window.location.href = '/thungan';
             }

@@ -48,7 +48,7 @@ GO
 
 -- Data: NHAN_VIEN (6 rows)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'admin', N'Quản trị viên', N'Admin / Quản lý', N'0999999999', N'scrypt:32768:8:1$aHcqfArPgDOIbSTx$71d68d9dd348b424e4b6d53cbe56c7a352ed2de8d6cc8100b7328c3145c052729e6185b80f0bb14b217d631abe089873eae536746d0e4683715c3f0c7f4f8d58', 0)
-INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'demo', N'Tài khoản Demo Hệ thống', N'Demo Tester', N'0999999999', N'demo', 1)
+INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'demo', N'Tài khoản Demo Hệ thống', N'Demo Tester', N'0999999999', N'demo', -1)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'kho1', N'Thủ Kho 1', N'Nhân viên kho', N'0922233344', N'scrypt:32768:8:1$lqOBkIzs93IqsFZS$6a17c0425297e5c7e4999afd64595e124884f0adb633ece7039039f696d4004872f1c8e49496010445efc8c96ced86869b47536639b9d35ba8ce57e544e113ff', 2)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'kho2', N'Thủ Kho 2', N'Nhân viên kho', N'0922233345', N'scrypt:32768:8:1$kXtxhR9g5ZZoxffB$04854fc4e6c74ef0f720d3907f82d5b3123be864b21d5c6199a5e31e619ece14933fed80773843e8b1b26404d63ff7bd8f50755d4158a7ab649ac78a32432773', 2)
 INSERT INTO [NHAN_VIEN] ([MaNV], [TenNV], [ChucVu], [SoDienThoai], [MatKhau], [Role]) VALUES (N'thungan1', N'Thu Ngân 1', N'Thu ngân', N'0911122233', N'scrypt:32768:8:1$RWfKHag9deB8wj3P$a500cf18e49f52d7b3a74240f78eb3ccc489ec9f3f17e2de20784e9ca37149b307b858a64502dc3a948f7af1e8bc19cdd8fa3b94ff83d21679b8e04bc8433e05', 1)

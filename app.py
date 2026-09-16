@@ -678,6 +678,8 @@ def login():
                 role = 'ADMIN'
             elif role_id == 2:
                 role = 'KHO'
+            elif role_id == -1:
+                role = 'DEMO'
             else:
                 role = 'THUNGAN'
             

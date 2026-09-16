@@ -47,7 +47,7 @@ flowchart TD
 | 2 | **`SAN_PHAM`** | `MaSP` | `MaDanhMuc` | Danh mục hàng hóa, đơn vị tính, giá bán niêm yết, cờ `LaHangTuoiSong`, `MaNVSuaCuoi`, `NgaySuaCuoi`. |
 | 3 | **`NHA_CUNG_CAP`** | `MaNCC` | - | Đối tác cung cấp nguồn hàng, số điện thoại, địa chỉ trụ sở. |
 | 4 | **`LO_HANG`** | `MaLo` *(Identity)* | `MaSP` | Quản lý tồn kho theo lô: `NgaySanXuat`, `HanSuDung`, `GiaNhap`, `SoLuongTon`. |
-| 5 | **`NHAN_VIEN`** | `MaNV` | - | Tài khoản nhân sự, chức vụ, mật khẩu mã hóa, phân quyền (`Role 0: Admin`, `Role 2: Kho`, `Role 1: Thu ngân/Demo`). |
+| 5 | **`NHAN_VIEN`** | `MaNV` | - | Tài khoản nhân sự, chức vụ, mật khẩu mã hóa, phân quyền (`Role 0: Admin`, `Role 2: Kho`, `Role 1: Thu ngân`, `Role -1: Demo Bot / System`). |
 | 6 | **`KHACH_HANG`** | `MaKH` *(Identity)* | - | Hội viên thân thiết, `SoDienThoai` (UNIQUE), `DiemTichLuy`, `HangThanhVien`. |
 | 7 | **`KHUYEN_MAI`** | `MaKM` | - | Chương trình ưu đãi giảm giá theo % trong khoảng thời gian có hiệu lực. |
 | 8 | **`KM_SAN_PHAM`** | `(MaKM, MaSP)` | `MaKM`, `MaSP` | Bảng liên kết xác định các sản phẩm được áp dụng chương trình khuyến mãi. |
